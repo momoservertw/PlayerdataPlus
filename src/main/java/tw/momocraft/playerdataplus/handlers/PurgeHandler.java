@@ -429,7 +429,11 @@ public class PurgeHandler {
             if (offlinePlayer.getName() != null) {
                 if (!PermissionsHandler.hasPermissionOffline(offlinePlayer, "playerdataplus.bypass.clean." + title.toLowerCase()) && !PermissionsHandler.hasPermissionOffline(offlinePlayer, "playerdataplus.bypass.clean.*")) {
                     if (ConfigHandler.getDepends().AuthMeEnabled()) {
-                        lastTime = Date.from(AuthMeApi.getInstance().getLastLoginTime(offlinePlayer.getName())).getTime();
+                        try {
+                            lastTime = Date.from(AuthMeApi.getInstance().getLastLoginTime(offlinePlayer.getName())).getTime();
+                        } catch (Exception e) {
+                            lastTime = new Date(offlinePlayer.getLastPlayed()).getTime();
+                        }
                     } else {
                         lastTime = new Date(offlinePlayer.getLastPlayed()).getTime();
                     }
@@ -473,7 +477,11 @@ public class PurgeHandler {
             if (offlinePlayer != null) {
                 if (!PermissionsHandler.hasPermissionOffline(offlinePlayer, "playerdataplus.bypass.clean." + title.toLowerCase()) && !PermissionsHandler.hasPermissionOffline(offlinePlayer, "playerdataplus.bypass.clean.*")) {
                     if (ConfigHandler.getDepends().AuthMeEnabled()) {
-                        lastTime = Date.from(AuthMeApi.getInstance().getLastLoginTime(offlinePlayer.getName())).getTime();
+                        try {
+                            lastTime = Date.from(AuthMeApi.getInstance().getLastLoginTime(offlinePlayer.getName())).getTime();
+                        } catch (Exception e) {
+                            lastTime = new Date(offlinePlayer.getLastPlayed()).getTime();
+                        }
                     } else {
                         lastTime = new Date(offlinePlayer.getLastPlayed()).getTime();
                     }
@@ -517,7 +525,11 @@ public class PurgeHandler {
             if (offlinePlayer.getName() != null) {
                 if (!PermissionsHandler.hasPermissionOffline(offlinePlayer, "playerdataplus.bypass.clean." + title.toLowerCase()) && !PermissionsHandler.hasPermissionOffline(offlinePlayer, "playerdataplus.bypass.clean.*")) {
                     if (ConfigHandler.getDepends().AuthMeEnabled()) {
-                        lastTime = Date.from(AuthMeApi.getInstance().getLastLoginTime(offlinePlayer.getName())).getTime();
+                        try {
+                            lastTime = Date.from(AuthMeApi.getInstance().getLastLoginTime(offlinePlayer.getName())).getTime();
+                        } catch (Exception e) {
+                            lastTime = new Date(offlinePlayer.getLastPlayed()).getTime();
+                        }
                     } else {
                         lastTime = new Date(offlinePlayer.getLastPlayed()).getTime();
                     }
@@ -553,7 +565,11 @@ public class PurgeHandler {
             if (offlinePlayer != null) {
                 if (!PermissionsHandler.hasPermissionOffline(offlinePlayer, "playerdataplus.bypass.clean." + title.toLowerCase()) && !PermissionsHandler.hasPermissionOffline(offlinePlayer, "playerdataplus.bypass.clean.*")) {
                     if (ConfigHandler.getDepends().AuthMeEnabled()) {
-                        lastTime = Date.from(AuthMeApi.getInstance().getLastLoginTime(offlinePlayer.getName())).getTime();
+                        try {
+                            lastTime = Date.from(AuthMeApi.getInstance().getLastLoginTime(offlinePlayer.getName())).getTime();
+                        } catch (Exception e) {
+                            lastTime = new Date(offlinePlayer.getLastPlayed()).getTime();
+                        }
                     } else {
                         lastTime = new Date(offlinePlayer.getLastPlayed()).getTime();
                     }
@@ -594,7 +610,11 @@ public class PurgeHandler {
             if (offlinePlayer.getName() != null) {
                 if (!PermissionsHandler.hasPermissionOffline(offlinePlayer, "playerdataplus.bypass.clean." + title.toLowerCase()) && !PermissionsHandler.hasPermissionOffline(offlinePlayer, "playerdataplus.bypass.clean.*")) {
                     if (ConfigHandler.getDepends().AuthMeEnabled()) {
-                        lastTime = Date.from(AuthMeApi.getInstance().getLastLoginTime(offlinePlayer.getName())).getTime();
+                        try {
+                            lastTime = Date.from(AuthMeApi.getInstance().getLastLoginTime(offlinePlayer.getName())).getTime();
+                        } catch (Exception e) {
+                            lastTime = new Date(offlinePlayer.getLastPlayed()).getTime();
+                        }
                     } else {
                         lastTime = new Date(offlinePlayer.getLastPlayed()).getTime();
                     }

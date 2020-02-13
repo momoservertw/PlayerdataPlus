@@ -1,5 +1,5 @@
 # PlayerdataPlus
-##  Minecraft plugin
+##  Minecraft server plugin
 ***Clean the old data and improve the server's performance.***
 
 ![](https://imgur.com/rtucEp7.png)

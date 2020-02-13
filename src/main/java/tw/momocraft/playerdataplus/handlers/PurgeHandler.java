@@ -251,14 +251,19 @@ public class PurgeHandler {
     }
 
     private List<String> getFileFormats(String title) {
-        List<String> fileFormats = new ArrayList<>(ConfigHandler.getConfig("config.yml").getStringList("Clean.Control." + title + "File-formats"));
-        if (title.equals("Playerdata")) {
-            fileFormats.add("dat");
-        } else if (title.equals("Advancements") || title.equals("Stats")) {
-            fileFormats.add("json");
-        } else if (title.equals("Logs")) {
-            fileFormats.add("log");
-            fileFormats.add("gz");
+        List<String> fileFormats = new ArrayList<>(ConfigHandler.getConfig("config.yml").getStringList("Clean.Control." + title + ".File-formats"));
+        switch (title) {
+            case "Playerdata":
+                fileFormats.add("dat");
+                break;
+            case "Advancements":
+            case "Stats":
+                fileFormats.add("json");
+                break;
+            case "Logs":
+                fileFormats.add("log");
+                fileFormats.add("gz");
+                break;
         }
         return fileFormats;
     }
@@ -360,7 +365,7 @@ public class PurgeHandler {
             }
             offlinePlayer = PlayerHandler.getOfflinePlayer(data);
             if (offlinePlayer != null) {
-                if (!PermissionsHandler.hasPermissionOffline(offlinePlayer, "playerdataplus.bypass.clean." + title) && !PermissionsHandler.hasPermissionOffline(offlinePlayer, "playerdataplus.bypass.clean.*")) {
+                if (!PermissionsHandler.hasPermissionOffline(offlinePlayer, "playerdataplus.bypass.clean." + title.toLowerCase()) && !PermissionsHandler.hasPermissionOffline(offlinePlayer, "playerdataplus.bypass.clean.*")) {
                     if (ConfigHandler.getDepends().AuthmeEnabled()) {
                         lastTime = Date.from(AuthMeApi.getInstance().getLastLoginTime(offlinePlayer.getName())).getTime();
                     } else {
@@ -412,7 +417,7 @@ public class PurgeHandler {
             }
             offlinePlayer = Bukkit.getOfflinePlayer(playerUUID);
             if (offlinePlayer.getName() != null) {
-                if (!PermissionsHandler.hasPermissionOffline(offlinePlayer, "playerdataplus.bypass.clean." + title) && !PermissionsHandler.hasPermissionOffline(offlinePlayer, "playerdataplus.bypass.clean.*")) {
+                if (!PermissionsHandler.hasPermissionOffline(offlinePlayer, "playerdataplus.bypass.clean." + title.toLowerCase()) && !PermissionsHandler.hasPermissionOffline(offlinePlayer, "playerdataplus.bypass.clean.*")) {
                     if (ConfigHandler.getDepends().AuthmeEnabled()) {
                         lastTime = Date.from(AuthMeApi.getInstance().getLastLoginTime(offlinePlayer.getName())).getTime();
                     } else {

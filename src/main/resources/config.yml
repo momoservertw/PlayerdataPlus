@@ -31,6 +31,7 @@ Clean:
       Expiry-Days: 90
       # You can disable the backup feature for each data.
       Backup: true
+    # Bypass permission: playerdataplus.bypass.clean.* or playerdataplus.bypass.clean.playeerdata
     Playerdata:
       Enable: false
     Advancements:

@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>momocraft.tw</groupId>
+    <artifactId>PlayerdataPlus</artifactId>
+    <version>1.0.0</version>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <repositories>
+        <!--Maven Repo-->
+        <repository>
+            <id>sk89q-repo</id>
+            <url>https://maven.sk89q.com/repo/</url>
+        </repository>
+        <!--Spigot/CraftBukkit Repo-->
+        <repository>
+            <id>spigot-repo</id>
+            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+        </repository>
+        <!--PlaceholderAPI Repo-->
+        <repository>
+            <id>placeholderapi</id>
+            <url>http://repo.extendedclip.com/content/repositories/placeholderapi/</url>
+        </repository>
+        <!--AuthMe Repo-->
+        <repository>
+            <id>codemc-repo</id>
+            <url>http://repo.codemc.org/repository/maven-public/</url>
+        </repository>
+        <!--DiscordSRV Repo-->
+        <repository>
+            <id>Scarsz-Nexus</id>
+            <url>https://nexus.scarsz.me/content/groups/public/</url>
+        </repository>
+        <!--Vault Repo-->
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
+    <dependencies>
+        <!--Google API-->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>18.0</version>
+        </dependency>
+        <!--Spigot API-->
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
+            <version>1.15.2-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <!--CraftBukkit API-->
+        <dependency>
+            <groupId>org.bukkit</groupId>
+            <artifactId>bukkit</artifactId>
+            <version>LATEST</version>
+            <scope>provided</scope>
+        </dependency>
+        <!--Vault API-->
+        <dependency>
+            <groupId>com.github.MilkBowl</groupId>
+            <artifactId>VaultAPI</artifactId>
+            <version>1.7</version>
+            <scope>provided</scope>
+        </dependency>
+        <!--CMI API-->
+        <dependency>
+            <groupId>me.CMI</groupId>
+            <artifactId>CMI</artifactId>
+            <scope>system</scope>
+            <systemPath>${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/CMIAPI7.6.2.0.jar</systemPath>
+            <version>LATEST</version>
+        </dependency>
+        <!--Residence API-->
+        <dependency>
+            <groupId>me.Residence</groupId>
+            <artifactId>Residence</artifactId>
+            <scope>system</scope>
+            <systemPath>${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/Residence4.8.8.2.jar</systemPath>
+            <version>LEGACY</version>
+        </dependency>
+        <!--PlaceholderAPI API-->
+        <dependency>
+            <groupId>me.clip</groupId>
+            <artifactId>placeholderapi</artifactId>
+            <version>LATEST</version>
+            <scope>provided</scope>
+        </dependency>
+        <!--AuthMe API-->
+        <dependency>
+            <groupId>fr.xephi</groupId>
+            <artifactId>authme</artifactId>
+            <version>LATEST</version>
+            <scope>provided</scope>
+        </dependency>
+        <!--MysqlPlayerDataBridge API-->
+        <dependency>
+            <groupId>me.MysqlPlayerDataBridge</groupId>
+            <artifactId>MysqlPlayerDataBridge</artifactId>
+            <scope>system</scope>
+            <systemPath>
+                ${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/MysqlPlayerDataBridge-v3.31.0.jar
+            </systemPath>
+            <version>LEGACY</version>
+        </dependency>
+        <!--ChatControlPro API-->
+        <dependency>
+            <groupId>me.ChatControlPro</groupId>
+            <artifactId>ChatControlPro</artifactId>
+            <scope>system</scope>
+            <systemPath>${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/ChatControlProAPI_8.0.11.jar
+            </systemPath>
+            <version>LEGACY</version>
+        </dependency>
+        <!--SkinsRestorer API-->
+        <dependency>
+            <groupId>me.SkinsRestorer</groupId>
+            <artifactId>SkinsRestorer</artifactId>
+            <scope>system</scope>
+            <systemPath>${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/SkinsRestorer-13.7.5.jar
+            </systemPath>
+            <version>LEGACY</version>
+        </dependency>
+        <!--DiscordSRV API-->
+        <dependency>
+            <groupId>com.discordsrv</groupId>
+            <artifactId>discordsrv</artifactId>
+            <version>LATEST</version>
+            <scope>provided</scope>
+        </dependency>
+        <!--LuckPerms API-->
+        <dependency>
+            <groupId>net.luckperms</groupId>
+            <artifactId>api</artifactId>
+            <version>5.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <!--MyPet API-->
+        <dependency>
+            <groupId>me.MyPet</groupId>
+            <artifactId>MyPet</artifactId>
+            <scope>system</scope>
+            <systemPath>${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/MyPet-3.9-SNAPSHOT-B1510.jar
+            </systemPath>
+            <version>LATEST</version>
+        </dependency>
+    </dependencies>
+
+</project>

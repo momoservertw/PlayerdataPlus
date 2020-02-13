@@ -1,0 +1,62 @@
+# --{ =-=-=-=-=-=-=-=-=-= PlayerdataPlus's Configuration Settings, by Momocraft =-=-=-=-=-=-=-=-=-= }--
+Config-Version: 1
+# If you want to see if the player data is out of date or bypassed, you can turn on the Debug mode.
+Debugging: false
+Check-Updates: true
+
+# Clean the old data and improve the server's performance.
+# Player bypass permission: playerdataplus.bypass.clean
+Clean:
+  Settings:
+    Expiry-Days: 60
+    # Create a detail log file in plugin folder.
+    Log: true
+    # Automatic clean the old data when the server is starting.
+    Auto-Clean:
+      Enable: false
+      Delay: 20
+    # Backup the data in plugin folder, it only support some data types.
+    Backup:
+      Enable: true
+      # The backup folder: plugin, custom
+      Mode: 'plugin'
+      Folder-Name: 'Backup'
+      # Custom the backup path like "C:\Server". You need to set the Backup Mode to "custom".
+      Custom-Path: 'C:\Server'
+      To-Zip: true
+  Control:
+    Logs:
+      Enable: false
+      # You can specific the expiry day for each data.
+      Expiry-Days: 90
+      # You can disable the backup feature for each data.
+      Backup: true
+    Playerdata:
+      Enable: false
+    Advancements:
+      Enable: false
+    Stats:
+      Enable: false
+    Regions:
+      Enable: false
+      # Bypass clean the regions which contain Residences.
+      # If you disable this option, you can still add the custom flag "bypassclean" to the residences to bypass the clean event.
+      Residence-Bypass: true
+      Worlds:
+        - world
+        - world_nether
+        - world_the_end
+      Ignore-Regions: []
+      #  - 'world 8.8'
+
+Message:
+  prefix: '&7[&dPlayerdataPlus&7]&r '
+  noPermission: '&cYou do not have permission to use that command!'
+  configReload: '&aConfiguration(s) Reloaded!'
+  unknownCommand: '&cUnknown command, See &e/playerdataplus help &cfor a list of commands.'
+  PlayerdataPlus:
+    Commands:
+      title: '&8▩▩▩▩▩▩▩▩▩▩▩▩▩ &d&lPlayerdataPlus &8▩▩▩▩▩▩▩▩▩▩▩▩▩'
+      help: '&a/playerdataplus help &8- &7This help menu.'
+      reload: '&a/playerdataplus reload &8- &7Reload config file.'
+      clean: '&a/playerdataplus clean &8- &7Clean the expired data.'

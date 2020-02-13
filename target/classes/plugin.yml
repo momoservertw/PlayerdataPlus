@@ -1,0 +1,65 @@
+name: PlayerdataPlus
+main: tw.momocraft.playerdataplus.PlayerdataPlus
+author: Momocraft
+api-version: 1.13
+version: 1.1.0
+description: Clean the old data and improve the server's performance.
+softdepend: [Vault, MythicMobs, CMI, Residence, PlaceHolderAPI, MySQLPlayerDataBridge, SkinsRestorer, ChatControlPro, DiscordSRV, LuckPerms, MyPet]
+
+commands:
+  playerdataplus:
+    description: Displays main command menu.
+    permission: playerdataplus.use
+    usage: |
+      /playerdataplus
+  playerdataplus reload:
+    description: Reloads all PlayerdataPlus configuration files and caches any new data.
+    permission: playerdataplus.command.reload
+    usage: |
+      /playerdataplus reload
+  playerdataplus version:
+    description: Check the plugin version and updates.
+    permission: playerdataplus.command.version
+    usage: |
+      /playerdataplus version
+  playerdataplus clean:
+    description: Clean the expired data.
+    permission: playerdataplus.command.clean
+    usage: |
+      /playerdataplus clean
+
+permissions:
+  playerdataplus.*:
+    description: Allows use of all commands and feature.
+    default: op
+    children:
+      playerdataplus.use: true
+      playerdataplus.command.*: true
+      playerdataplus.bypass.*: true
+  playerdataplus.use:
+    description: Allows use of basic commands.
+    default: true
+  playerdataplus.command.*:
+    description: Allows use all commands.
+    default: op
+    children:
+      playerdataplus.command.reload: true
+      playerdataplus.command.version: true
+      playerdataplus.command.clean: true
+  playerdataplus.command.reload:
+    description: Allows use of /playerdataplus command reload.
+    default: op
+  playerdataplus.command.version:
+    description: Allows use of command /playerdataplus version.
+    default: op
+  playerdataplus.command.clean:
+    description: Allows use of command /playerdataplus clean.
+    default: op
+  playerdataplus.bypass.*:
+    description: Bypass all clean features.
+    default: op
+    children:
+      playerdataplus.bypass.clean: true
+  playerdataplus.bypass.clean:
+    description: Bypass the data clean event.
+    default: op

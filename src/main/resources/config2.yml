@@ -1,0 +1,89 @@
+# --{ =-=-=-=-=-=-=-=-=-= PlayerdataPlus's Configuration Settings, by Momocraft =-=-=-=-=-=-=-=-=-= }--
+Config-Version: 1
+Debugging: true
+Check-Updates: true
+
+# Clean the old data and improve the server's performance.
+# Player bypass permission: playerdataplus.bypass.clean
+# More information: https://github.com/momoservertw/EntityPlus/wiki/Clean
+Clean:
+  Settings:
+    Expiry-Days: 60
+    Log: true
+    #  It will automatic purge the old data when the server is starting.
+    Auto-Clean:
+      Enable: false
+      # If you enable the schedule feature, it will only auto-clean the data in that time.
+      Schedule:
+        Enable: false
+        Expression:
+          - '0 1 5 30 * ?'
+    # It will backup the data before deleted it. It only support mode "source" and some dependence​ plugins.
+    Backup:
+      Enable: true
+      # The backup folder, support: plugin, custom
+      Mode: 'plugin'
+      # The custom backup path like "C:\Backup". You need to set the Mode to "custom".
+      Custom-Path: 'C:\Backup'
+      Name-Format: 'yyyy-MM-dd'
+      To-Zip: true
+    MySQL:
+      Host: localhost:3306
+      Password: password
+      UserName: root
+  Control:
+    Logs:
+      Enable: false
+      # You can specific the expiry day for each data.
+      Expiry-Days: 90
+      # You can disable the backup feature for each data.
+      Backup: false
+    Playerdata:
+      Enable: false
+    Advancements:
+      Enable: false
+    Stats:
+      Enable: false
+    Regions:
+      Enable: false
+      Regenerate: false
+      Worlds:
+        - world
+        - world_nether
+        - world_the_end
+      Ignore-Regions: []
+      #  - 'world 8.8'
+    AuthMe:
+      Enable: false
+    CMI:
+      Enable: false
+    DiscordSRV:
+      Enable: false
+    MyPet:
+      Enable: false
+    LuckPerms:
+      Enable: false
+    MySQLPlayerDataBridge:
+      Enable: false
+    MyCommand:
+      Enable: false
+      Variables:
+        - a
+        - b
+        - c
+    SkinsRestorer:
+      Enable: false
+    ChatControlPro:
+      Enable: false
+
+Message:
+  prefix: '&7[&dPlayerdataPlus&7]&r '
+  noPermission: '&cYou do not have permission to use that command!'
+  configReload: '&aConfiguration(s) Reloaded!'
+  unknownCommand: '&cUnknown command, See &e/playerdataplus help &cfor a list of commands.'
+  PlayerdataPlus:
+    Commands:
+      title: '&8▩▩▩▩▩▩▩▩▩▩▩▩▩ &d&lPlayerdataPlus &8▩▩▩▩▩▩▩▩▩▩▩▩▩'
+      help: '&a/playerdataplus help &8- &7This help menu.'
+      reload: '&a/playerdataplus reload &8- &7Reloads config file.'
+      clean: '&a/playerdataplus clean &8- &7Clean the expired data in configuration.'

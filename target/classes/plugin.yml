@@ -2,7 +2,7 @@ name: PlayerdataPlus
 main: tw.momocraft.playerdataplus.PlayerdataPlus
 author: Momocraft
 api-version: 1.13
-version: 1.0.0
+version: 1.0.1
 description: Clean the old data and improve the server's performance.
 softdepend: [Vault, MythicMobs, CMI, Residence, PlaceHolderAPI, MySQLPlayerDataBridge, SkinsRestorer, ChatControlPro, DiscordSRV, LuckPerms, MyPet]
 

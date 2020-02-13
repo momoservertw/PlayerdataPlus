@@ -54,14 +54,14 @@ public class Commands implements CommandExecutor {
                 Language.sendLangMessage("Message.noPermission", sender);
             }
             return true;
-        /*} else if (args.length == 1 && args[0].equalsIgnoreCase("version")) {
+        } else if (args.length == 1 && args[0].equalsIgnoreCase("version")) {
             if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.version")) {
                 Language.dispatchMessage(sender, "&d&lPlayerdataPlus &e&lv" + PlayerdataPlus.getInstance().getDescription().getVersion() + "&8 - &fby Momocraft");
-                ConfigHandler.getUpdater().checkUpdates(sender, false);
+                ConfigHandler.getUpdater().checkUpdates(sender);
             } else {
                 Language.sendLangMessage("Message.noPermission", sender);
             }
-            return true;*/
+            return true;
         } else if (args.length == 1 && args[0].equalsIgnoreCase("clean")) {
             if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.clean")) {
                 ServerHandler.sendConsoleMessage("&6Starting to clean the expired data...");

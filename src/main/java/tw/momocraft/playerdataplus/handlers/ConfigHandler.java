@@ -29,7 +29,7 @@ public class ConfigHandler {
         configFile();
         setDepends(new DependAPI());
         sendUtilityDepends();
-        //setUpdater(new UpdateHandler());
+        setUpdater(new UpdateHandler());
         setLogger(new Logger());
 
         if (ConfigHandler.getDepends().ResidenceEnabled()) {
@@ -125,7 +125,7 @@ public class ConfigHandler {
     }
 
     private static void sendUtilityDepends() {
-        ServerHandler.sendConsoleMessage("&fHooked [ &e"
+        ServerHandler.sendConsoleMessage("&fHooked: "
                 + (getDepends().getVault().vaultEnabled() ? "Vault, " : "")
                 + (getDepends().CMIEnabled() ? "CMI, " : "")
                 + (getDepends().ResidenceEnabled() ? "Residence, " : "")
@@ -137,7 +137,7 @@ public class ConfigHandler {
                 + (getDepends().LuckPermsEnabled() ? "LuckPerms" : "")
                 + (getDepends().MyPetEnabled() ? "MyPet" : "")
                 + (getDepends().AuthmeEnabled() ? "Authme" : "")
-                + " &f]");
+        );
     }
 
     public static DependAPI getDepends() {

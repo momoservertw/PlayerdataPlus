@@ -12,7 +12,7 @@ public class DependAPI {
     private boolean DiscordSRV = false;
     private boolean LuckPerms = false;
     private boolean MyPet = false;
-    private boolean Authme = false;
+    private boolean AuthMe = false;
     private VaultAPI vault;
 
     public DependAPI() {
@@ -25,7 +25,7 @@ public class DependAPI {
         this.setDiscordSRVStatus(Bukkit.getServer().getPluginManager().getPlugin("DiscordSRV") != null);
         this.setLuckPermsStatus(Bukkit.getServer().getPluginManager().getPlugin("LuckPerms") != null);
         this.setMyPetStatus(Bukkit.getServer().getPluginManager().getPlugin("MyPet") != null);
-        this.setAuthmeStatus(Bukkit.getServer().getPluginManager().getPlugin("Authme") != null);
+        this.setAuthMeStatus(Bukkit.getServer().getPluginManager().getPlugin("AuthMe") != null);
         this.setVault();
     }
 
@@ -66,49 +66,49 @@ public class DependAPI {
         return this.MyPet;
     }
 
-    public boolean AuthmeEnabled() {
-        return this.Authme;
+    public boolean AuthMeEnabled() {
+        return this.AuthMe;
     }
 
 
-    public void setCMIStatus(boolean bool) {
+    private void setCMIStatus(boolean bool) {
         this.CMI = bool;
     }
 
-    public void setResidenceStatus(boolean bool) {
+    private void setResidenceStatus(boolean bool) {
         this.Residence = bool;
     }
 
-    public void setPlaceHolderStatus(boolean bool) {
+    private void setPlaceHolderStatus(boolean bool) {
         this.PlaceHolderAPI = bool;
     }
 
-    public void setMySQLPlayerDataBridgeStatus(boolean bool) {
+    private void setMySQLPlayerDataBridgeStatus(boolean bool) {
         this.MySQLPlayerDataBridge = bool;
     }
 
-    public void setSkinsRestorerStatus(boolean bool) {
+    private void setSkinsRestorerStatus(boolean bool) {
         this.SkinsRestorer = bool;
     }
 
-    public void setChatControlProStatus(boolean bool) {
+    private void setChatControlProStatus(boolean bool) {
         this.ChatControlPro = bool;
     }
 
-    public void setDiscordSRVStatus(boolean bool) {
+    private void setDiscordSRVStatus(boolean bool) {
         this.DiscordSRV = bool;
     }
 
-    public void setLuckPermsStatus(boolean bool) {
+    private void setLuckPermsStatus(boolean bool) {
         this.LuckPerms = bool;
     }
 
-    public void setMyPetStatus(boolean bool) {
+    private void setMyPetStatus(boolean bool) {
         this.MyPet = bool;
     }
 
-    public void setAuthmeStatus(boolean bool) {
-        this.MyPet = bool;
+    private void setAuthMeStatus(boolean bool) {
+        this.AuthMe = bool;
     }
 
     public VaultAPI getVault() {

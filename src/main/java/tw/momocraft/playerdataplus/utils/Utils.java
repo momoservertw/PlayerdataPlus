@@ -111,7 +111,9 @@ public class Utils {
         if (ConfigHandler.getDepends().PlaceHolderAPIEnabled()) {
             try { try { return PlaceholderAPI.setPlaceholders(player, name); }
             catch (NoSuchFieldError e) { ServerHandler.sendDebugMessage("Error has occured when setting the PlaceHolder " + e.getMessage() + ", if this issue persits contact the developer of PlaceholderAPI."); return name; }
-            } catch (Exception e) { }
+            } catch (Exception e) {
+                ServerHandler.sendDebugTrace(e);
+            }
         }
         return name;
     }

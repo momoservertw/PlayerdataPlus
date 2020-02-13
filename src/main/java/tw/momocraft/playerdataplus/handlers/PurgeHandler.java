@@ -35,10 +35,9 @@ public class PurgeHandler {
                 if (!ConfigHandler.getEnable("Clean.Control." + title + ".Enable", true)) {
                     continue;
                 }
-                List<String> playerNameList;
                 String folderTitle;
-                List<String> dataList;
                 File dataPath;
+                List<String> dataList;
                 List<String> expiredList;
                 List<String> unignoredList;
                 List<String> cleanedList;
@@ -82,7 +81,7 @@ public class PurgeHandler {
                                 ServerHandler.debugMessage("Clean", title, "dataPath = null", "continue");
                                 break;
                             }
-                            expiredList = getExpiredUUIDList(title, dataList);
+                            expiredList = getExpiredUUIDDataList(title, dataList);
                             if (expiredList.isEmpty()) {
                                 ServerHandler.debugMessage("Clean", title, "expiredList = isEmpty", "break");
                                 break;
@@ -125,12 +124,12 @@ public class PurgeHandler {
                         break;
                     case "AuthMe":
                         if (ConfigHandler.getDepends().getVault().vaultEnabled()) {
-                            if (ConfigHandler.getDepends().AuthmeEnabled()) {
-                                playerNameList = AuthMeApi.getInstance().getRegisteredNames();
-                                List<String> expiredPlayerList = getExpiredPlayerList(title, playerNameList);
-                                if (!expiredPlayerList.isEmpty()) {
-                                    cleanTable.put(title, "users", expiredPlayerList);
-                                    for (String user : expiredPlayerList) {
+                            if (ConfigHandler.getDepends().AuthMeEnabled()) {
+                                dataList = AuthMeApi.getInstance().getRegisteredNames();
+                                expiredList = getExpiredPlayerList(title, dataList);
+                                if (!expiredList.isEmpty()) {
+                                    cleanTable.put(title, "users", expiredList);
+                                    for (String user : expiredList) {
                                         Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "authme unregister " + user);
                                     }
                                 }
@@ -140,16 +139,16 @@ public class PurgeHandler {
                     case "CMI":
                         if (ConfigHandler.getDepends().getVault().vaultEnabled()) {
                             if (ConfigHandler.getDepends().CMIEnabled()) {
-                                Map<UUID, CMIUser> userList = CMI.getInstance().getPlayerManager().getAllUsers();
-                                List<String> playerUUIDList = new ArrayList<>();
-                                for (UUID uuid : userList.keySet()) {
-                                    playerUUIDList.add(uuid.toString());
+                                Map<UUID, CMIUser> userMap = CMI.getInstance().getPlayerManager().getAllUsers();
+                                List<String> uuidList = new ArrayList<>();
+                                for (UUID uuid : userMap.keySet()) {
+                                    uuidList.add(uuid.toString());
                                 }
-                                List<String> expiredUUIDList = getExpiredUUIDList(title, playerUUIDList);
-                                if (!expiredUUIDList.isEmpty()) {
-                                    cleanTable.put(title, "users", expiredUUIDList);
-                                    for (String uuid : expiredUUIDList) {
-                                        CMI.getInstance().getPlayerManager().removeUser(userList.get(UUID.fromString(uuid)));
+                                expiredList = getExpiredUUIDList(title, uuidList);
+                                if (!expiredList.isEmpty()) {
+                                    cleanTable.put(title, "users", expiredList);
+                                    for (String uuid : expiredList) {
+                                        CMI.getInstance().getPlayerManager().removeUser(userMap.get(UUID.fromString(uuid)));
                                     }
                                 }
                             }
@@ -158,15 +157,15 @@ public class PurgeHandler {
                     case "DiscordSRV":
                         if (ConfigHandler.getDepends().getVault().vaultEnabled()) {
                             if (ConfigHandler.getDepends().DiscordSRVEnabled()) {
-                                List<String> playerUUIDList = new ArrayList<>();
                                 Map<String, UUID> linkedAccounts = DiscordSRV.getPlugin().getAccountLinkManager().getLinkedAccounts();
+                                List<String> uuidList = new ArrayList<>();
                                 for (String id : linkedAccounts.keySet()) {
-                                    playerUUIDList.add(linkedAccounts.get(id).toString());
+                                    uuidList.add(linkedAccounts.get(id).toString());
                                 }
-                                List<String> expiredUUIDList = getExpiredUUIDList(title, playerUUIDList);
-                                if (!expiredUUIDList.isEmpty()) {
-                                    cleanTable.put(title, "users", expiredUUIDList);
-                                    for (String uuid : expiredUUIDList) {
+                                expiredList = getExpiredUUIDList(title, uuidList);
+                                if (!expiredList.isEmpty()) {
+                                    cleanTable.put(title, "users", expiredList);
+                                    for (String uuid : expiredList) {
                                         DiscordSRV.getPlugin().getAccountLinkManager().unlink(UUID.fromString(uuid));
                                     }
                                 }
@@ -177,23 +176,48 @@ public class PurgeHandler {
                         if (ConfigHandler.getDepends().getVault().vaultEnabled()) {
                             // Can only remove pets and still have player list need to remove.
                             if (ConfigHandler.getDepends().MyPetEnabled()) {
-                                List<String> petNameList = new ArrayList<>();
-                                UUID playerUUID;
                                 MyPet[] petList = MyPetApi.getMyPetManager().getAllActiveMyPets();
+                                List<String> expiredPetList = new ArrayList<>();
+                                String uuid;
                                 for (MyPet pet : petList) {
-                                    playerUUID = pet.getOwner().getPlayerUUID();
-                                    if (getExpiredPlayerUUID(title, playerUUID)) {
-                                        petNameList.add(pet.getPetType() + " " + pet.getPetName());
+                                    uuid = pet.getOwner().getPlayerUUID().toString();
+                                    if (getExpiredUUID(title, uuid)) {
                                         pet.removePet();
+                                        expiredPetList.add(uuid);
                                     }
                                 }
-                                List<String> expiredUUIDList = getExpiredUUIDList(title, petNameList);
-                                if (!expiredUUIDList.isEmpty()) {
-                                    cleanTable.put(title, "users", expiredUUIDList);
+                                if (!expiredPetList.isEmpty()) {
+                                    cleanTable.put(title, "users", expiredPetList);
                                 }
                             }
                         }
                         break;
+                        /*
+                    case "LuckPerms":
+                        if (ConfigHandler.getDepends().getVault().vaultEnabled()) {
+                            if (ConfigHandler.getDepends().SkinsRestorerEnabled()) {
+                                Set<UUID> userList;
+                                try {
+                                    userList = LuckPermsProvider.get().getUserManager().getUniqueUsers().get();
+                                } catch (InterruptedException | ExecutionException e) {
+                                    ServerHandler.sendDebugTrace(e);
+                                    break;
+                                }
+                                List<String> uuidList = new ArrayList<>();
+                                for (UUID uuid : userList) {
+                                    uuidList.add(uuid.toString());
+                                }
+                                expiredList = getExpiredUUIDList(title, uuidList);
+                                if (!expiredList.isEmpty()) {
+                                    cleanTable.put(title, "users", expiredList);
+                                    for (String uuid : expiredList) {
+                                        Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "authme unregister " + user);
+                                        LuckPermsProvider.get().getUserManager().getUser(UUID.fromString(uuid));
+                                    }
+                                }
+                            }
+                        }
+                        break;*/
                     default:
                         break;
                 }
@@ -205,9 +229,13 @@ public class PurgeHandler {
                 String customStatus;
                 long customExpiredDay;
                 boolean customBackup;
+                List<String> backupAvailable = new ArrayList<>(Arrays.asList("Logs", "Playerdata", "Advancements", "Stats", "Regions"));
                 for (String title : cleanTable.rowKeySet()) {
                     customExpiredDay = ConfigHandler.getConfig("config.yml").getLong("Clean.Control." + title + ".Expiry-Days");
                     customBackup = ConfigHandler.getEnable("Clean.Control." + title + ".Backup", true);
+                    if (!backupAvailable.contains(title)) {
+                        customBackup = false;
+                    }
                     if (!customBackup || customExpiredDay != 0) {
                         customStatus = " ("
                                 + (!customBackup ? "Backup: false, " : "")
@@ -343,51 +371,33 @@ public class PurgeHandler {
         return dataList;
     }
 
-    private List<String> getExpiredPlayerList(String title, List<String> dataList) {
-        List<String> expiredList = new ArrayList<>();
-        Map<String, String> expiredMap = new HashMap<>();
+    private List<String> getExpiredDataList(String title, List<String> dataList, File path) {
+        List<String> expiredData = new ArrayList<>();
+        Date currentDate = new Date();
+        long diffMillies;
+        long diffDays;
         long expiredDay = ConfigHandler.getConfig("config.yml").getLong("Clean.Control." + title + ".Expiry-Days");
         if (expiredDay == 0) {
             expiredDay = ConfigHandler.getConfig("config.yml").getLong("Clean.Settings.Expiry-Days");
         }
-        long diffMillies;
-        long diffDays;
-        long currentTime = new Date().getTime();
-        long lastTime;
-        OfflinePlayer offlinePlayer;
+        File file;
+        Date lastDate;
         for (String data : dataList) {
-            for (String fileFormat : getFileFormats(title)) {
-                if (data.endsWith("." + fileFormat)) {
-                    expiredList.add(data);
-                    expiredMap.put(data.replace("." + fileFormat, ""), data);
-                    data = data.replace("." + fileFormat, "");
-                }
-            }
-            offlinePlayer = PlayerHandler.getOfflinePlayer(data);
-            if (offlinePlayer != null) {
-                if (!PermissionsHandler.hasPermissionOffline(offlinePlayer, "playerdataplus.bypass.clean." + title.toLowerCase()) && !PermissionsHandler.hasPermissionOffline(offlinePlayer, "playerdataplus.bypass.clean.*")) {
-                    if (ConfigHandler.getDepends().AuthmeEnabled()) {
-                        lastTime = Date.from(AuthMeApi.getInstance().getLastLoginTime(offlinePlayer.getName())).getTime();
-                    } else {
-                        lastTime = new Date(offlinePlayer.getLastPlayed()).getTime();
-                    }
-                    diffMillies = Math.abs(lastTime - currentTime);
-                    diffDays = TimeUnit.DAYS.convert(diffMillies, TimeUnit.MILLISECONDS);
-                    if (diffDays > expiredDay) {
-                        ServerHandler.debugMessage("Clean", title, "expiredList", "remove", data);
-                        continue;
-                    }
-                    ServerHandler.debugMessage("Clean", title, "expiredList", "bypass", data + "&f not expired");
-                } else {
-                    ServerHandler.debugMessage("Clean", title, "expiredList", "bypass", data + "&f has bypass permission");
-                }
-                expiredList.remove(expiredMap.get(data));
+            file = new File(path + "\\" + data);
+            lastDate = new Date(file.lastModified());
+            diffMillies = Math.abs(currentDate.getTime() - lastDate.getTime());
+            diffDays = TimeUnit.DAYS.convert(diffMillies, TimeUnit.MILLISECONDS);
+            if (diffDays > expiredDay) {
+                expiredData.add(data);
+                ServerHandler.debugMessage("Clean", title, "ExpiredDataList", "remove", data);
+            } else {
+                ServerHandler.debugMessage("Clean", title, "ExpiredDataList", "bypass", data + "&f not expired");
             }
         }
-        return expiredList;
+        return expiredData;
     }
 
-    private List<String> getExpiredUUIDList(String title, List<String> dataList) {
+    private List<String> getExpiredUUIDDataList(String title, List<String> dataList) {
         List<String> expiredList = new ArrayList<>();
         Map<String, String> expiredMap = new HashMap<>();
         long expiredDay = ConfigHandler.getConfig("config.yml").getLong("Clean.Control." + title + ".Expiry-Days");
@@ -411,14 +421,14 @@ public class PurgeHandler {
             try {
                 playerUUID = UUID.fromString(data);
             } catch (IllegalArgumentException e) {
-                ServerHandler.debugMessage("Clean", title, "expiredUUIDList", "bypass", data + "&f not UUID");
+                ServerHandler.debugMessage("Clean", title, "ExpiredUUIDDataList", "bypass", data + "&f not UUID");
                 expiredList.remove(expiredMap.get(data));
                 break;
             }
             offlinePlayer = Bukkit.getOfflinePlayer(playerUUID);
             if (offlinePlayer.getName() != null) {
                 if (!PermissionsHandler.hasPermissionOffline(offlinePlayer, "playerdataplus.bypass.clean." + title.toLowerCase()) && !PermissionsHandler.hasPermissionOffline(offlinePlayer, "playerdataplus.bypass.clean.*")) {
-                    if (ConfigHandler.getDepends().AuthmeEnabled()) {
+                    if (ConfigHandler.getDepends().AuthMeEnabled()) {
                         lastTime = Date.from(AuthMeApi.getInstance().getLastLoginTime(offlinePlayer.getName())).getTime();
                     } else {
                         lastTime = new Date(offlinePlayer.getLastPlayed()).getTime();
@@ -426,12 +436,12 @@ public class PurgeHandler {
                     diffMillies = Math.abs(lastTime - currentTime);
                     diffDays = TimeUnit.DAYS.convert(diffMillies, TimeUnit.MILLISECONDS);
                     if (diffDays > expiredDay) {
-                        ServerHandler.debugMessage("Clean", title, "expiredUUIDList", "remove", data);
+                        ServerHandler.debugMessage("Clean", title, "ExpiredUUIDDataList", "remove", data);
                         continue;
                     }
-                    ServerHandler.debugMessage("Clean", title, "expiredUUIDList", "bypass", data + "&f not expired");
+                    ServerHandler.debugMessage("Clean", title, "ExpiredUUIDDataList", "bypass", data + "&f not expired");
                 } else {
-                    ServerHandler.debugMessage("Clean", title, "expiredUUIDList", "bypass", data + "&f has bypass permission");
+                    ServerHandler.debugMessage("Clean", title, "ExpiredUUIDDataList", "bypass", data + "&f has bypass permission");
                 }
                 expiredList.remove(expiredMap.get(data));
             }
@@ -439,7 +449,9 @@ public class PurgeHandler {
         return expiredList;
     }
 
-    private boolean getExpiredPlayerUUID(String title, UUID playerUUID) {
+    private List<String> getExpiredPlayerDataList(String title, List<String> dataList) {
+        List<String> expiredList = new ArrayList<>();
+        Map<String, String> expiredMap = new HashMap<>();
         long expiredDay = ConfigHandler.getConfig("config.yml").getLong("Clean.Control." + title + ".Expiry-Days");
         if (expiredDay == 0) {
             expiredDay = ConfigHandler.getConfig("config.yml").getLong("Clean.Settings.Expiry-Days");
@@ -448,55 +460,157 @@ public class PurgeHandler {
         long diffDays;
         long currentTime = new Date().getTime();
         long lastTime;
-        String playerUUIDString = playerUUID.toString();
         OfflinePlayer offlinePlayer;
-        offlinePlayer = Bukkit.getOfflinePlayer(playerUUID);
-        if (offlinePlayer.getName() != null) {
-            if (!PermissionsHandler.hasPermissionOffline(offlinePlayer, "playerdataplus.bypass.clean." + title) && !PermissionsHandler.hasPermissionOffline(offlinePlayer, "playerdataplus.bypass.clean.*")) {
-                if (ConfigHandler.getDepends().AuthmeEnabled()) {
-                    lastTime = Date.from(AuthMeApi.getInstance().getLastLoginTime(offlinePlayer.getName())).getTime();
-                } else {
-                    lastTime = new Date(offlinePlayer.getLastPlayed()).getTime();
+        for (String data : dataList) {
+            for (String fileFormat : getFileFormats(title)) {
+                if (data.endsWith("." + fileFormat)) {
+                    expiredList.add(data);
+                    expiredMap.put(data.replace("." + fileFormat, ""), data);
+                    data = data.replace("." + fileFormat, "");
                 }
-                diffMillies = Math.abs(lastTime - currentTime);
-                diffDays = TimeUnit.DAYS.convert(diffMillies, TimeUnit.MILLISECONDS);
-                if (diffDays > expiredDay) {
-                    ServerHandler.debugMessage("Clean", title, "expiredUUID", "remove", playerUUIDString);
-                    return true;
-                }
-                ServerHandler.debugMessage("Clean", title, "expiredUUID", "bypass", playerUUIDString + "&f not expired");
-            } else {
-                ServerHandler.debugMessage("Clean", title, "expiredUUID", "bypass", playerUUIDString + "&f has bypass permission");
             }
-            return false;
+            offlinePlayer = PlayerHandler.getOfflinePlayer(data);
+            if (offlinePlayer != null) {
+                if (!PermissionsHandler.hasPermissionOffline(offlinePlayer, "playerdataplus.bypass.clean." + title.toLowerCase()) && !PermissionsHandler.hasPermissionOffline(offlinePlayer, "playerdataplus.bypass.clean.*")) {
+                    if (ConfigHandler.getDepends().AuthMeEnabled()) {
+                        lastTime = Date.from(AuthMeApi.getInstance().getLastLoginTime(offlinePlayer.getName())).getTime();
+                    } else {
+                        lastTime = new Date(offlinePlayer.getLastPlayed()).getTime();
+                    }
+                    diffMillies = Math.abs(lastTime - currentTime);
+                    diffDays = TimeUnit.DAYS.convert(diffMillies, TimeUnit.MILLISECONDS);
+                    if (diffDays > expiredDay) {
+                        ServerHandler.debugMessage("Clean", title, "ExpiredPlayerDataList", "remove", data);
+                        continue;
+                    }
+                    ServerHandler.debugMessage("Clean", title, "ExpiredPlayerDataList", "bypass", data + "&f not expired");
+                } else {
+                    ServerHandler.debugMessage("Clean", title, "ExpiredPlayerDataList", "bypass", data + "&f has bypass permission");
+                }
+                expiredList.remove(expiredMap.get(data));
+            }
         }
-        return true;
+        return expiredList;
     }
 
-    private List<String> getExpiredDataList(String title, List<String> dataList, File path) {
-        List<String> expiredData = new ArrayList<>();
-        Date currentDate = new Date();
-        long diffMillies;
-        long diffDays;
+    private List<String> getExpiredUUIDList(String title, List<String> dataList) {
+        List<String> expiredList = new ArrayList<>(dataList);
         long expiredDay = ConfigHandler.getConfig("config.yml").getLong("Clean.Control." + title + ".Expiry-Days");
         if (expiredDay == 0) {
             expiredDay = ConfigHandler.getConfig("config.yml").getLong("Clean.Settings.Expiry-Days");
         }
-        File file;
-        Date lastDate;
+        long diffMillies;
+        long diffDays;
+        long currentTime = new Date().getTime();
+        long lastTime;
+        OfflinePlayer offlinePlayer;
+        UUID playerUUID;
         for (String data : dataList) {
-            file = new File(path + "\\" + data);
-            lastDate = new Date(file.lastModified());
-            diffMillies = Math.abs(currentDate.getTime() - lastDate.getTime());
-            diffDays = TimeUnit.DAYS.convert(diffMillies, TimeUnit.MILLISECONDS);
-            if (diffDays > expiredDay) {
-                expiredData.add(data);
-                ServerHandler.debugMessage("Clean", title, "expiredDataList", "remove", data);
-            } else {
-                ServerHandler.debugMessage("Clean", title, "expiredDataList", "bypass", data + "&f not expired");
+            try {
+                playerUUID = UUID.fromString(data);
+            } catch (IllegalArgumentException e) {
+                ServerHandler.debugMessage("Clean", title, "ExpiredUUIDList", "bypass", data + "&f not UUID");
+                expiredList.remove(data);
+                break;
+            }
+            offlinePlayer = Bukkit.getOfflinePlayer(playerUUID);
+            if (offlinePlayer.getName() != null) {
+                if (!PermissionsHandler.hasPermissionOffline(offlinePlayer, "playerdataplus.bypass.clean." + title.toLowerCase()) && !PermissionsHandler.hasPermissionOffline(offlinePlayer, "playerdataplus.bypass.clean.*")) {
+                    if (ConfigHandler.getDepends().AuthMeEnabled()) {
+                        lastTime = Date.from(AuthMeApi.getInstance().getLastLoginTime(offlinePlayer.getName())).getTime();
+                    } else {
+                        lastTime = new Date(offlinePlayer.getLastPlayed()).getTime();
+                    }
+                    diffMillies = Math.abs(lastTime - currentTime);
+                    diffDays = TimeUnit.DAYS.convert(diffMillies, TimeUnit.MILLISECONDS);
+                    if (diffDays > expiredDay) {
+                        ServerHandler.debugMessage("Clean", title, "ExpiredUUIDList", "remove", data);
+                        continue;
+                    }
+                    ServerHandler.debugMessage("Clean", title, "ExpiredUUIDList", "bypass", data + "&f not expired");
+                } else {
+                    ServerHandler.debugMessage("Clean", title, "ExpiredUUIDList", "bypass", data + "&f has bypass permission");
+                }
+                expiredList.remove(data);
             }
         }
-        return expiredData;
+        return expiredList;
+    }
+
+    private List<String> getExpiredPlayerList(String title, List<String> dataList) {
+        List<String> expiredList = new ArrayList<>(dataList);
+        long expiredDay = ConfigHandler.getConfig("config.yml").getLong("Clean.Control." + title + ".Expiry-Days");
+        if (expiredDay == 0) {
+            expiredDay = ConfigHandler.getConfig("config.yml").getLong("Clean.Settings.Expiry-Days");
+        }
+        long diffMillies;
+        long diffDays;
+        long currentTime = new Date().getTime();
+        long lastTime;
+        OfflinePlayer offlinePlayer;
+        for (String data : dataList) {
+            offlinePlayer = PlayerHandler.getOfflinePlayer(data);
+            if (offlinePlayer != null) {
+                if (!PermissionsHandler.hasPermissionOffline(offlinePlayer, "playerdataplus.bypass.clean." + title.toLowerCase()) && !PermissionsHandler.hasPermissionOffline(offlinePlayer, "playerdataplus.bypass.clean.*")) {
+                    if (ConfigHandler.getDepends().AuthMeEnabled()) {
+                        lastTime = Date.from(AuthMeApi.getInstance().getLastLoginTime(offlinePlayer.getName())).getTime();
+                    } else {
+                        lastTime = new Date(offlinePlayer.getLastPlayed()).getTime();
+                    }
+                    diffMillies = Math.abs(lastTime - currentTime);
+                    diffDays = TimeUnit.DAYS.convert(diffMillies, TimeUnit.MILLISECONDS);
+                    if (diffDays > expiredDay) {
+                        ServerHandler.debugMessage("Clean", title, "ExpiredPlayerList", "remove", data);
+                        continue;
+                    }
+                    ServerHandler.debugMessage("Clean", title, "ExpiredPlayerList", "bypass", data + "&f not expired");
+                } else {
+                    ServerHandler.debugMessage("Clean", title, "ExpiredPlayerList", "bypass", data + "&f has bypass permission");
+                }
+                expiredList.remove(data);
+            }
+        }
+        return expiredList;
+    }
+
+    private boolean getExpiredUUID(String title, String data) {
+        long expiredDay = ConfigHandler.getConfig("config.yml").getLong("Clean.Control." + title + ".Expiry-Days");
+        if (expiredDay == 0) {
+            expiredDay = ConfigHandler.getConfig("config.yml").getLong("Clean.Settings.Expiry-Days");
+        }
+        long diffMillies;
+        long diffDays;
+        long currentTime = new Date().getTime();
+        long lastTime;
+        OfflinePlayer offlinePlayer;
+        UUID playerUUID;
+            try {
+                playerUUID = UUID.fromString(data);
+            } catch (IllegalArgumentException e) {
+                ServerHandler.debugMessage("Clean", title, "ExpiredUUIDList", "bypass", data + "&f not UUID");
+                return false;
+            }
+            offlinePlayer = Bukkit.getOfflinePlayer(playerUUID);
+            if (offlinePlayer.getName() != null) {
+                if (!PermissionsHandler.hasPermissionOffline(offlinePlayer, "playerdataplus.bypass.clean." + title.toLowerCase()) && !PermissionsHandler.hasPermissionOffline(offlinePlayer, "playerdataplus.bypass.clean.*")) {
+                    if (ConfigHandler.getDepends().AuthMeEnabled()) {
+                        lastTime = Date.from(AuthMeApi.getInstance().getLastLoginTime(offlinePlayer.getName())).getTime();
+                    } else {
+                        lastTime = new Date(offlinePlayer.getLastPlayed()).getTime();
+                    }
+                    diffMillies = Math.abs(lastTime - currentTime);
+                    diffDays = TimeUnit.DAYS.convert(diffMillies, TimeUnit.MILLISECONDS);
+                    if (diffDays > expiredDay) {
+                        ServerHandler.debugMessage("Clean", title, "ExpiredUUIDList", "remove", data);
+                        return true;
+                    }
+                    ServerHandler.debugMessage("Clean", title, "ExpiredUUIDList", "bypass", data + "&f not expired");
+                } else {
+                    ServerHandler.debugMessage("Clean", title, "ExpiredUUIDList", "bypass", data + "&f has bypass permission");
+                }
+                return false;
+            }
+        return true;
     }
 
     private List<String> getUnignoreRegions(String worldName, List<String> expiredList) {

@@ -51,9 +51,13 @@ public class DataHandler {
         String customStatus;
         long customExpiredDay;
         boolean customBackup;
+        List<String> backupAvailable = new ArrayList<>(Arrays.asList("Logs", "Playerdata", "Advancements", "Stats", "Regions"));
         for (String title : cleanTable.rowKeySet()) {
             customExpiredDay = ConfigHandler.getConfig("config.yml").getLong("Clean.Control." + title + ".Expiry-Days");
             customBackup = ConfigHandler.getEnable("Clean.Control." + title + ".Backup", true);
+            if (!backupAvailable.contains(title)) {
+                customBackup = false;
+            }
             if (!customBackup || customExpiredDay != 0) {
                 customStatus = " ("
                         + (!customBackup ? "Backup: false, " : "")

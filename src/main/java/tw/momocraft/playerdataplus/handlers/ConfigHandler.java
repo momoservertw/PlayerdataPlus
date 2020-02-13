@@ -129,14 +129,14 @@ public class ConfigHandler {
                 + (getDepends().getVault().vaultEnabled() ? "Vault, " : "")
                 + (getDepends().CMIEnabled() ? "CMI, " : "")
                 + (getDepends().ResidenceEnabled() ? "Residence, " : "")
-                + (getDepends().PlaceHolderAPIEnabled() ? "PlaceHolderAPI" : "")
-                + (getDepends().MySQLPlayerDataBridgeEnabled() ? "MySQLPlayerDataBridge" : "")
-                + (getDepends().SkinsRestorerEnabled() ? "SkinsRestorer" : "")
-                + (getDepends().ChatControlProEnabled() ? "ChatControlPro" : "")
-                + (getDepends().DiscordSRVEnabled() ? "DiscordSRV" : "")
-                + (getDepends().LuckPermsEnabled() ? "LuckPerms" : "")
-                + (getDepends().MyPetEnabled() ? "MyPet" : "")
-                + (getDepends().AuthmeEnabled() ? "Authme" : "")
+                + (getDepends().PlaceHolderAPIEnabled() ? "PlaceHolderAPI, " : "")
+                + (getDepends().MySQLPlayerDataBridgeEnabled() ? "MySQLPlayerDataBridge, " : "")
+                + (getDepends().SkinsRestorerEnabled() ? "SkinsRestorer, " : "")
+                + (getDepends().ChatControlProEnabled() ? "ChatControlPro, " : "")
+                + (getDepends().DiscordSRVEnabled() ? "DiscordSRV, " : "")
+                + (getDepends().LuckPermsEnabled() ? "LuckPerms, " : "")
+                + (getDepends().MyPetEnabled() ? "MyPet, " : "")
+                + (getDepends().AuthMeEnabled() ? "Authme" : "")
         );
     }
 
@@ -197,5 +197,4 @@ public class ConfigHandler {
         }
         return enable.equals("true");
     }
-
 }

@@ -319,7 +319,6 @@ public class PurgeHandler {
             }
             ServerHandler.sendConsoleMessage("&6There has no any expired data!");
         }
-
     }
 
     private List<String> getFileFormats(String title) {

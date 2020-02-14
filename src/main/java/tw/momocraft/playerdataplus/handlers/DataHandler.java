@@ -54,7 +54,7 @@ public class DataHandler {
         List<String> backupAvailable = new ArrayList<>(Arrays.asList("Logs", "Playerdata", "Advancements", "Stats", "Regions"));
         for (String title : cleanTable.rowKeySet()) {
             customExpiredDay = ConfigHandler.getConfig("config.yml").getLong("Clean.Control." + title + ".Expiry-Days");
-            customBackup = ConfigHandler.getEnable("Clean.Control." + title + ".Backup", true);
+            customBackup = ConfigHandler.isEnable("Clean.Control." + title + ".Backup", true);
             if (!backupAvailable.contains(title)) {
                 customBackup = false;
             }
@@ -98,7 +98,7 @@ public class DataHandler {
         } else {
             titleName = title;
         }
-        if (!ConfigHandler.getConfig("config.yml").getBoolean("Clean.Settings.Backup.Enable") || !ConfigHandler.getEnable("Clean.Control." + title + ".Backup", true)) {
+        if (!ConfigHandler.getConfig("config.yml").getBoolean("Clean.Settings.Backup.Enable") || !ConfigHandler.isEnable("Clean.Control." + title + ".Backup", true)) {
             // Backup is disabled - only delete the file.
             for (String fileName : expiredList) {
                 File dataFile = new File(dataPath + "\\" + fileName);

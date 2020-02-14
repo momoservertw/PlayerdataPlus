@@ -1,8 +1,10 @@
 package tw.momocraft.playerdataplus.handlers;
 
 import com.bekvon.bukkit.residence.protection.FlagPermissions;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -43,7 +45,7 @@ public class ConfigHandler {
                 public void run() {
                     ServerHandler.sendConsoleMessage("&6Starting to clean the expired data...");
                     PurgeHandler purgeHandler = new PurgeHandler();
-                    purgeHandler.startClean();
+                    purgeHandler.startClean(Bukkit.getConsoleSender());
                 }
             }.runTaskLater(PlayerdataPlus.getInstance(), delay);
         } /* else if (!reload && getConfig("config.yml").getBoolean("Clean.Settings.Schedule.Enable")) {
@@ -99,7 +101,7 @@ public class ConfigHandler {
     private static void configFile() {
         getConfigData("config.yml");
         File File = new File(PlayerdataPlus.getInstance().getDataFolder(), "config.yml");
-        if (File.exists() && getConfig("config.yml").getInt("Config-Version") != 1) {
+        if (File.exists() && getConfig("config.yml").getInt("Config-Version") != 3) {
             if (PlayerdataPlus.getInstance().getResource("config.yml") != null) {
                 LocalDateTime currentDate = LocalDateTime.now();
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH-mm-ss");
@@ -190,11 +192,16 @@ public class ConfigHandler {
         return null;
     }
 
-    public static boolean getEnable(String path, Boolean empty) {
+    public static boolean isEnable(String path, Boolean empty) {
         String enable = ConfigHandler.getConfig("config.yml").getString(path);
         if (enable == null) {
             return empty;
         }
         return enable.equals("true");
+    }
+
+    public static boolean isExist(String path) {
+        String exist = ConfigHandler.getConfig("config.yml").getString(path);
+        return exist != null;
     }
 }

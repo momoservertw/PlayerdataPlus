@@ -1,5 +1,5 @@
 # --{ =-=-=-=-=-=-=-=-=-= PlayerdataPlus's Configuration Settings, by Momocraft =-=-=-=-=-=-=-=-=-= }--
-Config-Version: 1
+Config-Version: 3
 # If you want to see if the player data is out of date or bypassed, you can turn on the Debug mode.
 Debugging: false
 Check-Updates: true
@@ -11,6 +11,8 @@ Clean:
     Expiry-Days: 60
     # Create a detail log file in plugin folder.
     Log: true
+    # It will clean up a limited amount of data once and then restart again. Set "0" to disable this feature.
+    Max-Clean-Per-Data: 10000
     # Automatic clean the old data when the server is starting.
     Auto-Clean:
       Enable: false
@@ -49,6 +51,12 @@ Clean:
         - world_the_end
       Ignore-Regions: []
       #  - 'world 8.8'
+    AuthMe:
+      Enable: false
+    CMI:
+      Enable: false
+    DiscordSRV:
+      Enable: false
 
 Message:
   prefix: '&7[&dPlayerdataPlus&7]&r '

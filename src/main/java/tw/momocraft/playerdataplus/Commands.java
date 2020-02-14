@@ -66,7 +66,7 @@ public class Commands implements CommandExecutor {
             if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.clean")) {
                 ServerHandler.sendConsoleMessage("&6Starting to clean the expired data...");
                 PurgeHandler purgeHandler = new PurgeHandler();
-                purgeHandler.startClean();
+                purgeHandler.startClean(sender);
             } else {
                 Language.sendLangMessage("Message.noPermission", sender);
             }

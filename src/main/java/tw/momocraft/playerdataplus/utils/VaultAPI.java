@@ -12,7 +12,7 @@ public class VaultAPI {
     private boolean isEnabled = false;
     private Permission perms = null;
 
-    public VaultAPI() {
+    VaultAPI() {
         this.setVaultStatus(Bukkit.getServer().getPluginManager().getPlugin("Vault") != null);
     }
 

@@ -4,7 +4,6 @@ import com.bekvon.bukkit.residence.protection.FlagPermissions;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -22,6 +21,7 @@ import static org.bukkit.Bukkit.getServer;
 public class ConfigHandler {
 
     private static YamlConfiguration configYAML;
+    private static YamlConfiguration spigotYAML;
     private static DependAPI depends;
     private static UpdateHandler updater;
     private static Logger logger;
@@ -36,6 +36,13 @@ public class ConfigHandler {
 
         if (ConfigHandler.getDepends().ResidenceEnabled()) {
             FlagPermissions.addFlag("bypassclean");
+        }
+
+        int timeoutTime = ConfigHandler.getServerConfig("spigot.yml").getInt("settings.timeout-time");
+        if (ConfigHandler.getConfig("config.yml").getBoolean("Clean.Settings.Timeout-Warning") && timeoutTime < 180) {
+            ServerHandler.sendConsoleMessage("&cIf your \"timeout-time\" setting in spigot.yml is too low, it may cause the server to restart in the middle of cleaning.");
+            ServerHandler.sendConsoleMessage("&cPlease set a higher number of seconds based on the number of server players, especially for the first time.");
+            return;
         }
 
         if (!reload && getConfig("config.yml").getBoolean("Clean.Settings.Auto-Clean.Enable")) {
@@ -73,6 +80,29 @@ public class ConfigHandler {
             getConfigData(path);
         }
         return getPath(path, file, false);
+    }
+
+    public static FileConfiguration getServerConfig(String path) {
+        File file = new File(Bukkit.getWorldContainer(), path);
+        if (spigotYAML == null) {
+            getServerConfigData(path);
+        }
+        return getServerPath(path, file, false);
+    }
+
+    private static FileConfiguration getServerConfigData(String path) {
+        File file = new File(Bukkit.getWorldContainer(), path);
+        return getServerPath(path, file, true);
+    }
+
+    private static YamlConfiguration getServerPath(String path, File file, boolean saveData) {
+        if (path.contains("spigot.yml")) {
+            if (saveData) {
+                spigotYAML = YamlConfiguration.loadConfiguration(file);
+            }
+            return spigotYAML;
+        }
+        return null;
     }
 
     private static FileConfiguration getConfigData(String path) {

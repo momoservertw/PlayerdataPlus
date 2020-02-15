@@ -10,6 +10,9 @@ Clean:
   Settings:
     Expiry-Days: 60
     Log: true
+      # It will kick all players out and prevent players join the server.
+      # Bypass permission: playerdataplus.bypass.maintenance
+      Maintenance-Before-Cleaning: true
     #  It will automatic purge the old data when the server is starting.
     Auto-Clean:
       Enable: false

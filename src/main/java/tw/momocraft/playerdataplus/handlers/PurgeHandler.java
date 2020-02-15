@@ -28,6 +28,13 @@ public class PurgeHandler {
     public void startClean(CommandSender sender) {
         ConfigurationSection cleanConfig = ConfigHandler.getConfig("config.yml").getConfigurationSection("Clean.Control");
         if (cleanConfig != null) {
+            int timeoutTime = ConfigHandler.getServerConfig("spigot.yml").getInt("settings.timeout-time");
+            if (ConfigHandler.getConfig("config.yml").getBoolean("Clean.Settings.Timeout-Warning") && timeoutTime < 180) {
+                ServerHandler.sendConsoleMessage("&cIf your \"timeout-time\" setting in spigot.yml is too low, it may cause the server to restart in the middle of cleaning.");
+                ServerHandler.sendConsoleMessage("&cPlease set a higher number of seconds based on the number of server players, especially for the first time.");
+                ServerHandler.sendConsoleMessage("&6Cleanup process has ended.");
+                return;
+            }
             int maxData = ConfigHandler.getConfig("config.yml").getInt("Clean.Settings.Max-Clean-Per-Data");
             Table<String, String, List<String>> cleanTable = HashBasedTable.create();
             String backupPath = DataHandler.getBackupPath();

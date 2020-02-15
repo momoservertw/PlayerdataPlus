@@ -11,8 +11,11 @@ Clean:
     Expiry-Days: 60
     # Create a detail log file in plugin folder.
     Log: true
-    # It will clean up a limited amount of data once and then restart again. Set "0" to disable this feature.
+    # It will clean up a limited amount of data once and then restart the clean process again. Set "0" to disable this feature.
     Max-Clean-Per-Data: 10000
+    # If your "timeout-time" setting in spigot.yml is too low, it may cause the server to restart in the middle of cleaning.
+    # Please set a higher number of seconds based on the number of server players, especially for the first time.
+    Timeout-Warning: true
     # Automatic clean the old data when the server is starting.
     Auto-Clean:
       Enable: false

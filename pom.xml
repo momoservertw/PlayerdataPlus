@@ -51,6 +51,11 @@
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
+        <!--NameTagEdit Repo-->
+        <repository>
+        <id>upstream</id>
+        <url>http://ci.nametagedit.com/plugin/repository/everything/</url>
+    </repository>
     </repositories>
     <dependencies>
         <!--Google API-->
@@ -160,6 +165,12 @@
             <systemPath>${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/MyPet-3.9-SNAPSHOT-B1510.jar
             </systemPath>
             <version>LATEST</version>
+        </dependency>
+        <!--NameTagEdit API-->
+        <dependency>
+            <groupId>com.nametagedit</groupId>
+            <artifactId>nametagedit</artifactId>
+            <version>4.1.0</version>
         </dependency>
     </dependencies>
 

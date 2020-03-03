@@ -32,6 +32,11 @@ commands:
     permission: playerdataplus.command.clean
     usage: |
       /playerdataplus clean
+  playerdataplus nick:
+   description: Change player's nick name.
+   permission: playerdataplus.command.nick
+   usage: |
+     /playerdataplus nick
 
 permissions:
   playerdataplus.*:
@@ -51,6 +56,8 @@ permissions:
       playerdataplus.command.reload: true
       playerdataplus.command.version: true
       playerdataplus.command.clean: true
+      playerdataplus.command.nick: true
+      playerdataplus.command.nick.*: true
   playerdataplus.command.reload:
     description: Allows use of /playerdataplus command reload.
     default: op
@@ -59,6 +66,12 @@ permissions:
     default: op
   playerdataplus.command.clean:
     description: Allowss use of command /playerdataplus clean.
+    default: op
+  playerdataplus.command.nick:
+    description: Allows use of command /playerdataplus nick.
+    default: op
+  nickplus.command.nick.other:
+    description: Allows to see command /playerdataplus nick <player>.
     default: op
   playerdataplus.bypass.*:
     description: Allows player to bypass all features.

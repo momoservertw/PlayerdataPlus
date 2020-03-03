@@ -13,6 +13,7 @@ public class DependAPI {
     private boolean LuckPerms = false;
     private boolean MyPet = false;
     private boolean AuthMe = false;
+    private boolean NameTagEdit = false;
     private VaultAPI vault;
 
     public DependAPI() {
@@ -26,6 +27,7 @@ public class DependAPI {
         this.setLuckPermsStatus(Bukkit.getServer().getPluginManager().getPlugin("LuckPerms") != null);
         this.setMyPetStatus(Bukkit.getServer().getPluginManager().getPlugin("MyPet") != null);
         this.setAuthMeStatus(Bukkit.getServer().getPluginManager().getPlugin("AuthMe") != null);
+        this.setNameTagEditStatus(Bukkit.getServer().getPluginManager().getPlugin("NameTagEdit") != null);
         this.setVault();
     }
 
@@ -70,6 +72,10 @@ public class DependAPI {
         return this.AuthMe;
     }
 
+    public boolean NameTagEditEnabled() {
+        return this.AuthMe;
+    }
+
 
     private void setCMIStatus(boolean bool) {
         this.CMI = bool;
@@ -103,9 +109,9 @@ public class DependAPI {
         this.LuckPerms = bool;
     }
 
-    private void setMyPetStatus(boolean bool) {
-        this.MyPet = bool;
-    }
+    private void setMyPetStatus(boolean bool) { this.MyPet = bool; }
+
+    private void setNameTagEditStatus(boolean bool) { this.MyPet = bool; }
 
     private void setAuthMeStatus(boolean bool) {
         this.AuthMe = bool;

@@ -61,6 +61,34 @@ Clean:
     DiscordSRV:
       Enable: false
 
+Nick:
+  Length: 6
+  Black-List:
+    - '§'
+    - '&'
+  Format:
+    CMI:
+      Enable: false
+      Nick: "%color%%nick%(%player%)"
+      Off: "%color%%player%"
+    NameTagEdit:
+      Enable: false
+      Off:
+        Prefix: "%color%"
+        Suffix: ""
+    Commands: []
+    Commands-Cancel: []
+  # Permission: playerdataplus.nick.color.COLOR
+  # Permission: playerdataplus.nick.defaultcolor.COLOR
+  # Permission: playerdataplus.nick.forcecolor.COLOR
+  Groups:
+    Default:
+      0: a
+      1: b
+      2: d
+      3: e
+      4: e
+
 Message:
   prefix: '&7[&dPlayerdataPlus&7]&r '
   noPermission: '&cYou do not have permission to use that command!'
@@ -72,3 +100,10 @@ Message:
       help: '&a/playerdataplus help &8- &7This help menu.'
       reload: '&a/playerdataplus reload &8- &7Reload config file.'
       clean: '&a/playerdataplus clean &8- &7Clean the expired data.'
+    Nick:
+      usage: '&cUsage: /nick <nick> <color> | /nick off'
+      helpColor: '&cColor: &aa &8| &bb&8(VIP) &8| &dd&8(MVP) &8| &ee&8(GOD)'
+      invalidLong: '&cNick is too long. Max &68 &esymbols.'
+      invalidNick: '&cYou can''t use this nick name.'
+      invalidColor: '&cYou dont have permission to set this color.'
+      success: '&aYou nick is: %color%%nick%(%player%)'

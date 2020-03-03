@@ -117,4 +117,12 @@ public class Utils {
         }
         return name;
     }
+
+    static boolean isColorCode(String colorCode) {
+        if (colorCode.length() != 1){
+            String pattern = "[a-fA-F0-8]";
+            return colorCode.matches(pattern);
+        }
+        return  false;
+    }
 }

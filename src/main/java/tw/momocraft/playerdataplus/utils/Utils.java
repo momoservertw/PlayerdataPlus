@@ -6,7 +6,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Statistic;
 import org.bukkit.block.Block;
-import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -16,6 +15,9 @@ import tw.momocraft.playerdataplus.handlers.ServerHandler;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Set;
+import java.util.*;
+
+import static tw.momocraft.playerdataplus.handlers.ConfigHandler.getColors;
 
 public class Utils {
 
@@ -118,11 +120,12 @@ public class Utils {
         return name;
     }
 
-    static boolean isColorCode(String colorCode) {
+    public static boolean isColorCode(String colorCode) {
         if (colorCode.length() != 1){
-            String pattern = "[a-fA-F0-8]";
+            String pattern = "[a-fA-F0-9]";
             return colorCode.matches(pattern);
+        } else {
+            return false;
         }
-        return  false;
     }
 }

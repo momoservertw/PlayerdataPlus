@@ -9,6 +9,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.scheduler.BukkitRunnable;
 import tw.momocraft.playerdataplus.Commands;
 import tw.momocraft.playerdataplus.PlayerdataPlus;
+import tw.momocraft.playerdataplus.utils.ColorCorrespond;
 import tw.momocraft.playerdataplus.utils.DependAPI;
 import tw.momocraft.playerdataplus.utils.Logger;
 
@@ -25,6 +26,7 @@ public class ConfigHandler {
     private static DependAPI depends;
     private static UpdateHandler updater;
     private static Logger logger;
+    private static ColorCorrespond colors;
 
 
     public static void generateData(boolean reload) {
@@ -33,6 +35,7 @@ public class ConfigHandler {
         sendUtilityDepends();
         setUpdater(new UpdateHandler());
         setLogger(new Logger());
+        setColorConvert(new ColorCorrespond());
 
         if (ConfigHandler.getDepends().ResidenceEnabled()) {
             FlagPermissions.addFlag("bypassclean");
@@ -198,6 +201,12 @@ public class ConfigHandler {
 
     public static Logger getLogger() {
         return logger;
+    }
+
+    private static void setColorConvert(ColorCorrespond colorCorrespond) { colors = colorCorrespond; }
+
+    public static ColorCorrespond getColors() {
+        return colors;
     }
 
 

@@ -3,10 +3,12 @@ tw\momocraft\playerdataplus\handlers\ConfigHandler$1.class
 tw\momocraft\playerdataplus\handlers\PermissionsHandler.class
 tw\momocraft\playerdataplus\utils\Language.class
 tw\momocraft\playerdataplus\handlers\ServerHandler.class
+tw\momocraft\playerdataplus\utils\Nick.class
 tw\momocraft\playerdataplus\Commands.class
 tw\momocraft\playerdataplus\utils\Logger.class
 tw\momocraft\playerdataplus\utils\Language$Lang.class
 tw\momocraft\playerdataplus\handlers\ConfigHandler.class
+tw\momocraft\playerdataplus\utils\ColorCorrespond.class
 tw\momocraft\playerdataplus\handlers\PurgeHandler.class
 tw\momocraft\playerdataplus\handlers\PlayerHandler.class
 tw\momocraft\playerdataplus\PlayerdataPlus.class

@@ -2,7 +2,7 @@ name: PlayerdataPlus
 main: tw.momocraft.playerdataplus.PlayerdataPlus
 author: Momocraft
 api-version: 1.13
-version: 1.0.5
+version: 1.1.0
 description: Clean the old data and improve the server's performance.
 softdepend: [Vault, MythicMobs, CMI, Residence, PlaceHolderAPI, MySQLPlayerDataBridge, SkinsRestorer, ChatControlPro, DiscordSRV, LuckPerms, MyPet]
 
@@ -67,17 +67,32 @@ permissions:
   playerdataplus.command.clean:
     description: Allowss use of command /playerdataplus clean.
     default: op
-  playerdataplus.command.nick:
-    description: Allows use of command /playerdataplus nick.
+  playerdataplus.command.nick.*:
+    description: Allows use all nick commands.
     default: op
-  nickplus.command.nick.other:
-    description: Allows to see command /playerdataplus nick <player>.
+    children:
+      playerdataplus.command.nick: true
+      playerdataplus.command.nick.color: true
+      playerdataplus.command.nick.bypass: true
+      playerdataplus.command.nick.other: true
+  playerdataplus.command.nick:
+    description: Allows use of command /playerdataplus nick <nick>.
+    default: op
+  playerdataplus.command.nick.color:
+    description: Allows use of command /playerdataplus nick <nick> [color].
+    default: op
+  playerdataplus.command.nick.bypass:
+    description: Allows use of command /playerdataplus nick <nick> [bypass].
+    default: op
+  playerdataplus.command.nick.other:
+    description: Allows use of command /playerdataplus nick <nick> [player].
     default: op
   playerdataplus.bypass.*:
     description: Allows player to bypass all features.
     default: op
     children:
       playerdataplus.bypass.clean.*: true
+      playerdataplus.bypass.nick.*: true
   playerdataplus.bypass.clean.*:
     description: Allows player to bypass all data clean.
     default: op
@@ -89,4 +104,86 @@ permissions:
     default: op
   playerdataplus.bypass.clean.stats:
     description: Allows player to bypass the stats clean.
+    default: op
+  playerdataplus.bypass.nick.*:
+    description: Allows player to bypass all nick limits.
+    default: op
+    children:
+      playerdataplus.bypass.nick.length: true
+      playerdataplus.bypass.nick.purecolor: true
+      playerdataplus.bypass.nick.blacklist: true
+  playerdataplus.bypass.nick.length:
+    description: Allows player to bypass the nick length limit.
+    default: op
+  playerdataplus.bypass.nick.purecolor:
+    description: Allows player to bypass the nick pure-color limit.
+    default: op
+  playerdataplus.bypass.nick.blacklist:
+    description: Allows player to bypass the nick blacklist limit.
+    default: op
+  playerdataplus.nick.color.*:
+    description: Allows player to change his nick color.
+    default: op
+  playerdataplus.nick.color.a:
+    description: Allows player to change his nick color.
+    default: op
+  playerdataplus.nick.color.b:
+    description: Allows player to change his nick color.
+    default: op
+  playerdataplus.nick.color.c:
+    description: Allows player to change his nick color.
+    default: op
+  playerdataplus.nick.color.d:
+    description: Allows player to change his nick color.
+    default: op
+  playerdataplus.nick.color.e:
+    description: Allows player to change his nick color.
+    default: op
+  playerdataplus.nick.color.f:
+    description: Allows player to change his nick color.
+    default: op
+  playerdataplus.nick.color.0:
+    description: Allows player to change his nick color.
+    default: op
+  playerdataplus.nick.color.1:
+    description: Allows player to change his nick color.
+    default: op
+  playerdataplus.nick.color.2:
+    description: Allows player to change his nick color.
+    default: op
+  playerdataplus.nick.color.3:
+    description: Allows player to change his nick color.
+    default: op
+  playerdataplus.nick.color.4:
+    description: Allows player to change his nick color.
+    default: op
+  playerdataplus.nick.color.5:
+    description: Allows player to change his nick color.
+    default: op
+  playerdataplus.nick.color.6:
+    description: Allows player to change his nick color.
+    default: op
+  playerdataplus.nick.color.7:
+    description: Allows player to change his nick color.
+    default: op
+  playerdataplus.nick.color.8:
+    description: Allows player to change his nick color.
+    default: op
+  playerdataplus.nick.color.9:
+    description: Allows player to change his nick color.
+    default: op
+  playerdataplus.nick.group.*:
+    description: Defines player's default nick color.
+    default: op
+  playerdataplus.nick.group.0:
+    description: Defines player's default nick color.
+    default: op
+  playerdataplus.nick.group.1:
+    description: Defines player's default nick color.
+    default: op
+  playerdataplus.nick.group.2:
+    description: Defines player's default nick color.
+    default: op
+  playerdataplus.nick.group.3:
+    description: Defines player's default nick color.
     default: op

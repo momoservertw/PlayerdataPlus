@@ -1,8 +1,13 @@
 package tw.momocraft.playerdataplus.handlers;
 
+import com.Zrips.CMI.CMI;
+import com.Zrips.CMI.Containers.CMIUser;
+import net.luckperms.api.LuckPermsProvider;
+import net.luckperms.api.model.user.User;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import sun.security.krb5.Config;
 
 import java.util.Collection;
 import java.util.UUID;
@@ -36,6 +41,21 @@ public class PlayerHandler {
     }
 
     public static OfflinePlayer getOfflinePlayer(String playerName) {
+        if (ConfigHandler.getDepends().LuckPermsEnabled()) {
+            User luckUser = LuckPermsProvider.get().getUserManager().getUser(playerName);
+            if (luckUser != null) {
+                UUID playerUUID = luckUser.getUniqueId();
+                return Bukkit.getOfflinePlayer(playerUUID);
+            }
+        }
+        if (ConfigHandler.getDepends().CMIEnabled()) {
+            CMIUser cmiUser = CMI.getInstance().getPlayerManager().getUser(playerName);
+            if (cmiUser != null) {
+                UUID playerUUID = cmiUser.getUniqueId();
+                return Bukkit.getOfflinePlayer(playerUUID);
+            }
+            return null;
+        }
         Collection<?> playersOnlineNew;
         OfflinePlayer[] playersOnlineOld;
         try {

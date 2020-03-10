@@ -125,7 +125,10 @@ public class Language {
         return langMessage
                 .replace("%command%", langHolder[0])
                 .replace("%player%", langHolder[1])
-                .replace("%targetplayer%", langHolder[2]);
+                .replace("%targetplayer%", langHolder[2])
+                .replace("%nick%", langHolder[3])
+                .replace("%nick_color%", langHolder[4])
+                .replace("%nick_length%", ConfigHandler.getConfig("config.yml").getString("Nick.Limits.Length"));
     }
 
     public static String[] newString() {

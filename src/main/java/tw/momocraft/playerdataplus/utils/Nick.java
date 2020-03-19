@@ -35,14 +35,12 @@ public class Nick {
         }
         Player player = (Player) sender;
         String playerName = player.getName();
-        if (bypass || PermissionsHandler.hasPermission(player, "playerdataplus.bypass.nick.*", false)) {
+        if (bypass && !PermissionsHandler.hasPermission(player, "playerdataplus.bypass.nick.*", false)) {
             if (nickColor == null) {
                 nickColor = getDefaultColor(player);
-            } else {
-                if (!getColorPerm(player, nickColor)) {
-                    Language.sendLangMessage("Message.PlayerdataPlus.Nick.invalidColor", sender);
-                    return;
-                }
+            } else if (!getColorPerm(player, nickColor)) {
+                Language.sendLangMessage("Message.PlayerdataPlus.Nick.invalidColor", sender);
+                return;
             }
             if (!getLength(player, nickName)) {
                 Language.sendLangMessage("Message.PlayerdataPlus.Nick.invalidLength", sender);
@@ -83,7 +81,7 @@ public class Nick {
         String playerName = player.getName();
         String[] placeHolders = Language.newString();
         placeHolders[2] = playerName;
-        if (bypass || PermissionsHandler.hasPermission(player, "playerdataplus.bypass.nick.*", false)) {
+        if (bypass && !PermissionsHandler.hasPermission(player, "playerdataplus.bypass.nick.*", false)) {
             if (nickColor == null) {
                 nickColor = getDefaultColor(player);
             } else {
@@ -111,6 +109,7 @@ public class Nick {
         }
         getFormatting("On", player, playerName, nickName, nickColor);
         placeHolders[1] = playerName;
+        placeHolders[2] = playerName;
         placeHolders[3] = nickName;
         placeHolders[4] = nickColor;
         Language.sendLangMessage("Message.PlayerdataPlus.Nick.successOn", player, placeHolders);
@@ -120,8 +119,7 @@ public class Nick {
     // Command: /nickplus nick off [player]
     public static void setNickOff(CommandSender sender) {
         Player player = (Player) sender;
-        String playerName;
-        playerName = player.getName();
+        String playerName = player.getName();
         String nickColor = getDefaultColor(player);
         getFormatting("Off", player, playerName, null, nickColor);
         String[] placeHolders = Language.newString();
@@ -170,7 +168,7 @@ public class Nick {
         }
     }
 
-    private static String getDefaultColor(Player player) {
+    public static String getDefaultColor(CommandSender sender) {
         String defaultColor = ConfigHandler.getConfig("config.yml").getString("Nick.Groups.Default");
         ConfigurationSection groupConfig = ConfigHandler.getConfig("config.yml").getConfigurationSection("Nick.Groups.Custom");
         Set<String> groupSet;
@@ -181,7 +179,7 @@ public class Nick {
         }
         List<Long> groupList = new ArrayList<>();
         for (String group : groupSet) {
-            if (PermissionsHandler.hasPermission(player, "playerdataplus.nick.color." + group)) {
+            if (PermissionsHandler.hasPermission(sender, "playerdataplus.nick.color." + group)) {
                 groupList.add(Long.valueOf(group));
             }
         }
@@ -191,11 +189,11 @@ public class Nick {
         Long maxGroup = Collections.max(groupList);
         String customColor;
         while (true) {
-            customColor = ConfigHandler.getConfig("config.yml").getString("Nick.Groups." + maxGroup);
+            customColor = ConfigHandler.getConfig("config.yml").getString("Nick.Groups.Custom." + maxGroup);
             if (customColor != null) {
                 return customColor;
             }
-            groupList.remove(Collections.max(groupList));
+            groupList.remove(maxGroup);
             if (groupList.isEmpty()) {
                 return defaultColor;
             }
@@ -205,7 +203,7 @@ public class Nick {
 
     private static boolean getLength(Player player, String nickName) {
         if (!PermissionsHandler.hasPermission(player, "playerdataplus.bypass.nick.length", false)) {
-            int nickLength = ConfigHandler.getConfig("config.yml").getInt("Nick.Length");
+            int nickLength = ConfigHandler.getConfig("config.yml").getInt("Nick.Limits.Length");
             return nickName.length() <= nickLength;
         }
         return true;
@@ -213,7 +211,7 @@ public class Nick {
 
     private static boolean getPureColor(Player player, String nickName) {
         if (!PermissionsHandler.hasPermission(player, "playerdataplus.bypass.nick.purecolor", false)) {
-            if (ConfigHandler.getConfig("config.yml").getBoolean("Nick.Formats.Pure-Color")) {
+            if (ConfigHandler.getConfig("config.yml").getBoolean("Nick.Limits.Pure-Color")) {
                 return !nickName.contains("§") && !nickName.contains("&");
             } else {
                 String[] nickNameSplit = nickName.split("[&§]");
@@ -232,7 +230,7 @@ public class Nick {
 
     private static boolean getBlackList(Player player, String nickName) {
         if (!PermissionsHandler.hasPermission(player, "playerdataplus.bypass.nick.blacklist", false)) {
-            for (String key : ConfigHandler.getConfig("config.yml").getStringList("Nick.Black-List")) {
+            for (String key : ConfigHandler.getConfig("config.yml").getStringList("Nick.Limits.Black-List")) {
                 if (nickName.contains(key)) {
                     return false;
                 }
@@ -243,7 +241,7 @@ public class Nick {
 
     private static boolean getColorPerm(Player player, String nickColor) {
         if (nickColor != null) {
-            return PermissionsHandler.hasPermission(player, "playerdataplus.nick.color." + nickColor)
+            return PermissionsHandler.hasPermission(player, "playerdataplus.nick.color." + nickColor, false)
                     || getDefaultColor(player).equals(nickColor);
         }
         return true;
@@ -288,14 +286,14 @@ public class Nick {
                     nteFormatSuffix = "";
                 }
             }
-            NametagEdit.getApi().setNametag(player.getName(), nteFormatPrefix, nteFormatSuffix);
+            NametagEdit.getApi().setNametag(player, nteFormatPrefix, nteFormatSuffix);
             ServerHandler.debugMessage("Nick", playerName, "NameEditTag", "set", nteFormatPrefix + playerName + nteFormatSuffix);
         }
         List<String> cmdList;
         if (toggle.equals("On")) {
-            cmdList = ConfigHandler.getConfig("config.yml").getStringList("Nick.Commands");
+            cmdList = ConfigHandler.getConfig("config.yml").getStringList("Nick.Formats.Commands");
         } else {
-            cmdList = ConfigHandler.getConfig("config.yml").getStringList("Nick.Commands-Off");
+            cmdList = ConfigHandler.getConfig("config.yml").getStringList("Nick.Formats.Commands-Off");
         }
         for (String command : cmdList) {
             command = getCmdReplace(command, playerName, nickName, nickColor, player);

@@ -6,6 +6,7 @@ tw\momocraft\playerdataplus\handlers\ServerHandler.class
 tw\momocraft\playerdataplus\utils\Nick.class
 tw\momocraft\playerdataplus\Commands.class
 tw\momocraft\playerdataplus\utils\Logger.class
+tw\momocraft\playerdataplus\utils\TabComplete.class
 tw\momocraft\playerdataplus\utils\Language$Lang.class
 tw\momocraft\playerdataplus\handlers\ConfigHandler.class
 tw\momocraft\playerdataplus\utils\ColorCorrespond.class

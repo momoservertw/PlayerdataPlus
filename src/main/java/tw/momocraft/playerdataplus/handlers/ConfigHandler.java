@@ -12,6 +12,7 @@ import tw.momocraft.playerdataplus.PlayerdataPlus;
 import tw.momocraft.playerdataplus.utils.ColorCorrespond;
 import tw.momocraft.playerdataplus.utils.DependAPI;
 import tw.momocraft.playerdataplus.utils.Logger;
+import tw.momocraft.playerdataplus.utils.TabComplete;
 
 import java.io.File;
 import java.time.LocalDateTime;
@@ -75,6 +76,7 @@ public class ConfigHandler {
 
     public static void registerEvents() {
         PlayerdataPlus.getInstance().getCommand("playerdataplus").setExecutor(new Commands());
+        PlayerdataPlus.getInstance().getCommand("playerdataplus").setTabCompleter(new TabComplete());
     }
 
     public static FileConfiguration getConfig(String path) {

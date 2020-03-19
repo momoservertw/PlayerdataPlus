@@ -119,13 +119,4 @@ public class Utils {
         }
         return name;
     }
-
-    public static boolean isColorCode(String colorCode) {
-        if (colorCode.length() != 1){
-            String pattern = "[a-fA-F0-9]";
-            return colorCode.matches(pattern);
-        } else {
-            return false;
-        }
-    }
 }

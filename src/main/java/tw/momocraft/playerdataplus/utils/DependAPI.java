@@ -73,7 +73,7 @@ public class DependAPI {
     }
 
     public boolean NameTagEditEnabled() {
-        return this.AuthMe;
+        return this.NameTagEdit;
     }
 
 
@@ -111,11 +111,11 @@ public class DependAPI {
 
     private void setMyPetStatus(boolean bool) { this.MyPet = bool; }
 
-    private void setNameTagEditStatus(boolean bool) { this.MyPet = bool; }
-
     private void setAuthMeStatus(boolean bool) {
         this.AuthMe = bool;
     }
+
+    private void setNameTagEditStatus(boolean bool) { this.NameTagEdit = bool; }
 
     public VaultAPI getVault() {
         return this.vault;

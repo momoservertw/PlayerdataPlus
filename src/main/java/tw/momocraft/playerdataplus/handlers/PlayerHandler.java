@@ -18,7 +18,6 @@ public class PlayerHandler {
         try {
             args = Bukkit.getPlayer(UUID.fromString(playerName));
         } catch (Exception e) {
-            ServerHandler.sendDebugTrace(e);
         }
         if (args == null) {
             return Bukkit.getPlayer(playerName);

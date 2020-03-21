@@ -1,5 +1,6 @@
 package tw.momocraft.playerdataplus.utils;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -31,24 +32,39 @@ public class TabComplete implements TabCompleter {
             if (cleanConfig != null) {
                 commands.addAll(cleanConfig.getKeys(false));
             }
-        } else if ((args.length == 3 || args.length == 4 || args.length == 5) && (args[0].equalsIgnoreCase("nick"))) {
-            if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.nick.other")) {
-                try {
-                    if (Bukkit.class.getMethod("getOnlinePlayers", new Class<?>[0]).getReturnType() == Collection.class) {
+        } else if ((args.length >= 3) && (args[0].equalsIgnoreCase("nick"))) {
+            if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.nick")) {
+                if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.nick.bypass")) {
+                    commands.add("false");
+                }
+                if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.nick.color")) {
+                    commands.addAll(ConfigHandler.getColors().getColorList());
+                }
+                if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.nick.other")) {
+                    try {
                         if (Bukkit.class.getMethod("getOnlinePlayers", new Class<?>[0]).getReturnType() == Collection.class) {
-                            playersOnlineNew = ((Collection<?>) Bukkit.class.getMethod("getOnlinePlayers", new Class<?>[0]).invoke(null, new Object[0]));
-                            for (Object objPlayer : playersOnlineNew) {
-                                commands.add(((Player) objPlayer).getName());
+                            if (Bukkit.class.getMethod("getOnlinePlayers", new Class<?>[0]).getReturnType() == Collection.class) {
+                                playersOnlineNew = ((Collection<?>) Bukkit.class.getMethod("getOnlinePlayers", new Class<?>[0]).invoke(null, new Object[0]));
+                                for (Object objPlayer : playersOnlineNew) {
+                                    commands.add(((Player) objPlayer).getName());
+                                }
+                            }
+                        } else {
+                            playersOnlineOld = ((Player[]) Bukkit.class.getMethod("getOnlinePlayers", new Class<?>[0]).invoke(null, new Object[0]));
+                            for (Player player : playersOnlineOld) {
+                                commands.add(player.getName());
                             }
                         }
-                    } else {
-                        playersOnlineOld = ((Player[]) Bukkit.class.getMethod("getOnlinePlayers", new Class<?>[0]).invoke(null, new Object[0]));
-                        for (Player player : playersOnlineOld) {
-                            commands.add(player.getName());
-                        }
+                    } catch (Exception e) {
+                        ServerHandler.sendDebugTrace(e);
                     }
-                } catch (Exception e) {
-                    ServerHandler.sendDebugTrace(e);
+                }
+            }
+        } else if ((args.length == 2) && (args[0].equalsIgnoreCase("nick"))) {
+            commands.add("off");
+            if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.nick")) {
+                if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.nick.color")) {
+                    commands.addAll(ConfigHandler.getColors().getColorList());
                 }
             }
         } else if (args.length == 1) {

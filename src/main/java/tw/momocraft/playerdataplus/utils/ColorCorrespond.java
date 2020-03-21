@@ -9,6 +9,7 @@ import java.util.*;
 
 public class ColorCorrespond {
     private Map<String, String> colorMap = new HashMap<>();
+    private List<String> colorList = new ArrayList<>();
 
     public ColorCorrespond() {
         setUp();
@@ -20,11 +21,18 @@ public class ColorCorrespond {
             for (String key : colorConfig.getKeys(false)) {
                 colorMap.put(key, String.valueOf(colorConfig.get(key)));
             }
+            colorList.addAll(colorMap.values());
         }
+        String[] colorArray = new String[]{"a", "b", "c", "d", "e", "f", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
+        Collections.addAll(colorList, colorArray);
     }
 
-    private Map<String, String> getColorMap() {
+    public Map<String, String> getColorMap() {
         return this.colorMap;
+    }
+
+    public List<String> getColorList() {
+        return colorList;
     }
 
     public String getColorCode(String color) {

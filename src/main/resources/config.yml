@@ -164,3 +164,5 @@ Message:
       targetSuccessOn: '&a%targetplayer% nick is: &%nick_color%%nick%(%player%)'
       successOff: '&aYou nick is: &%nick_color%%player%'
       targetSuccessOff: '&a%targetplayer% nick is: &%color%%player%'
+      successColor: '&aYou nick color is: &%nick_color%COLOR'
+      targetSuccessColor: '&a%targetplayer% nick color is: &%nick_color%COLOR'

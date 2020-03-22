@@ -207,11 +207,10 @@ public class ServerHandler {
         if (player != null) {
             try {
                 if (placeholder) {
-                    player.chat("/" + Utils.translateLayout(command, player));
+                    Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), Utils.translateLayout(command, player));
                 } else {
-                    player.chat("/" + command);
+                    Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command);
                 }
-                Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), Utils.translateLayout(command, player));
             } catch (Exception e) {
                 ServerHandler.sendErrorMessage("&cThere was an issue executing a console command, if this continues please report it to the developer!");
                 ServerHandler.sendDebugTrace(e);

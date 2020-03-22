@@ -1,7 +1,6 @@
 package tw.momocraft.playerdataplus.handlers;
 
 import com.google.common.collect.Table;
-import tw.momocraft.playerdataplus.PlayerdataPlus;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -10,8 +9,6 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
@@ -265,58 +262,5 @@ public class DataHandler {
 
     private static String generateZipEntry(String file, String SOURCE_FOLDER) {
         return file.substring(SOURCE_FOLDER.length() + 1, file.length());
-    }
-
-    private static String getBackupTimeName() {
-        String timeFormat = "yyyy-MM-dd";
-        LocalDateTime currentDate = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(timeFormat);
-        return currentDate.format(formatter);
-    }
-
-    static String getBackupPath() {
-        String backupTimeName = getBackupTimeName();
-        String backupMode = ConfigHandler.getConfig("config.yml").getString("Clean.Settings.Backup.Mode");
-        String backupFolderName = ConfigHandler.getConfig("config.yml").getString("Clean.Settings.Backup.Folder-Name");
-        if (backupMode == null) {
-            backupMode = "plugin";
-            ServerHandler.sendConsoleMessage("&cThe option &8\"&eClean.Settings.Backup.Name&8\" &cis missing, using the default value \"plugin\".");
-        }
-        String backupPath;
-        String backupCustomPath;
-        switch (backupMode) {
-            case "plugin":
-                backupPath = PlayerdataPlus.getInstance().getDataFolder().getPath() + "\\" + backupFolderName + "\\" + backupTimeName;
-                break;
-            case "custom":
-                backupCustomPath = ConfigHandler.getConfig("config.yml").getString("Clean.Settings.Backup.Custom-Path");
-                if (backupCustomPath != null) {
-                    backupPath = backupCustomPath + "\\" + backupFolderName + "\\" + backupTimeName;
-                } else {
-                    ServerHandler.sendConsoleMessage("&cThe option &8\"&eClean.Settings.Backup.Custom-Path&8\" &cis empty, using the default mode \"plugin\".");
-                    backupPath = PlayerdataPlus.getInstance().getDataFolder().getPath() + "\\Backup\\" + backupTimeName;
-                }
-                break;
-            default:
-                ServerHandler.sendConsoleMessage("&cThe option &8\"&eClean.Settings.Backup.Mode&8\" &cis empty, using the default mode \"plugin\".");
-                backupPath = PlayerdataPlus.getInstance().getDataFolder().getPath() + "\\" + backupFolderName + "\\" + backupTimeName;
-                break;
-        }
-
-        String backupName = backupPath;
-        File zipFile = new File(backupName + ".zip");
-        int number = 1;
-        while (zipFile.exists()) {
-            backupName = backupPath + "-" + number;
-            zipFile = new File(backupName + ".zip");
-            number++;
-        }
-        File backupFolder = new File(backupName);
-        while (backupFolder.exists()) {
-            backupName = backupPath + "-" + number;
-            backupFolder = new File(backupName);
-            number++;
-        }
-        return backupName;
     }
 }

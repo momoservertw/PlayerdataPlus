@@ -39,12 +39,12 @@ public class Commands implements CommandExecutor {
                     Language.sendLangMessage("Message.PlayerdataPlus.Commands.clean", sender, false);
                 }
                 if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.nick")) {
-                    Language.sendLangMessage("Message.PlayerdataPlus.Commands.nick", sender);
-                    Language.sendLangMessage("Message.PlayerdataPlus.Commands.nickOff", sender);
+                    Language.sendLangMessage("Message.PlayerdataPlus.Commands.nick", sender, false);
+                    Language.sendLangMessage("Message.PlayerdataPlus.Commands.nickOff", sender, false);
                 }
                 if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.nick.other")) {
-                    Language.sendLangMessage("Message.PlayerdataPlus.Commands.nickOther", sender);
-                    Language.sendLangMessage("Message.PlayerdataPlus.Commands.nickOffOther", sender);
+                    Language.sendLangMessage("Message.PlayerdataPlus.Commands.nickOther", sender, false);
+                    Language.sendLangMessage("Message.PlayerdataPlus.Commands.nickOffOther", sender, false);
                 }
                 Language.dispatchMessage(sender, "");
             } else {
@@ -72,170 +72,43 @@ public class Commands implements CommandExecutor {
             if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.clean")) {
                 ServerHandler.sendConsoleMessage("&6Starting to clean the expired data...");
                 PurgeHandler purgeHandler = new PurgeHandler();
-                purgeHandler.startClean(sender);
+                purgeHandler.start(sender);
+            } else {
+                Language.sendLangMessage("Message.noPermission", sender);
+            }
+            return true;
+        } else if (args.length == 2 && args[0].equalsIgnoreCase("clean")) {
+            if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.clean")) {
+                ServerHandler.sendConsoleMessage("&6Starting to clean the expired data...");
+                PurgeHandler purgeHandler = new PurgeHandler();
+                purgeHandler.start(sender, args[1]);
             } else {
                 Language.sendLangMessage("Message.noPermission", sender);
             }
             return true;
         } else if (args.length == 1 && args[0].equalsIgnoreCase("nick")) {
             if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.nick.other")) {
-                Language.sendLangMessage("Message.PlayerdataPlus.Commands.nickOther", sender);
-                Language.sendLangMessage("Message.PlayerdataPlus.Commands.nickOffOther", sender);
+                Language.sendLangMessage("Message.PlayerdataPlus.Commands.nickOther", sender, false);
+                Language.sendLangMessage("Message.PlayerdataPlus.Commands.nickOffOther", sender, false);
                 return true;
             } else if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.nick")) {
-                Language.sendLangMessage("Message.PlayerdataPlus.Commands.nick", sender);
-                Language.sendLangMessage("Message.PlayerdataPlus.Commands.nickOff", sender);
+                Language.sendLangMessage("Message.PlayerdataPlus.Commands.nick", sender, false);
+                Language.sendLangMessage("Message.PlayerdataPlus.Commands.nickOff", sender, false);
                 return true;
             } else {
                 Language.sendLangMessage("Message.noPermission", sender);
             }
             return true;
-        } else if (args.length == 2 && args[0].equalsIgnoreCase("nick")) {
-            if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.nick")) {
-                // /playerdataplus nick [color]
-                String nickColor = ConfigHandler.getColors().getColorCode(args[1]);
-                if (!nickColor.equals("")) {
-                    if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.nick.color")) {
-                        Nick.setColor(sender, false, nickColor);
-                        return true;
-                    }
-                    // /playerdataplus nick off
-                } else if (args[1].equalsIgnoreCase("off")) {
-                    Nick.setNickOff(sender);
-                    return true;
-                } else {
-                    // /playerdataplus nick <nick>
-                    nickColor = Nick.getDefaultColor(sender);
-                    Nick.setNick(sender, false, args[1], nickColor);
-                    return true;
-                }
-            }
-            Language.sendLangMessage("Message.noPermission", sender);
-            return true;
-        } else if (args.length == 3 && args[0].equalsIgnoreCase("nick")) {
-            if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.nick")) {
-                String nickColor = ConfigHandler.getColors().getColorCode(args[2]);
-                // /playerdataplus nick <off> [player]
-                if (args[1].equals("off")) {
-                    if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.nick.bypass")) {
-                        Player player = PlayerHandler.getPlayerString(args[2]);
-                        if (player != null) {
-                            Nick.setNickOff(sender, player);
-                            return true;
-                        }
-                        String[] placeHolders = Language.newString();
-                        placeHolders[2] = args[2];
-                        Language.sendLangMessage("Message.targetNotOnline", sender, placeHolders);
-                        return true;
-                    }
-                    // /playerdataplus nick <nick> [color]
-                } else if (!nickColor.equals("")) {
-                    if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.nick.color")) {
-                        Nick.setNick(sender, false, args[1], nickColor);
-                        return true;
-                    }
-                    // /playerdataplus nick <nick> [bypass]
-                } else if (args[2].equals("true")) {
-                    if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.nick.bypass")) {
-                        nickColor = Nick.getDefaultColor(sender);
-                        Nick.setNick(sender, true, args[1], nickColor);
-                        return true;
-                    }
-                }
-                nickColor = ConfigHandler.getColors().getColorCode(args[1]);
-                // /playerdataplus nick <color> [player]
-                if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.nick.other")) {
-                    Player player = PlayerHandler.getPlayerString(args[2]);
-                    if (player != null) {
-                        nickColor = ConfigHandler.getColors().getColorCode(args[1]);
-                        if (!nickColor.equals("")) {
-                            Nick.setColor(sender, player, false, nickColor);
-                            return true;
-                        }
-                        nickColor = Nick.getDefaultColor(player);
-                        Nick.setNick(sender, player, false, args[1], nickColor);
-                        return true;
-                    }
-                    String[] placeHolders = Language.newString();
-                    placeHolders[2] = args[2];
-                    Language.sendLangMessage("Message.targetNotOnline", sender, placeHolders);
-                    return true;
-                } else {
-                    // Unknown command.
-                    if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.nick.other")) {
-                        Language.sendLangMessage("Message.PlayerdataPlus.Commands.nickOther", sender);
-                        return true;
-                    } else {
-                        Language.sendLangMessage("Message.PlayerdataPlus.Commands.nick", sender);
-                        return true;
-                    }
-                }
-
-            }
-            Language.sendLangMessage("Message.noPermission", sender);
-            return true;
-        } else if (args.length == 4 && args[0].equalsIgnoreCase("nick")) {
-            if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.nick")) {
-                // /playerdataplus nick <nick> [color] [?]
-                String nickColor = ConfigHandler.getColors().getColorCode(args[2]);
-                if (!nickColor.equals("")) {
-                    if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.nick.color")) {
-                        // /playerdataplus nick <nick> [color] [bypass]
-                        if (args[3].equals("true")) {
-                            if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.nick.bypass")) {
-                                Nick.setNick(sender, true, args[1], nickColor);
-                                return true;
-                            }
-                            // /playerdataplus nick <nick> [color] [player]
-                        } else if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.nick.other")) {
-                            Player player = PlayerHandler.getPlayerString(args[3]);
-                            if (player != null) {
-                                nickColor = ConfigHandler.getColors().getColorCode(args[2]);
-                                Nick.setNick(sender, player, false, args[1], nickColor);
-                                return true;
-                            }
-                            String[] placeHolders = Language.newString();
-                            placeHolders[2] = args[2];
-                            Language.sendLangMessage("Message.targetNotOnline", sender, placeHolders);
-                            return true;
-                        }
-                    }
-                    // /playerdataplus nick <nick> [bypass] [player]
-                } else if (args[2].equals("true")) {
-                    if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.nick.bypass")) {
-                        Player player = PlayerHandler.getPlayerString(args[2]);
-                        if (player != null) {
-                            nickColor = Nick.getDefaultColor(player);
-                            Nick.setNick(sender, player, true, args[1], nickColor);
-                            return true;
-                        }
-                        String[] placeHolders = Language.newString();
-                        placeHolders[2] = args[2];
-                        Language.sendLangMessage("Message.targetNotFound", sender, placeHolders);
-                        return true;
-                    }
-                } else {
-                    // Unknown command.
-                    if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.nick.other")) {
-                        Language.sendLangMessage("Message.PlayerdataPlus.Commands.nickOther", sender);
-                        return true;
-                    } else {
-                        Language.sendLangMessage("Message.PlayerdataPlus.Commands.nick", sender);
-                        return true;
-                    }
-                }
-            }
-            Language.sendLangMessage("Message.noPermission", sender);
-            return true;
-            // /playerdataplus nick <nick> [bypass] [color] [player]
-        } else if (args.length >= 3 && args[0].equalsIgnoreCase("nick")) {
+        } else if (args.length > 1 && args[0].equalsIgnoreCase("nick")) {
             if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.nick")) {
                 boolean bypass = false;
                 boolean off = false;
                 Player player = null;
                 String nickColor = "";
                 String nickName = "";
-                for (String arg : args) {
+                String arg;
+                for (int i = 1; i < args.length; i++) {
+                    arg = args[i];
                     if (arg.equals("true") && !bypass) {
                         if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.nick.bypass")) {
                             bypass = true;
@@ -268,13 +141,49 @@ public class Commands implements CommandExecutor {
                             return true;
                         }
                     }
-                    nickName = arg;
+                    if (nickName.equals("")) {
+                        nickName = arg;
+                        continue;
+                    }
+                    Language.sendLangMessage("Message.targetNotOnline", sender);
+                    return true;
                 }
-                if (player != null) {
-                    Nick.setNick(sender, player, bypass, nickName, nickColor);
+                if (!off) {
+                    if (!nickName.equals("")) {
+                        if (player != null) {
+                            // <nick> [player]
+                            Nick.setNick(sender, player, bypass, nickName, nickColor);
+                        } else {
+                            // <nick>
+                            Nick.setNick(sender, bypass, nickName, nickColor);
+                        }
+                    } else {
+                        // <color> [player]
+                        if (player != null) {
+                            if (nickColor.equals("")) {
+                                Language.sendLangMessage("Message.PlayerdataPlus.Commands.nickOther", sender);
+                                return true;
+                            }
+                            Nick.setColor(sender, player, bypass, nickColor);
+                        } else {
+                            // <color>
+                            if (nickColor.equals("")) {
+                                Language.sendLangMessage("Message.PlayerdataPlus.Commands.nick", sender);
+                                return true;
+                            }
+                            Nick.setColor(sender, bypass, nickColor);
+                        }
+                    }
                 } else {
-                    Nick.setNick(sender, bypass, nickName, nickColor);
+                    if (player != null) {
+                        // <off> [player]
+                        Nick.setNickOff(sender, player);
+                    } else {
+                        // <off>
+                        Nick.setNickOff(sender);
+                    }
                 }
+                return true;
             }
             Language.sendLangMessage("Message.noPermission", sender);
             return true;

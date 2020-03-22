@@ -9,10 +9,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.scheduler.BukkitRunnable;
 import tw.momocraft.playerdataplus.Commands;
 import tw.momocraft.playerdataplus.PlayerdataPlus;
-import tw.momocraft.playerdataplus.utils.ColorCorrespond;
-import tw.momocraft.playerdataplus.utils.DependAPI;
-import tw.momocraft.playerdataplus.utils.Logger;
-import tw.momocraft.playerdataplus.utils.TabComplete;
+import tw.momocraft.playerdataplus.utils.*;
 
 import java.io.File;
 import java.time.LocalDateTime;
@@ -28,6 +25,7 @@ public class ConfigHandler {
     private static UpdateHandler updater;
     private static Logger logger;
     private static ColorCorrespond colors;
+    private static PlayerdataConfig playerdataConfig;
 
 
     public static void generateData(boolean reload) {
@@ -37,6 +35,7 @@ public class ConfigHandler {
         setUpdater(new UpdateHandler());
         setLogger(new Logger());
         setColorConvert(new ColorCorrespond());
+        setPlayerdataConfig(new PlayerdataConfig());
 
         if (ConfigHandler.getDepends().ResidenceEnabled()) {
             FlagPermissions.addFlag("bypassclean");
@@ -56,7 +55,7 @@ public class ConfigHandler {
                 public void run() {
                     ServerHandler.sendConsoleMessage("&6Starting to clean the expired data...");
                     PurgeHandler purgeHandler = new PurgeHandler();
-                    purgeHandler.startClean(Bukkit.getConsoleSender());
+                    purgeHandler.start(Bukkit.getConsoleSender());
                 }
             }.runTaskLater(PlayerdataPlus.getInstance(), delay);
         } /* else if (!reload && getConfig("config.yml").getBoolean("Clean.Settings.Schedule.Enable")) {
@@ -67,7 +66,7 @@ public class ConfigHandler {
                         public void run() {
                             ServerHandler.sendConsoleMessage("&eStarting to clean the expired data...");
                             PurgeHandler purgeHandler = new PurgeHandler();
-                            purgeHandler.startClean();
+                            purgeHandler.start();
                         }
                     }, 200);
         }
@@ -204,6 +203,16 @@ public class ConfigHandler {
     public static Logger getLogger() {
         return logger;
     }
+
+    public static PlayerdataConfig getPlayerdataConfig() {
+        return playerdataConfig;
+    }
+
+    public static void setPlayerdataConfig(PlayerdataConfig playerdataConfig) {
+        ConfigHandler.playerdataConfig = playerdataConfig;
+    }
+
+
 
     private static void setColorConvert(ColorCorrespond colorCorrespond) { colors = colorCorrespond; }
 

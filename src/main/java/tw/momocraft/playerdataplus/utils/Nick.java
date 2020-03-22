@@ -3,6 +3,7 @@ package tw.momocraft.playerdataplus.utils;
 import com.Zrips.CMI.CMI;
 import com.nametagedit.plugin.NametagEdit;
 import me.clip.placeholderapi.PlaceholderAPI;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.ConfigurationSection;
@@ -36,7 +37,7 @@ public class Nick {
         Player player = (Player) sender;
         String playerName = player.getName();
         if (!bypass && !PermissionsHandler.hasPermission(player, "playerdataplus.bypass.nick.*", false)) {
-            if (nickColor == null) {
+            if (nickColor.equals("")) {
                 nickColor = getDefaultColor(player);
             } else if (!getColorPerm(player, nickColor)) {
                 Language.sendLangMessage("Message.PlayerdataPlus.Nick.invalidColor", sender);
@@ -59,7 +60,7 @@ public class Nick {
                 return;
             }
         } else {
-            if (nickColor == null) {
+            if (nickColor.equals("")) {
                 nickColor = getDefaultColor(player);
             }
         }
@@ -87,7 +88,7 @@ public class Nick {
         String[] placeHolders = Language.newString();
         placeHolders[2] = playerName;
         if (!bypass && !PermissionsHandler.hasPermission(player, "playerdataplus.bypass.nick.*")) {
-            if (nickColor == null) {
+            if (nickColor.equals("")) {
                 nickColor = getDefaultColor(player);
             } else {
                 if (!getColorPerm(player, nickColor)) {
@@ -112,7 +113,7 @@ public class Nick {
                 return;
             }
         } else {
-            if (nickColor == null) {
+            if (nickColor.equals("")) {
                 nickColor = getDefaultColor(player);
             }
         }
@@ -217,7 +218,9 @@ public class Nick {
             String nteFormatSuffix = NametagEdit.getApi().getNametag(player).getSuffix();
             nteFormatPrefix = nteFormatPrefix.replaceAll("[§][a-fA-F0-9]", "§" + nickColor);
             nteFormatSuffix = nteFormatSuffix.replaceAll("[§][a-fA-F0-9]", "§" + nickColor);
-            NametagEdit.getApi().setNametag(player.getName(), nteFormatPrefix, nteFormatSuffix);
+            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), Utils.translateLayout("nte player " + playerName + " prefix " + nteFormatPrefix, player));
+            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), Utils.translateLayout("nte player " + playerName + " suffix " + nteFormatSuffix, player));
+            //NametagEdit.getApi().setNametag(player.getName(), nteFormatPrefix, nteFormatSuffix);
             ServerHandler.debugMessage("Nick-On", playerName, "NameEditTag", "setColor", nteFormatPrefix + playerName + nteFormatSuffix);
         }
     }
@@ -233,7 +236,7 @@ public class Nick {
         }
         List<Long> groupList = new ArrayList<>();
         for (String group : groupSet) {
-            if (PermissionsHandler.hasPermission(sender, "playerdataplus.nick.color." + group)) {
+            if (PermissionsHandler.hasPermission(sender, "playerdataplus.nick.group." + group)) {
                 groupList.add(Long.valueOf(group));
             }
         }
@@ -332,7 +335,7 @@ public class Nick {
                 nteFormatPrefix = getCmdReplace(nteFormatPrefix, playerName, nickName, nickColor, player);
             } else {
                 if (toggle.equals("On")) {
-                    nteFormatPrefix = "§" + nickColor + nickName + " ";
+                    nteFormatPrefix = "§" + nickColor + nickName + " &f";
                 } else {
                     nteFormatPrefix = "§" + nickColor;
                 }
@@ -346,7 +349,13 @@ public class Nick {
                     nteFormatSuffix = "";
                 }
             }
-            NametagEdit.getApi().setNametag(player, nteFormatPrefix, nteFormatSuffix);
+            if (!nteFormatPrefix.equals("")) {
+                Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), Utils.translateLayout("nte player " + playerName + " prefix " + nteFormatPrefix, player));
+            }
+            if (!nteFormatSuffix.equals("")) {
+                Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), Utils.translateLayout("nte player " + playerName + " suffix " + nteFormatSuffix, player));
+            }
+            //NametagEdit.getApi().setNametag(player, nteFormatPrefix, nteFormatSuffix);
             ServerHandler.debugMessage("Nick-On", playerName, "NameEditTag", "set", nteFormatPrefix + playerName + nteFormatSuffix);
         }
     }

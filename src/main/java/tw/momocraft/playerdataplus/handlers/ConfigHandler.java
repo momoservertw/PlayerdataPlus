@@ -135,7 +135,7 @@ public class ConfigHandler {
     private static void configFile() {
         getConfigData("config.yml");
         File File = new File(PlayerdataPlus.getInstance().getDataFolder(), "config.yml");
-        if (File.exists() && getConfig("config.yml").getInt("Config-Version") != 3) {
+        if (File.exists() && getConfig("config.yml").getInt("Config-Version") != 4) {
             if (PlayerdataPlus.getInstance().getResource("config.yml") != null) {
                 LocalDateTime currentDate = LocalDateTime.now();
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH-mm-ss");

@@ -1,5 +1,5 @@
 # --{ =-=-=-=-=-=-=-=-=-= PlayerdataPlus's Configuration Settings, by Momocraft =-=-=-=-=-=-=-=-=-= }--
-Config-Version: 3
+Config-Version: 4
 # If you want to see if the player data is out of date or bypassed, you can turn on the Debug mode.
 Debugging: false
 Check-Updates: true

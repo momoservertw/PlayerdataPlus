@@ -263,7 +263,7 @@ public class PurgeHandler {
                     ServerHandler.debugMessage("Clean", title, "dataList = isEmpty", "break");
                     return;
                 }
-                int maxData = ConfigHandler.getPlayerdataConfig().getCleanMaxData();
+                int maxData = ConfigHandler.getPlayerdataConfig().getCleanMaxDataSize();
                 if (dataList.size() > maxData) {
                     dataList = dataList.subList(0, maxData);
                     restart = true;
@@ -281,6 +281,8 @@ public class PurgeHandler {
             if (!cleanedList.isEmpty()) {
                 cleanTable.put(title, folderTitle, cleanedList);
             }
+        } else {
+            ServerHandler.sendConsoleMessage("&cYou need Vault to check the offline player's permission");
         }
     }
 
@@ -297,7 +299,7 @@ public class PurgeHandler {
                     ServerHandler.debugMessage("Clean", "Regions" + " " + worldName, "dataList = isEmpty", "continue", "check another world");
                     continue;
                 }
-                int maxData = ConfigHandler.getPlayerdataConfig().getCleanMaxData();
+                int maxData = ConfigHandler.getPlayerdataConfig().getCleanMaxDataSize();
                 if (dataList.size() > maxData) {
                     dataList = dataList.subList(0, maxData);
                     restart = true;
@@ -331,7 +333,7 @@ public class PurgeHandler {
                 for (UUID uuid : userMap.keySet()) {
                     uuidList.add(uuid.toString());
                 }
-                int maxData = ConfigHandler.getPlayerdataConfig().getCleanMaxData();
+                int maxData = ConfigHandler.getPlayerdataConfig().getCleanMaxDataSize();
                 if (uuidList.size() > maxData) {
                     uuidList = uuidList.subList(0, maxData);
                     restart = true;
@@ -355,7 +357,7 @@ public class PurgeHandler {
         if (ConfigHandler.getDepends().getVault().vaultEnabled()) {
             if (ConfigHandler.getDepends().AuthMeEnabled()) {
                 List<String> dataList = AuthMeApi.getInstance().getRegisteredNames();
-                int maxData = ConfigHandler.getPlayerdataConfig().getCleanMaxData();
+                int maxData = ConfigHandler.getPlayerdataConfig().getCleanMaxDataSize();
                 if (dataList.size() > maxData) {
                     dataList = dataList.subList(0, maxData);
                 }
@@ -378,7 +380,7 @@ public class PurgeHandler {
                 for (String id : linkedAccounts.keySet()) {
                     uuidList.add(linkedAccounts.get(id).toString());
                 }
-                int maxData = ConfigHandler.getPlayerdataConfig().getCleanMaxData();
+                int maxData = ConfigHandler.getPlayerdataConfig().getCleanMaxDataSize();
                 if (uuidList.size() > maxData) {
                     uuidList = uuidList.subList(0, maxData);
                     restart = true;
@@ -404,7 +406,7 @@ public class PurgeHandler {
             if (ConfigHandler.getDepends().MyPetEnabled()) {
                 MyPet[] myPets = MyPetApi.getMyPetManager().getAllActiveMyPets();
                 List<MyPet> myPetList = new ArrayList<>(Arrays.asList(myPets));
-                int maxData = ConfigHandler.getPlayerdataConfig().getCleanMaxData();
+                int maxData = ConfigHandler.getPlayerdataConfig().getCleanMaxDataSize();
                 if (myPetList.size() > maxData) {
                     myPetList = myPetList.subList(0, maxData);
                     restart = true;
@@ -825,7 +827,7 @@ public class PurgeHandler {
                         resLowZ = area.getLowLoc().getBlockZ();
                         if (regionHighX >= resHighX && resHighX >= regionLowX || regionHighX >= resLowX && resLowX >= regionLowX) {
                             if (regionHighZ >= resHighZ && resHighZ >= regionLowZ || regionHighZ >= resLowZ && resLowZ >= regionLowZ) {
-                                if (ConfigHandler.getPlayerdataConfig().isCleaanRegionBypassRes()) {
+                                if (ConfigHandler.getPlayerdataConfig().isCleanRegionBypassRes()) {
                                     ServerHandler.debugMessage("Clean - Regions", worldName + " r." + region + ".mac", "has-residence \"" + resHighX + "." + resHighY + "." + resHighZ + "\"", "bypass");
                                     i.remove();
                                     continue back;
@@ -908,7 +910,7 @@ public class PurgeHandler {
         DateFormat dateFormat = new SimpleDateFormat("YYYY/MM/dd HH:mm");
         String date = dateFormat.format(new Date());
         long expiredDay = ConfigHandler.getPlayerdataConfig().getCleanExpiryDay();
-        boolean autoClean = ConfigHandler.getPlayerdataConfig().isCleanAuto();
+        boolean autoClean = ConfigHandler.getPlayerdataConfig().isCleanAutoEnable();
         boolean toZip = ConfigHandler.getPlayerdataConfig().isBackupToZip();
         StringBuilder sb = new StringBuilder();
         for (String value : cleanTable.rowKeySet()) {

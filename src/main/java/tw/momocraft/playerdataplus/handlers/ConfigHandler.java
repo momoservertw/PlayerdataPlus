@@ -37,17 +37,6 @@ public class ConfigHandler {
         setColorConvert(new ColorCorrespond());
         setPlayerdataConfig(new PlayerdataConfig());
 
-        if (ConfigHandler.getDepends().ResidenceEnabled()) {
-            FlagPermissions.addFlag("bypassclean");
-        }
-
-        int timeoutTime = ConfigHandler.getServerConfig("spigot.yml").getInt("settings.timeout-time");
-        if (ConfigHandler.getConfig("config.yml").getBoolean("Clean.Settings.Timeout-Warning") && timeoutTime < 180) {
-            ServerHandler.sendConsoleMessage("&cIf your \"timeout-time\" setting in spigot.yml is too low, it may cause the server to restart in the middle of cleaning.");
-            ServerHandler.sendConsoleMessage("&cPlease set a higher number of seconds based on the number of server players, especially for the first time.");
-            return;
-        }
-
         if (!reload && getConfig("config.yml").getBoolean("Clean.Settings.Auto-Clean.Enable")) {
             long delay = getConfig("config.yml").getLong("Clean.Settings.Auto-Clean.Delay") * 20;
             new BukkitRunnable() {
@@ -58,7 +47,8 @@ public class ConfigHandler {
                     purgeHandler.start(Bukkit.getConsoleSender());
                 }
             }.runTaskLater(PlayerdataPlus.getInstance(), delay);
-        } /* else if (!reload && getConfig("config.yml").getBoolean("Clean.Settings.Schedule.Enable")) {
+        }
+         /* else if (!reload && getConfig("config.yml").getBoolean("Clean.Settings.Schedule.Enable")) {
             BukkitScheduler scheduler = getServer().getScheduler();
             scheduler.scheduleSyncDelayedTask(PlayerdataPlus.getInstance(),
                     new BukkitRunnable() {
@@ -76,6 +66,17 @@ public class ConfigHandler {
     public static void registerEvents() {
         PlayerdataPlus.getInstance().getCommand("playerdataplus").setExecutor(new Commands());
         PlayerdataPlus.getInstance().getCommand("playerdataplus").setTabCompleter(new TabComplete());
+
+        if (ConfigHandler.getDepends().ResidenceEnabled()) {
+            FlagPermissions.addFlag("bypassclean");
+        }
+
+        int timeoutTime = ConfigHandler.getServerConfig("spigot.yml").getInt("settings.timeout-time");
+        if (ConfigHandler.getConfig("config.yml").getBoolean("Clean.Settings.Timeout-Warning") && timeoutTime < 180) {
+            ServerHandler.sendConsoleMessage("&cIf your \"timeout-time\" setting in spigot.yml is too low, it may cause the server to restart in the middle of cleaning.");
+            ServerHandler.sendConsoleMessage("&cPlease set a higher number of seconds based on the number of server players, especially for the first time.");
+            return;
+        }
     }
 
     public static FileConfiguration getConfig(String path) {

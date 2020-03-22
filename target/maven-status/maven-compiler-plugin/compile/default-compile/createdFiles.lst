@@ -14,7 +14,6 @@ tw\momocraft\playerdataplus\handlers\PurgeHandler.class
 tw\momocraft\playerdataplus\handlers\PlayerHandler.class
 tw\momocraft\playerdataplus\PlayerdataPlus.class
 tw\momocraft\playerdataplus\utils\BungeeCord.class
-tw\momocraft\playerdataplus\handlers\DataHandler.class
 tw\momocraft\playerdataplus\handlers\UpdateHandler.class
 tw\momocraft\playerdataplus\utils\DependAPI.class
 tw\momocraft\playerdataplus\utils\PlayerdataConfig.class

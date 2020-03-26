@@ -131,7 +131,7 @@ public class Nick {
         Player player = (Player) sender;
         String playerName = player.getName();
         String nickColor = getDefaultColor(player);
-        formatting("Off", player, playerName, null, nickColor);
+        formatting("Off", player, playerName, "", nickColor);
         String[] placeHolders = Language.newString();
         placeHolders[1] = playerName;
         placeHolders[4] = nickColor;
@@ -143,7 +143,7 @@ public class Nick {
     public static void setNickOff(CommandSender sender, Player player) {
         String playerName = player.getName();
         String nickColor = getDefaultColor(player);
-        formatting("Off", player, playerName, null, nickColor);
+        formatting("Off", player, playerName, "", nickColor);
         String[] placeHolders = Language.newString();
         placeHolders[1] = playerName;
         placeHolders[2] = playerName;
@@ -203,10 +203,15 @@ public class Nick {
     private static void CMIColorChanging(Player player, String playerName, String nickColor) {
         if (ConfigHandler.getDepends().CMIEnabled() && ConfigHandler.getConfig("config.yml").getBoolean("Nick.Formats.CMI.Enable")) {
             String cmiFormat = CMI.getInstance().getPlayerManager().getUser(player).getNickName();
-            cmiFormat = cmiFormat.replaceAll("[§][a-fA-F0-9]", "§" + nickColor);
+            if (cmiFormat == null) {
+                cmiFormat = "";
+            } else {
+                cmiFormat = cmiFormat.replaceAll("[§][a-fA-F0-9]", "§" + nickColor);
+            }
             CMI.getInstance().getPlayerManager().getUser(player).setNickName(cmiFormat, true);
             if (ConfigHandler.getConfig("config.yml").getBoolean("Nick.Formats.CMI.Tablist-Update")) {
-                CMI.getInstance().getTabListManager().updateTabList();
+                CMI.getInstance().getTabListManager().updateTabList(20);
+                //Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "cmi tablistupdate");
             }
             ServerHandler.debugMessage("Nick-On", playerName, "CMI", "setColor", cmiFormat);
         }
@@ -216,12 +221,94 @@ public class Nick {
         if (ConfigHandler.getDepends().NameTagEditEnabled() && ConfigHandler.getConfig("config.yml").getBoolean("Nick.Formats.NameTagEdit.Enable")) {
             String nteFormatPrefix = NametagEdit.getApi().getNametag(player).getPrefix();
             String nteFormatSuffix = NametagEdit.getApi().getNametag(player).getSuffix();
-            nteFormatPrefix = nteFormatPrefix.replaceAll("[§][a-fA-F0-9]", "§" + nickColor);
-            nteFormatSuffix = nteFormatSuffix.replaceAll("[§][a-fA-F0-9]", "§" + nickColor);
-            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), Utils.translateLayout("nte player " + playerName + " prefix " + nteFormatPrefix, player));
-            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), Utils.translateLayout("nte player " + playerName + " suffix " + nteFormatSuffix, player));
+            if (nteFormatPrefix != null) {
+                nteFormatPrefix = nteFormatPrefix.replaceAll("[§][a-fA-F0-9]", "§" + nickColor);
+                if (!nteFormatPrefix.equals("")) {
+                    Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), Utils.translateLayout("nte player " + playerName + " prefix " + nteFormatPrefix, player));
+                }
+            }
+            if (nteFormatSuffix != null) {
+                nteFormatSuffix = nteFormatSuffix.replaceAll("[§][a-fA-F0-9]", "§" + nickColor);
+                if (!nteFormatSuffix.equals("")) {
+                    Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), Utils.translateLayout("nte player " + playerName + " suffix " + nteFormatSuffix, player));
+                }
+            }
             //NametagEdit.getApi().setNametag(player.getName(), nteFormatPrefix, nteFormatSuffix);
             ServerHandler.debugMessage("Nick-On", playerName, "NameEditTag", "setColor", nteFormatPrefix + playerName + nteFormatSuffix);
+        }
+    }
+
+    private static void formatting(String toggle, Player player, String playerName, String nickName, String nickColor) {
+        CMIFormatting(toggle, player, playerName, nickName, nickColor);
+        NTEFormatting(toggle, player, playerName, nickName, nickColor);
+        CMDFormatting(toggle, player, playerName, nickName, nickColor);
+    }
+
+    private static void CMIFormatting(String toggle, Player player, String playerName, String nickName, String nickColor) {
+        if (ConfigHandler.getDepends().CMIEnabled() && ConfigHandler.getConfig("config.yml").getBoolean("Nick.Formats.CMI.Enable")) {
+            String cmiFormat = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.CMI." + toggle);
+            if (cmiFormat != null) {
+                cmiFormat = getCmdReplace(cmiFormat, playerName, nickName, nickColor, player);
+            } else {
+                if (toggle.equals("On")) {
+                    cmiFormat = "§" + nickColor + nickName + "(" + playerName + ")";
+                } else {
+                    cmiFormat = "§" + nickColor + playerName;
+                }
+            }
+            CMI.getInstance().getPlayerManager().getUser(player).setNickName(cmiFormat, true);
+            if (ConfigHandler.getConfig("config.yml").getBoolean("Nick.Formats.CMI.Tablist-Update")) {
+                CMI.getInstance().getTabListManager().updateTabList(20);
+                //Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "cmi tablistupdate");
+            }
+            ServerHandler.debugMessage("Nick-On", playerName, "CMI", "set", cmiFormat);
+        }
+    }
+
+    private static void NTEFormatting(String toggle, Player player, String playerName, String nickName, String nickColor) {
+        if (ConfigHandler.getDepends().NameTagEditEnabled() && ConfigHandler.getConfig("config.yml").getBoolean("Nick.Formats.NameTagEdit.Enable")) {
+            String nteFormatPrefix = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.NameTagEdit." + toggle + ".Prefix");
+            String nteFormatSuffix = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.NameTagEdit." + toggle + ".Suffix");
+            if (nteFormatPrefix != null) {
+                nteFormatPrefix = getCmdReplace(nteFormatPrefix, playerName, nickName, nickColor, player);
+            } else {
+                if (toggle.equals("On")) {
+                    nteFormatPrefix = "§" + nickColor + nickName + " &f";
+                } else {
+                    nteFormatPrefix = "§" + nickColor;
+                }
+            }
+            if (nteFormatSuffix != null) {
+                nteFormatSuffix = getCmdReplace(nteFormatSuffix, playerName, nickName, nickColor, player);
+            } else {
+                if (toggle.equals("On")) {
+                    nteFormatSuffix = "";
+                } else {
+                    nteFormatSuffix = "";
+                }
+            }
+            if (!nteFormatPrefix.equals("")) {
+                Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), Utils.translateLayout("nte player " + playerName + " prefix " + nteFormatPrefix, player));
+            }
+            if (!nteFormatSuffix.equals("")) {
+                Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), Utils.translateLayout("nte player " + playerName + " suffix " + nteFormatSuffix, player));
+            }
+            //NametagEdit.getApi().setNametag(player, nteFormatPrefix, nteFormatSuffix);
+            ServerHandler.debugMessage("Nick-On", playerName, "NameEditTag", "set", nteFormatPrefix + playerName + nteFormatSuffix);
+        }
+    }
+
+    private static void CMDFormatting(String toggle, Player player, String playerName, String nickName, String nickColor) {
+        List<String> cmdList;
+        if (toggle.equals("On")) {
+            cmdList = ConfigHandler.getConfig("config.yml").getStringList("Nick.Formats.Commands");
+        } else {
+            cmdList = ConfigHandler.getConfig("config.yml").getStringList("Nick.Formats.Commands-Off");
+        }
+        for (String command : cmdList) {
+            command = getCmdReplace(command, playerName, nickName, nickColor, player);
+            ServerHandler.executeCommands(player, command);
+            ServerHandler.debugMessage("Nick-On", playerName, "commands", "set", command);
         }
     }
 
@@ -299,79 +386,6 @@ public class Nick {
     private static boolean getColorPerm(Player player, String nickColor) {
         return PermissionsHandler.hasPermission(player, "playerdataplus.nick.color." + nickColor)
                 || getDefaultColor(player).equals(nickColor);
-    }
-
-    private static void formatting(String toggle, Player player, String playerName, String nickName, String nickColor) {
-        CMIFormatting(toggle, player, playerName, nickName, nickColor);
-        NTEFormatting(toggle, player, playerName, nickName, nickColor);
-        CMDFormatting(toggle, player, playerName, nickName, nickColor);
-    }
-
-    private static void CMIFormatting(String toggle, Player player, String playerName, String nickName, String nickColor) {
-        if (ConfigHandler.getDepends().CMIEnabled() && ConfigHandler.getConfig("config.yml").getBoolean("Nick.Formats.CMI.Enable")) {
-            String cmiFormat = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.CMI." + toggle);
-            if (cmiFormat != null) {
-                cmiFormat = getCmdReplace(cmiFormat, playerName, nickName, nickColor, player);
-            } else {
-                if (toggle.equals("On")) {
-                    cmiFormat = "§" + nickColor + nickName + "(" + playerName + ")";
-                } else {
-                    cmiFormat = "§" + nickColor + playerName;
-                }
-            }
-            CMI.getInstance().getPlayerManager().getUser(player).setNickName(cmiFormat, true);
-            if (ConfigHandler.getConfig("config.yml").getBoolean("Nick.Formats.CMI.Tablist-Update")) {
-                CMI.getInstance().getTabListManager().updateTabList();
-            }
-            ServerHandler.debugMessage("Nick-On", playerName, "CMI", "set", cmiFormat);
-        }
-    }
-
-    private static void NTEFormatting(String toggle, Player player, String playerName, String nickName, String nickColor) {
-        if (ConfigHandler.getDepends().NameTagEditEnabled() && ConfigHandler.getConfig("config.yml").getBoolean("Nick.Formats.NameTagEdit.Enable")) {
-            String nteFormatPrefix = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.NameTagEdit." + toggle + ".Prefix");
-            String nteFormatSuffix = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.NameTagEdit." + toggle + ".Suffix");
-            if (nteFormatPrefix != null) {
-                nteFormatPrefix = getCmdReplace(nteFormatPrefix, playerName, nickName, nickColor, player);
-            } else {
-                if (toggle.equals("On")) {
-                    nteFormatPrefix = "§" + nickColor + nickName + " &f";
-                } else {
-                    nteFormatPrefix = "§" + nickColor;
-                }
-            }
-            if (nteFormatSuffix != null) {
-                nteFormatSuffix = getCmdReplace(nteFormatSuffix, playerName, nickName, nickColor, player);
-            } else {
-                if (toggle.equals("On")) {
-                    nteFormatSuffix = "";
-                } else {
-                    nteFormatSuffix = "";
-                }
-            }
-            if (!nteFormatPrefix.equals("")) {
-                Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), Utils.translateLayout("nte player " + playerName + " prefix " + nteFormatPrefix, player));
-            }
-            if (!nteFormatSuffix.equals("")) {
-                Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), Utils.translateLayout("nte player " + playerName + " suffix " + nteFormatSuffix, player));
-            }
-            //NametagEdit.getApi().setNametag(player, nteFormatPrefix, nteFormatSuffix);
-            ServerHandler.debugMessage("Nick-On", playerName, "NameEditTag", "set", nteFormatPrefix + playerName + nteFormatSuffix);
-        }
-    }
-
-    private static void CMDFormatting(String toggle, Player player, String playerName, String nickName, String nickColor) {
-        List<String> cmdList;
-        if (toggle.equals("On")) {
-            cmdList = ConfigHandler.getConfig("config.yml").getStringList("Nick.Formats.Commands");
-        } else {
-            cmdList = ConfigHandler.getConfig("config.yml").getStringList("Nick.Formats.Commands-Off");
-        }
-        for (String command : cmdList) {
-            command = getCmdReplace(command, playerName, nickName, nickColor, player);
-            ServerHandler.executeCommands(player, command);
-            ServerHandler.debugMessage("Nick-On", playerName, "commands", "set", command);
-        }
     }
 
     private static String getCmdReplace(String command, String playerName, String nickName, String nickColor, Player player) {

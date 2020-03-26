@@ -31,6 +31,9 @@ public class Commands implements CommandExecutor {
                 if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.version")) {
                     Language.dispatchMessage(sender, "&d&lPlayerdataPlus &e&lv" + PlayerdataPlus.getInstance().getDescription().getVersion() + "&8 - &fby Momocraft");
                 }
+                if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.version")) {
+                    Language.sendLangMessage("Message.PlayerdataPlus.Commands.version", sender, false);
+                }
                 Language.sendLangMessage("Message.PlayerdataPlus.Commands.help", sender, false);
                 if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.reload")) {
                     Language.sendLangMessage("Message.PlayerdataPlus.Commands.reload", sender, false);
@@ -151,20 +154,32 @@ public class Commands implements CommandExecutor {
                 if (!off) {
                     if (!nickName.equals("")) {
                         if (player != null) {
-                            // <nick> [player]
-                            Nick.setNick(sender, player, bypass, nickName, nickColor);
+                            if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.nick.other")) {
+                                // <nick> [player]
+                                if (nickColor.equals("")) {
+                                    nickColor = Nick.getDefaultColor(player);
+                                }
+                                Nick.setNick(sender, player, bypass, nickName, nickColor);
+                                return true;
+                            }
                         } else {
                             // <nick>
+                            if (nickColor.equals("")) {
+                                nickColor = Nick.getDefaultColor(sender);
+                            }
                             Nick.setNick(sender, bypass, nickName, nickColor);
+                            return true;
                         }
                     } else {
                         // <color> [player]
                         if (player != null) {
-                            if (nickColor.equals("")) {
-                                Language.sendLangMessage("Message.PlayerdataPlus.Commands.nickOther", sender);
+                            if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.nick.other")) {
+                                if (nickColor.equals("")) {
+                                    nickColor = Nick.getDefaultColor(player);
+                                }
+                                Nick.setColor(sender, player, bypass, nickColor);
                                 return true;
                             }
-                            Nick.setColor(sender, player, bypass, nickColor);
                         } else {
                             // <color>
                             if (nickColor.equals("")) {
@@ -172,18 +187,22 @@ public class Commands implements CommandExecutor {
                                 return true;
                             }
                             Nick.setColor(sender, bypass, nickColor);
+                            return true;
                         }
                     }
                 } else {
                     if (player != null) {
                         // <off> [player]
-                        Nick.setNickOff(sender, player);
+                        if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.nick.other")) {
+                            Nick.setNickOff(sender, player);
+                            return true;
+                        }
                     } else {
                         // <off>
                         Nick.setNickOff(sender);
+                        return true;
                     }
                 }
-                return true;
             }
             Language.sendLangMessage("Message.noPermission", sender);
             return true;

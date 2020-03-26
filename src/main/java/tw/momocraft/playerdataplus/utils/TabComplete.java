@@ -40,23 +40,6 @@ public class TabComplete implements TabCompleter {
                     commands.addAll(ConfigHandler.getColors().getColorList());
                 }
                 if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.nick.other")) {
-                    try {
-                        if (Bukkit.class.getMethod("getOnlinePlayers", new Class<?>[0]).getReturnType() == Collection.class) {
-                            if (Bukkit.class.getMethod("getOnlinePlayers", new Class<?>[0]).getReturnType() == Collection.class) {
-                                playersOnlineNew = ((Collection<?>) Bukkit.class.getMethod("getOnlinePlayers", new Class<?>[0]).invoke(null, new Object[0]));
-                                for (Object objPlayer : playersOnlineNew) {
-                                    commands.add(((Player) objPlayer).getName());
-                                }
-                            }
-                        } else {
-                            playersOnlineOld = ((Player[]) Bukkit.class.getMethod("getOnlinePlayers", new Class<?>[0]).invoke(null, new Object[0]));
-                            for (Player player : playersOnlineOld) {
-                                commands.add(player.getName());
-                            }
-                        }
-                    } catch (Exception e) {
-                        ServerHandler.sendDebugTrace(e);
-                    }
                 }
             }
         } else if ((args.length == 2) && (args[0].equalsIgnoreCase("nick"))) {

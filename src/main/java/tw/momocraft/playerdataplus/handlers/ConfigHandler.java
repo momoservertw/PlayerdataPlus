@@ -25,7 +25,7 @@ public class ConfigHandler {
     private static UpdateHandler updater;
     private static Logger logger;
     private static ColorCorrespond colors;
-    private static PlayerdataConfig playerdataConfig;
+    private static PlayerdataConfig playerdata;
 
 
     public static void generateData(boolean reload) {
@@ -205,17 +205,17 @@ public class ConfigHandler {
         return logger;
     }
 
-    public static PlayerdataConfig getPlayerdataConfig() {
-        return playerdataConfig;
+    private static void setPlayerdataConfig(PlayerdataConfig playerdataConfig) {
+        playerdata = playerdataConfig;
     }
 
-    public static void setPlayerdataConfig(PlayerdataConfig playerdataConfig) {
-        ConfigHandler.playerdataConfig = playerdataConfig;
+    public static PlayerdataConfig getPlayerdata() {
+        return playerdata;
     }
 
-
-
-    private static void setColorConvert(ColorCorrespond colorCorrespond) { colors = colorCorrespond; }
+    private static void setColorConvert(ColorCorrespond colorCorrespond) {
+        colors = colorCorrespond;
+    }
 
     public static ColorCorrespond getColors() {
         return colors;

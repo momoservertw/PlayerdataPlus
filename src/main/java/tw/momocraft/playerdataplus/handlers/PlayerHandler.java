@@ -40,7 +40,7 @@ public class PlayerHandler {
     }
 
     public static OfflinePlayer getOfflinePlayer(String playerName) {
-        List<String> priority = ConfigHandler.getConfig("config.yml").getStringList("Clean.Settings.Check-Priority");
+        List<String> priority = ConfigHandler.getConfig("config.yml").getStringList("Clean.Settings.Offline-Player.Priority-Order");
         for (String check : priority) {
             switch (check) {
                 case "LuckPerms":

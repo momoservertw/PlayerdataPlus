@@ -65,8 +65,6 @@ public class PlayerdataConfig {
                 }
             }
         }
-        ServerHandler.sendConsoleMessage(cleanList.toString());
-        ServerHandler.sendConsoleMessage(cleanExpireTimeMap.keySet().toString());
     }
 
     public int getCleanMaxDataSize() {

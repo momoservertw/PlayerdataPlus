@@ -1,35 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="55df3580-7d8b-4dd9-afca-eac36992f8e3" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/Commands.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/Commands.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/handlers/ConfigHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/handlers/ConfigHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/handlers/PlayerHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/handlers/PlayerHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/handlers/PurgeHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/handlers/PurgeHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/utils/Nick.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/utils/Nick.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/utils/PlayerdataConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/utils/PlayerdataConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/utils/TabComplete.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/utils/TabComplete.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/config.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/plugin.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/PlayerdataPlus-1.1.1.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/config.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/plugin.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/Commands.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/handlers/ConfigHandler$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/handlers/ConfigHandler.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/handlers/PlayerHandler.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/handlers/PurgeHandler.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/handlers/ServerHandler.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/utils/ColorCorrespond.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/utils/DependAPI.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/utils/Nick.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/utils/PlayerdataConfig.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/utils/TabComplete.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/utils/Utils.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-archiver/pom.properties" afterDir="false" />
-    </list>
+    <list default="true" id="55df3580-7d8b-4dd9-afca-eac36992f8e3" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/target/" />
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -55,7 +27,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/utils/Nick.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="371">
@@ -67,11 +39,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/resources/config.yml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="138">
-              <caret line="10" column="18" selection-start-line="10" selection-start-column="4" selection-end-line="10" selection-end-column="18" />
+            <state relative-caret-position="180">
+              <caret line="12" column="14" selection-start-line="12" selection-start-column="6" selection-end-line="12" selection-end-column="14" />
             </state>
           </provider>
         </entry>
@@ -399,6 +371,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1721" height="935" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.173181" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -633,13 +606,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/config.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="138">
-          <caret line="10" column="18" selection-start-line="10" selection-start-column="4" selection-end-line="10" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/handlers/PlayerHandler.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1159">
@@ -734,6 +700,13 @@
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/config.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="12" column="14" selection-start-line="12" selection-start-column="6" selection-end-line="12" selection-end-column="14" />
         </state>
       </provider>
     </entry>

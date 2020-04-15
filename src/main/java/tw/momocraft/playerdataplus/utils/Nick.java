@@ -1,6 +1,9 @@
 package tw.momocraft.playerdataplus.utils;
 
 import com.Zrips.CMI.CMI;
+import com.Zrips.CMI.Containers.CMIUser;
+import com.earth2me.essentials.Essentials;
+import com.earth2me.essentials.User;
 import com.nametagedit.plugin.NametagEdit;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
@@ -16,6 +19,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+
+import static org.bukkit.Bukkit.getServer;
 
 public class Nick {
 
@@ -36,7 +41,7 @@ public class Nick {
         }
         Player player = (Player) sender;
         String playerName = player.getName();
-        if (!bypass && !PermissionsHandler.hasPermission(player, "playerdataplus.bypass.nick.*", false)) {
+        if (!bypass && !PermissionsHandler.hasPermission(player, "playerdataplus.bypass.nick.*")) {
             if (nickColor.equals("")) {
                 nickColor = getDefaultColor(player);
             } else if (!getColorPerm(player, nickColor)) {
@@ -197,104 +202,145 @@ public class Nick {
 
     private static void colorChanging(Player player, String playerName, String nickColor) {
         CMIColorChanging(player, playerName, nickColor);
+        EssColorChanging(player, playerName, nickColor);
         NTEColorChanging(player, playerName, nickColor);
     }
 
     private static void CMIColorChanging(Player player, String playerName, String nickColor) {
         if (ConfigHandler.getDepends().CMIEnabled() && ConfigHandler.getConfig("config.yml").getBoolean("Nick.Formats.CMI.Enable")) {
-            String cmiFormat = CMI.getInstance().getPlayerManager().getUser(player).getNickName();
-            if (cmiFormat == null) {
-                cmiFormat = "";
+            CMIUser user = CMI.getInstance().getPlayerManager().getUser(player);
+            String nickName = user.getNickName();
+            if (nickName == null) {
+                nickName = "";
             } else {
-                cmiFormat = cmiFormat.replaceAll("[§][a-fA-F0-9]", "§" + nickColor);
+                nickName = nickName.replaceAll("[§][a-fA-F0-9]", "§" + nickColor);
             }
-            CMI.getInstance().getPlayerManager().getUser(player).setNickName(cmiFormat, true);
+            user.setNickName(nickName, true);
             if (ConfigHandler.getConfig("config.yml").getBoolean("Nick.Formats.CMI.Tablist-Update")) {
                 CMI.getInstance().getTabListManager().updateTabList(20);
-                //Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "cmi tablistupdate");
             }
-            ServerHandler.debugMessage("Nick-On", playerName, "CMI", "setColor", cmiFormat);
+            ServerHandler.debugMessage("Nick-On", playerName, "CMI", "setColor", nickName);
+        }
+    }
+
+    private static void EssColorChanging(Player player, String playerName, String nickColor) {
+        if (ConfigHandler.getDepends().EssentialsEnabled() && ConfigHandler.getConfig("config.yml").getBoolean("Nick.Formats.Essentials.Enable")) {
+            Essentials ess = (Essentials) getServer().getPluginManager().getPlugin("Essentials");
+            if (ess == null) {
+                return;
+            }
+            User user = ess.getUser(player);
+            String nickName = user.getDisplayName();
+            if (nickName == null) {
+                nickName = "";
+            } else {
+                nickName = nickName.replaceAll("[§][a-fA-F0-9]", "§" + nickColor);
+            }
+            user.setNickname(nickName);
+            ServerHandler.debugMessage("Nick-On", playerName, "Essentials", "setColor", nickName);
         }
     }
 
     private static void NTEColorChanging(Player player, String playerName, String nickColor) {
         if (ConfigHandler.getDepends().NameTagEditEnabled() && ConfigHandler.getConfig("config.yml").getBoolean("Nick.Formats.NameTagEdit.Enable")) {
-            String nteFormatPrefix = NametagEdit.getApi().getNametag(player).getPrefix();
-            String nteFormatSuffix = NametagEdit.getApi().getNametag(player).getSuffix();
-            if (nteFormatPrefix != null) {
-                nteFormatPrefix = nteFormatPrefix.replaceAll("[§][a-fA-F0-9]", "§" + nickColor);
-                if (!nteFormatPrefix.equals("")) {
-                    Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), Utils.translateLayout("nte player " + playerName + " prefix " + nteFormatPrefix, player));
+            String formatPrefix = NametagEdit.getApi().getNametag(player).getPrefix();
+            String formatSuffix = NametagEdit.getApi().getNametag(player).getSuffix();
+            if (formatPrefix != null) {
+                formatPrefix = formatPrefix.replaceAll("[§][a-fA-F0-9]", "§" + nickColor);
+                if (!formatPrefix.equals("")) {
+                    Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), Utils.translateLayout("nte player " + playerName + " prefix " + formatPrefix, player));
                 }
             }
-            if (nteFormatSuffix != null) {
-                nteFormatSuffix = nteFormatSuffix.replaceAll("[§][a-fA-F0-9]", "§" + nickColor);
-                if (!nteFormatSuffix.equals("")) {
-                    Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), Utils.translateLayout("nte player " + playerName + " suffix " + nteFormatSuffix, player));
+            if (formatSuffix != null) {
+                formatSuffix = formatSuffix.replaceAll("[§][a-fA-F0-9]", "§" + nickColor);
+                if (!formatSuffix.equals("")) {
+                    Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), Utils.translateLayout("nte player " + playerName + " suffix " + formatSuffix, player));
                 }
             }
             //NametagEdit.getApi().setNametag(player.getName(), nteFormatPrefix, nteFormatSuffix);
-            ServerHandler.debugMessage("Nick-On", playerName, "NameEditTag", "setColor", nteFormatPrefix + playerName + nteFormatSuffix);
+            ServerHandler.debugMessage("Nick-On", playerName, "NameEditTag", "setColor", formatPrefix + playerName + formatSuffix);
         }
     }
 
     private static void formatting(String toggle, Player player, String playerName, String nickName, String nickColor) {
         CMIFormatting(toggle, player, playerName, nickName, nickColor);
+        EssFormatting(toggle, player, playerName, nickName, nickColor);
         NTEFormatting(toggle, player, playerName, nickName, nickColor);
         CMDFormatting(toggle, player, playerName, nickName, nickColor);
     }
 
     private static void CMIFormatting(String toggle, Player player, String playerName, String nickName, String nickColor) {
         if (ConfigHandler.getDepends().CMIEnabled() && ConfigHandler.getConfig("config.yml").getBoolean("Nick.Formats.CMI.Enable")) {
-            String cmiFormat = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.CMI." + toggle);
-            if (cmiFormat != null) {
-                cmiFormat = getCmdReplace(cmiFormat, playerName, nickName, nickColor, player);
+            String format = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.CMI." + toggle);
+            if (format != null) {
+                format = getCmdReplace(format, playerName, nickName, nickColor, player);
             } else {
                 if (toggle.equals("On")) {
-                    cmiFormat = "§" + nickColor + nickName + "(" + playerName + ")";
+                    format = "§" + nickColor + nickName + "(" + playerName + ")";
                 } else {
-                    cmiFormat = "§" + nickColor + playerName;
+                    format = "§" + nickColor + playerName;
                 }
             }
-            CMI.getInstance().getPlayerManager().getUser(player).setNickName(cmiFormat, true);
+            CMI.getInstance().getPlayerManager().getUser(player).setNickName(format, true);
             if (ConfigHandler.getConfig("config.yml").getBoolean("Nick.Formats.CMI.Tablist-Update")) {
                 CMI.getInstance().getTabListManager().updateTabList(20);
                 //Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "cmi tablistupdate");
             }
-            ServerHandler.debugMessage("Nick-On", playerName, "CMI", "set", cmiFormat);
+            ServerHandler.debugMessage("Nick-On", playerName, "CMI", "set", format);
+        }
+    }
+
+    private static void EssFormatting(String toggle, Player player, String playerName, String nickName, String nickColor) {
+        if (ConfigHandler.getDepends().EssentialsEnabled() && ConfigHandler.getConfig("config.yml").getBoolean("Nick.Formats.Essentials.Enable")) {
+            Essentials ess = (Essentials) getServer().getPluginManager().getPlugin("Essentials");
+            if (ess == null) {
+                return;
+            }
+            String format = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.Essentials." + toggle);
+            if (format != null) {
+                format = getCmdReplace(format, playerName, nickName, nickColor, player);
+            } else {
+                if (toggle.equals("On")) {
+                    format = "§" + nickColor + nickName + "(" + playerName + ")";
+                } else {
+                    format = "§" + nickColor + playerName;
+                }
+            }
+            ess.getUser(player).setNickname(format);
+            ServerHandler.debugMessage("Nick-On", playerName, "Essentials", "set", format);
         }
     }
 
     private static void NTEFormatting(String toggle, Player player, String playerName, String nickName, String nickColor) {
         if (ConfigHandler.getDepends().NameTagEditEnabled() && ConfigHandler.getConfig("config.yml").getBoolean("Nick.Formats.NameTagEdit.Enable")) {
-            String nteFormatPrefix = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.NameTagEdit." + toggle + ".Prefix");
-            String nteFormatSuffix = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.NameTagEdit." + toggle + ".Suffix");
-            if (nteFormatPrefix != null) {
-                nteFormatPrefix = getCmdReplace(nteFormatPrefix, playerName, nickName, nickColor, player);
+            String formatPrefix = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.NameTagEdit." + toggle + ".Prefix");
+            String formatSuffix = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.NameTagEdit." + toggle + ".Suffix");
+            if (formatPrefix != null) {
+                formatPrefix = getCmdReplace(formatPrefix, playerName, nickName, nickColor, player);
             } else {
                 if (toggle.equals("On")) {
-                    nteFormatPrefix = "§" + nickColor + nickName + " &f";
+                    formatPrefix = "§" + nickColor + nickName + " &f";
                 } else {
-                    nteFormatPrefix = "§" + nickColor;
+                    formatPrefix = "§" + nickColor;
                 }
             }
-            if (nteFormatSuffix != null) {
-                nteFormatSuffix = getCmdReplace(nteFormatSuffix, playerName, nickName, nickColor, player);
+            if (formatSuffix != null) {
+                formatSuffix = getCmdReplace(formatSuffix, playerName, nickName, nickColor, player);
             } else {
                 if (toggle.equals("On")) {
-                    nteFormatSuffix = "";
+                    formatSuffix = "";
                 } else {
-                    nteFormatSuffix = "";
+                    formatSuffix = "";
                 }
             }
-            if (!nteFormatPrefix.equals("")) {
-                Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), Utils.translateLayout("nte player " + playerName + " prefix " + nteFormatPrefix, player));
+            if (!formatPrefix.equals("")) {
+                Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), Utils.translateLayout("nte player " + playerName + " prefix " + formatPrefix, player));
             }
-            if (!nteFormatSuffix.equals("")) {
-                Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), Utils.translateLayout("nte player " + playerName + " suffix " + nteFormatSuffix, player));
+            if (!formatSuffix.equals("")) {
+                Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), Utils.translateLayout("nte player " + playerName + " suffix " + formatSuffix, player));
             }
             //NametagEdit.getApi().setNametag(player, nteFormatPrefix, nteFormatSuffix);
-            ServerHandler.debugMessage("Nick-On", playerName, "NameEditTag", "set", nteFormatPrefix + playerName + nteFormatSuffix);
+            ServerHandler.debugMessage("Nick-On", playerName, "NameEditTag", "set", formatPrefix + playerName + formatSuffix);
         }
     }
 

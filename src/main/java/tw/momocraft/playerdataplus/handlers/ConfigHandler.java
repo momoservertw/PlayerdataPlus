@@ -6,8 +6,14 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.event.HandlerList;
+import org.bukkit.plugin.RegisteredListener;
 import org.bukkit.scheduler.BukkitRunnable;
 import tw.momocraft.playerdataplus.Commands;
+import tw.momocraft.playerdataplus.PlayerStatus.Fly.FlyPlayerJoin;
+import tw.momocraft.playerdataplus.PlayerStatus.Fly.FlyPlayerQuit;
+import tw.momocraft.playerdataplus.PlayerStatus.Fly.FlyControl;
+import tw.momocraft.playerdataplus.PlayerStatus.Fly.FlyPlayerChangedWorld;
 import tw.momocraft.playerdataplus.PlayerdataPlus;
 import tw.momocraft.playerdataplus.utils.*;
 
@@ -32,50 +38,53 @@ public class ConfigHandler {
         configFile();
         setDepends(new DependAPI());
         sendUtilityDepends();
+        setPlayerdataConfig(new PlayerdataConfig());
         setUpdater(new UpdateHandler());
         setLogger(new Logger());
         setColorConvert(new ColorCorrespond());
-        setPlayerdataConfig(new PlayerdataConfig());
 
-        if (!reload && getConfig("config.yml").getBoolean("Clean.Settings.Auto-Clean.Enable")) {
-            long delay = getConfig("config.yml").getLong("Clean.Settings.Auto-Clean.Delay") * 20;
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    ServerHandler.sendConsoleMessage("&6Starting to clean the expired data...");
-                    PurgeHandler purgeHandler = new PurgeHandler();
-                    purgeHandler.start(Bukkit.getConsoleSender());
-                }
-            }.runTaskLater(PlayerdataPlus.getInstance(), delay);
+        if (!reload && getPlayerdataConfig().isCleanAutoEnable()) {
+            if (ConfigHandler.getPlayerdataConfig().isTimeoutWarning() && ConfigHandler.getPlayerdataConfig().getTimeoutTime() < 180) {
+                ServerHandler.sendConsoleMessage("&cIf your \"timeout-time\" setting in spigot.yml is too low, it may cause the server to restart in the middle of cleaning.");
+                ServerHandler.sendConsoleMessage("&cPlease set a higher number of seconds based on the number of server players, especially for the first time.");
+                ServerHandler.sendConsoleMessage("&6Cleanup process has ended.");
+            } else {
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        ServerHandler.sendConsoleMessage("&6Starting to clean the expired data...");
+                        PurgeHandler purgeHandler = new PurgeHandler();
+                        purgeHandler.start(Bukkit.getConsoleSender());
+                    }
+                }.runTaskLater(PlayerdataPlus.getInstance(), getPlayerdataConfig().getCleanAutoDelay());
+            }
         }
-         /* else if (!reload && getConfig("config.yml").getBoolean("Clean.Settings.Schedule.Enable")) {
-            BukkitScheduler scheduler = getServer().getScheduler();
-            scheduler.scheduleSyncDelayedTask(PlayerdataPlus.getInstance(),
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            ServerHandler.sendConsoleMessage("&eStarting to clean the expired data...");
-                            PurgeHandler purgeHandler = new PurgeHandler();
-                            purgeHandler.start();
-                        }
-                    }, 200);
+
+        if (ConfigHandler.getPlayerdataConfig().isPsFly()) {
+            if (ConfigHandler.getPlayerdataConfig().isPsFlySchedule()) {
+                FlyControl flyStatus = new FlyControl();
+                flyStatus.startSchedule();
+            }
         }
-        */
     }
 
     public static void registerEvents() {
         PlayerdataPlus.getInstance().getCommand("playerdataplus").setExecutor(new Commands());
         PlayerdataPlus.getInstance().getCommand("playerdataplus").setTabCompleter(new TabComplete());
 
-        if (ConfigHandler.getDepends().ResidenceEnabled()) {
-            FlagPermissions.addFlag("bypassclean");
-        }
-
-        int timeoutTime = ConfigHandler.getServerConfig("spigot.yml").getInt("settings.timeout-time");
-        if (ConfigHandler.getConfig("config.yml").getBoolean("Clean.Settings.Timeout-Warning") && timeoutTime < 180) {
-            ServerHandler.sendConsoleMessage("&cIf your \"timeout-time\" setting in spigot.yml is too low, it may cause the server to restart in the middle of cleaning.");
-            ServerHandler.sendConsoleMessage("&cPlease set a higher number of seconds based on the number of server players, especially for the first time.");
-            return;
+        if (ConfigHandler.getPlayerdataConfig().isPsFly()) {
+            if (ConfigHandler.getPlayerdataConfig().isPsFlyLogin()) {
+                PlayerdataPlus.getInstance().getServer().getPluginManager().registerEvents(new FlyPlayerJoin(), PlayerdataPlus.getInstance());
+                ServerHandler.debugMessage("Register-Event", "Player-Status.Fly - FlyPlayerJoin");
+            }
+            if (ConfigHandler.getPlayerdataConfig().isPsFlyLeave()) {
+                PlayerdataPlus.getInstance().getServer().getPluginManager().registerEvents(new FlyPlayerQuit(), PlayerdataPlus.getInstance());
+                ServerHandler.debugMessage("Register-Event", "Player-Status.Fly - FlyPlayerQuit");
+            }
+            if (ConfigHandler.getPlayerdataConfig().isPsFlyWorld()) {
+                PlayerdataPlus.getInstance().getServer().getPluginManager().registerEvents(new FlyPlayerChangedWorld(), PlayerdataPlus.getInstance());
+                ServerHandler.debugMessage("Register-Event", "Player-Status.Fly - FlyPlayerChangedWorld");
+            }
         }
     }
 
@@ -173,7 +182,8 @@ public class ConfigHandler {
                 + (getDepends().DiscordSRVEnabled() ? "DiscordSRV, " : "")
                 + (getDepends().LuckPermsEnabled() ? "LuckPerms, " : "")
                 + (getDepends().MyPetEnabled() ? "MyPet, " : "")
-                + (getDepends().AuthMeEnabled() ? "Authme" : "")
+                + (getDepends().AuthMeEnabled() ? "Authme, " : "")
+                + (getDepends().EssentialsEnabled() ? "Essentials" : "")
         );
     }
 
@@ -209,7 +219,7 @@ public class ConfigHandler {
         playerdata = playerdataConfig;
     }
 
-    public static PlayerdataConfig getPlayerdata() {
+    public static PlayerdataConfig getPlayerdataConfig() {
         return playerdata;
     }
 

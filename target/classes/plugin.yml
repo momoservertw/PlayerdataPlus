@@ -2,9 +2,9 @@ name: PlayerdataPlus
 main: tw.momocraft.playerdataplus.PlayerdataPlus
 author: Momocraft
 api-version: 1.13
-version: 1.1.2
+version: 1.1.3
 description: Clean the old player data and formatting nicknames.
-softdepend: [Vault, MythicMobs, CMI, Residence, PlaceHolderAPI, MySQLPlayerDataBridge, SkinsRestorer, ChatControlPro, DiscordSRV, LuckPerms, MyPet]
+softdepend: [Vault, MythicMobs, CMI, Residence, PlaceHolderAPI, MySQLPlayerDataBridge, SkinsRestorer, ChatControlPro, DiscordSRV, LuckPerms, MyPet, Essentials]
 
 commands:
   playerdataplus:
@@ -34,6 +34,7 @@ permissions:
       playerdataplus.command.version: true
       playerdataplus.command.clean: true
       playerdataplus.command.nick.*: true
+      playerdataplus.command.playerstatus: true
   playerdataplus.command.reload:
     description: Allows use of /playerdataplus command reload.
     default: op
@@ -62,6 +63,9 @@ permissions:
     default: op
   playerdataplus.command.nick.other:
     description: Allows use of command /playerdataplus nick <nick> [player].
+    default: op
+  playerdataplus.command.playerstatus:
+    description: Allows use of command /playerdataplus playerstatus
     default: op
   playerdataplus.bypass.*:
     description: Allows player to bypass all features.

@@ -64,6 +64,8 @@ Clean:
       Enable: false
     CMI:
       Enable: false
+    Essentials:
+      Enable: false
     DiscordSRV:
       Enable: false
 
@@ -103,6 +105,12 @@ Nick:
       "Off":
         Prefix: '&%color%'
         Suffix: ''
+    Essentials:
+      Enable: false
+      # The format of nick when players changed their nicks.
+      "On": '&%color%%nick%(%player%)'
+      # The format of nick when players canceled their nicks.
+      "Off": '&%color%%player%'
     # Executed custom commands when players changed their nicks.
     # More information: https://github.com/momoservertw/PlayerdataPlus/wiki/Custom-Commands
     Commands: []
@@ -139,6 +147,77 @@ Nick:
       7: 'gray'
       8: 'dark_gray'
       9: 'blue'
+
+
+
+Player-Status:
+  Fly:
+    Enable: false
+    # If player has following situation, it will bypass the checking.
+    Ignore:
+      # It will ignore cancel if there don't has safe location on the ground.
+      No-Safe-Location:
+        Enable: true
+        # Teleport player to save location and cancel the fly status.
+        Teleport:
+          Enable: true
+          # Search the range of blocks.
+          Range: 5
+          # Checking the down side first.
+          Down-To-Top: true
+      Permissions:
+        - playerdataplus.bypass.status.fly
+        - cmi.command.fly
+      # Bypass checking if he is using CMI fly.
+      CMI:
+        tfly: true
+      Essentials: true
+      Residence: true
+    Auto-Disable:
+      Schedule:
+        Enable: true
+        Interval: 100
+      Login: true
+      Leave: false
+      World-Change: false
+  God:
+    Enable: false
+    Ignore:
+      Permission:
+        - playerdataplus.bypass.status.god
+        - cmi.command.god
+    Auto-Disable:
+      Schedule:
+        Enable: true
+        Interval: 100
+      Login: true
+      Leave: false
+      World-Change: false
+  Op:
+    Enable: false
+    Ignore:
+      Permission:
+        - playerdataplus.bypass.status.op
+    Auto-Disable:
+      Schedule:
+        Enable: true
+        Interval: 100
+      Login: true
+      Leave: false
+      World-Change: false
+  Gamemode:
+    Enable: false
+    Ignore:
+      Permission:
+        - playerdataplus.bypass.status.gamemode
+        - cmi.command.gm
+    Auto-Disable:
+      Schedule:
+        Enable: true
+        Interval: 100
+      Login: true
+      Leave: false
+      World-Change: false
 
 Message:
   prefix: '&7[&dPlayerdataPlus&7]&r '

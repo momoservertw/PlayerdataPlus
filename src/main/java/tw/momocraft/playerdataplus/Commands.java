@@ -4,6 +4,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import tw.momocraft.playerdataplus.PlayerStatus.Fly.FlyControl;
 import tw.momocraft.playerdataplus.handlers.*;
 import tw.momocraft.playerdataplus.utils.Language;
 import tw.momocraft.playerdataplus.utils.Nick;
@@ -73,8 +74,17 @@ public class Commands implements CommandExecutor {
             return true;
         } else if (args.length == 1 && args[0].equalsIgnoreCase("clean")) {
             if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.clean")) {
-                ServerHandler.sendConsoleMessage("&6Starting to clean the expired data...");
+                if (ConfigHandler.getPlayerdataConfig().isTimeoutWarning() && ConfigHandler.getPlayerdataConfig().getTimeoutTime() < 180) {
+                    ServerHandler.sendConsoleMessage("&cIf your \"timeout-time\" setting in spigot.yml is too low, it may cause the server to restart in the middle of cleaning.");
+                    ServerHandler.sendConsoleMessage("&cPlease set a higher number of seconds based on the number of server players, especially for the first time.");
+                    ServerHandler.sendConsoleMessage("&6Cleanup process has ended.");
+                    return true;
+                }
                 PurgeHandler purgeHandler = new PurgeHandler();
+                if (purgeHandler.getRun()) {
+                    ServerHandler.sendConsoleMessage("&cThe Cleanup process is still running! &8(Stop process: /pp clean stop)");
+                    return true;
+                }
                 purgeHandler.start(sender);
             } else {
                 Language.sendLangMessage("Message.noPermission", sender);
@@ -82,9 +92,30 @@ public class Commands implements CommandExecutor {
             return true;
         } else if (args.length == 2 && args[0].equalsIgnoreCase("clean")) {
             if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.clean")) {
-                ServerHandler.sendConsoleMessage("&6Starting to clean the expired data...");
+                if (ConfigHandler.getPlayerdataConfig().isTimeoutWarning() && ConfigHandler.getPlayerdataConfig().getTimeoutTime() < 180) {
+                    ServerHandler.sendConsoleMessage("&cIf your \"timeout-time\" setting in spigot.yml is too low, it may cause the server to restart in the middle of cleaning.");
+                    ServerHandler.sendConsoleMessage("&cPlease set a higher number of seconds based on the number of server players, especially for the first time.");
+                    ServerHandler.sendConsoleMessage("&6Cleanup process has ended.");
+                    return true;
+                }
                 PurgeHandler purgeHandler = new PurgeHandler();
+                if (purgeHandler.getRun()) {
+                    ServerHandler.sendConsoleMessage("&cThe Cleanup process is still running! &8(Stop process: /pp clean stop)");
+                    return true;
+                }
                 purgeHandler.start(sender, args[1]);
+            } else {
+                Language.sendLangMessage("Message.noPermission", sender);
+            }
+            return true;
+        } else if (args.length == 2 && args[0].equalsIgnoreCase("clean") && args[1].equalsIgnoreCase("stop")) {
+            if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.clean")) {
+                PurgeHandler purgeHandler = new PurgeHandler();
+                if (!purgeHandler.getRun()) {
+                    ServerHandler.sendConsoleMessage("&cThe Cleanup process isn't running now.");
+                    return true;
+                }
+                purgeHandler.setRun(false);
             } else {
                 Language.sendLangMessage("Message.noPermission", sender);
             }
@@ -205,6 +236,34 @@ public class Commands implements CommandExecutor {
                 }
             }
             Language.sendLangMessage("Message.noPermission", sender);
+            return true;
+        } else if (args.length == 4 && args[0].equalsIgnoreCase("playerstatus")) {
+            if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.playerstatus")) {
+                if (args[3].equalsIgnoreCase("start")) {
+                    if (args[2].equalsIgnoreCase("fly")) {
+                        FlyControl flyStatus = new FlyControl();
+                        if (flyStatus.isRunSchedule()) {
+                            ServerHandler.sendConsoleMessage("&cThe process of Fly-Status is still running!");
+                        } else {
+                            flyStatus.startSchedule();
+                        }
+                        return true;
+                    }
+                } else if (args[3].equalsIgnoreCase("stop")) {
+                    if (args[2].equalsIgnoreCase("fly")) {
+                        FlyControl flyStatus = new FlyControl();
+                        if (flyStatus.isRunSchedule()) {
+                            flyStatus.setRunSchedule(false);
+                            ServerHandler.sendConsoleMessage("&6Stops the Fly-Status process after finished this checking.");
+                        } else {
+                            ServerHandler.sendConsoleMessage("&cThe process of Fly-Status isn't running now.");
+                        }
+                        return true;
+                    }
+                }
+            } else {
+                Language.sendLangMessage("Message.noPermission", sender);
+            }
             return true;
         } else {
             Language.sendLangMessage("Message.unknownCommand", sender);

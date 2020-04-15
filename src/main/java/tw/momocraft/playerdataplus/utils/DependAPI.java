@@ -14,6 +14,8 @@ public class DependAPI {
     private boolean MyPet = false;
     private boolean AuthMe = false;
     private boolean NameTagEdit = false;
+    private boolean Essentials = false;
+    private boolean MultiverseCore = false;
     private VaultAPI vault;
 
     public DependAPI() {
@@ -28,6 +30,8 @@ public class DependAPI {
         this.setMyPetStatus(Bukkit.getServer().getPluginManager().getPlugin("MyPet") != null);
         this.setAuthMeStatus(Bukkit.getServer().getPluginManager().getPlugin("AuthMe") != null);
         this.setNameTagEditStatus(Bukkit.getServer().getPluginManager().getPlugin("NameTagEdit") != null);
+        this.setEssentialsStatus(Bukkit.getServer().getPluginManager().getPlugin("Essentials") != null);
+        this.setMultiverseCoreStatus(Bukkit.getServer().getPluginManager().getPlugin("MultiverseCore") != null);
         this.setVault();
     }
 
@@ -76,6 +80,14 @@ public class DependAPI {
         return this.NameTagEdit;
     }
 
+    public boolean EssentialsEnabled() {
+        return this.Essentials;
+    }
+
+    public boolean MultiverseCoreEnabled() {
+        return this.MultiverseCore;
+    }
+
 
     private void setCMIStatus(boolean bool) {
         this.CMI = bool;
@@ -116,6 +128,11 @@ public class DependAPI {
     }
 
     private void setNameTagEditStatus(boolean bool) { this.NameTagEdit = bool; }
+
+    private void setEssentialsStatus(boolean bool) { this.Essentials = bool; }
+
+    private void setMultiverseCoreStatus(boolean bool) { this.MultiverseCore = bool; }
+
 
     public VaultAPI getVault() {
         return this.vault;

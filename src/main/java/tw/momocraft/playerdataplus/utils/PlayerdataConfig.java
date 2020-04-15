@@ -2,7 +2,6 @@ package tw.momocraft.playerdataplus.utils;
 
 import org.bukkit.configuration.ConfigurationSection;
 import tw.momocraft.playerdataplus.handlers.ConfigHandler;
-import tw.momocraft.playerdataplus.handlers.ServerHandler;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,12 +11,13 @@ import java.util.List;
 
 public class PlayerdataConfig {
     private int timeoutTime;
+    private boolean cleanAutoEnable;
+    private long cleanAutoDelay;
     private boolean timeoutWarning;
     private ConfigurationSection cleanConfig;
     private List<String> cleanList = new ArrayList<>();
     private HashMap<String, Long> cleanExpireTimeMap = new HashMap<>();
     private List<String> backupList = new ArrayList<>();
-    private boolean cleanAutoEnable;
     private int cleanMaxDataSize;
     private long cleanExpiryDay;
     private boolean cleanLogEnable;
@@ -30,15 +30,27 @@ public class PlayerdataConfig {
     private String backupFolderName;
     private String backupCustomPath;
 
+    private boolean psFly;
+    private List<String> psFlyPerms;
+    private boolean psFlyTfly;
+    private boolean psFlyCfly;
+    private boolean psFlyRes;
+    private boolean psFlySchedule;
+    private int psFlyInterval;
+    private boolean psFlyLogin;
+    private boolean psFlyLeave;
+    private boolean psFlyWorld;
+
     public PlayerdataConfig() {
         setUp();
     }
 
     private void setUp() {
         timeoutTime = ConfigHandler.getServerConfig("spigot.yml").getInt("settings.timeout-time");
+        cleanAutoEnable = ConfigHandler.getConfig("config.yml").getBoolean("Clean.Settings.Auto-Clean.Enable");
+        cleanAutoDelay = ConfigHandler.getConfig("config.yml").getLong("Clean.Settings.Auto-Clean.Delay") * 20;
         timeoutWarning = ConfigHandler.getConfig("config.yml").getBoolean("Clean.Settings.Timeout-Warning");
         cleanConfig = ConfigHandler.getConfig("config.yml").getConfigurationSection("Clean.Control");
-        cleanAutoEnable = ConfigHandler.getConfig("config.yml").getBoolean("Clean.Settings.Auto-Clean.Enable");
         cleanMaxDataSize = ConfigHandler.getConfig("config.yml").getInt("Clean.Settings.Max-Clean-Per-Data");
         cleanExpiryDay = ConfigHandler.getConfig("config.yml").getLong("Clean.Settings.Expiry-Days");
         backupToZip = ConfigHandler.getConfig("config.yml").getBoolean("Clean.Settings.Backup.To-Zip");
@@ -65,6 +77,17 @@ public class PlayerdataConfig {
                 }
             }
         }
+
+        psFly = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.Fly.Enable");
+        psFlyPerms = ConfigHandler.getConfig("config.yml").getStringList("Player-Status.Fly.Ignore.Permissions");
+        psFlyTfly = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.Fly.Ignore.CMI.tfly");
+        psFlyCfly = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.Fly.Ignore.CMI.cfly");
+        psFlyRes = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.Fly.Ignore.Residence");
+        psFlySchedule = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.Fly.Auto-Disable.Schedule.Enable");
+        psFlyInterval = ConfigHandler.getConfig("config.yml").getInt("Player-Status.Fly.Auto-Disable.Schedule.Interval");
+        psFlyLogin = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.Fly.Auto-Disable.Login");
+        psFlyLeave = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.Fly.Auto-Disable.Leave");
+        psFlyWorld = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.Fly.Auto-Disable.World-Change");
     }
 
     public int getCleanMaxDataSize() {
@@ -81,6 +104,14 @@ public class PlayerdataConfig {
 
     public int getTimeoutTime() {
         return timeoutTime;
+    }
+
+    public boolean isBackupEnable(String title) {
+        return backupList.contains(title);
+    }
+
+    public long getCleanAutoDelay() {
+        return cleanAutoDelay;
     }
 
     public boolean isTimeoutWarning() {
@@ -139,8 +170,45 @@ public class PlayerdataConfig {
         return backupList;
     }
 
-    public boolean isBackupEnable(String title) {
-        return backupList.contains(title);
+
+    public boolean isPsFly() {
+        return psFly;
+    }
+
+    public boolean isPsFlyRes() {
+        return psFlyRes;
+    }
+
+    public boolean isPsFlyTfly() {
+        return psFlyTfly;
+    }
+
+    public boolean isPsFlyCfly() {
+        return psFlyCfly;
+    }
+
+    public List<String> getPsFlyPerms() {
+        return psFlyPerms;
+    }
+
+    public boolean isPsFlySchedule() {
+        return psFlySchedule;
+    }
+
+    public int getPsFlyInterval() {
+        return psFlyInterval;
+    }
+
+    public boolean isPsFlyLogin() {
+        return psFlyLogin;
+    }
+
+    public boolean isPsFlyLeave() {
+        return psFlyLeave;
+    }
+
+    public boolean isPsFlyWorld() {
+        return psFlyWorld;
     }
 }
 

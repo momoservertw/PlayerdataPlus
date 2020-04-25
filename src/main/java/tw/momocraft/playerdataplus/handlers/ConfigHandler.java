@@ -1,19 +1,20 @@
 package tw.momocraft.playerdataplus.handlers;
 
-import com.bekvon.bukkit.residence.protection.FlagPermissions;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.event.HandlerList;
-import org.bukkit.plugin.RegisteredListener;
 import org.bukkit.scheduler.BukkitRunnable;
 import tw.momocraft.playerdataplus.Commands;
 import tw.momocraft.playerdataplus.PlayerStatus.Fly.FlyPlayerJoin;
 import tw.momocraft.playerdataplus.PlayerStatus.Fly.FlyPlayerQuit;
 import tw.momocraft.playerdataplus.PlayerStatus.Fly.FlyControl;
 import tw.momocraft.playerdataplus.PlayerStatus.Fly.FlyPlayerChangedWorld;
+import tw.momocraft.playerdataplus.PlayerStatus.God.GodControl;
+import tw.momocraft.playerdataplus.PlayerStatus.God.GodPlayerChangedWorld;
+import tw.momocraft.playerdataplus.PlayerStatus.God.GodPlayerJoin;
+import tw.momocraft.playerdataplus.PlayerStatus.God.GodPlayerQuit;
 import tw.momocraft.playerdataplus.PlayerdataPlus;
 import tw.momocraft.playerdataplus.utils.*;
 
@@ -60,10 +61,16 @@ public class ConfigHandler {
             }
         }
 
-        if (ConfigHandler.getPlayerdataConfig().isPsFly()) {
+        if (ConfigHandler.getPlayerdataConfig().isPsFlyEnable()) {
             if (ConfigHandler.getPlayerdataConfig().isPsFlySchedule()) {
-                FlyControl flyStatus = new FlyControl();
-                flyStatus.startSchedule();
+                FlyControl flyControl = new FlyControl();
+                flyControl.startSchedule();
+            }
+        }
+        if (ConfigHandler.getPlayerdataConfig().isPsGodEnable()) {
+            if (ConfigHandler.getPlayerdataConfig().isPsGodSchedule()) {
+                GodControl godControl = new GodControl();
+                godControl.startSchedule();
             }
         }
     }
@@ -72,7 +79,7 @@ public class ConfigHandler {
         PlayerdataPlus.getInstance().getCommand("playerdataplus").setExecutor(new Commands());
         PlayerdataPlus.getInstance().getCommand("playerdataplus").setTabCompleter(new TabComplete());
 
-        if (ConfigHandler.getPlayerdataConfig().isPsFly()) {
+        if (ConfigHandler.getPlayerdataConfig().isPsFlyEnable()) {
             if (ConfigHandler.getPlayerdataConfig().isPsFlyLogin()) {
                 PlayerdataPlus.getInstance().getServer().getPluginManager().registerEvents(new FlyPlayerJoin(), PlayerdataPlus.getInstance());
                 ServerHandler.debugMessage("Register-Event", "Player-Status.Fly - FlyPlayerJoin");
@@ -84,6 +91,20 @@ public class ConfigHandler {
             if (ConfigHandler.getPlayerdataConfig().isPsFlyWorld()) {
                 PlayerdataPlus.getInstance().getServer().getPluginManager().registerEvents(new FlyPlayerChangedWorld(), PlayerdataPlus.getInstance());
                 ServerHandler.debugMessage("Register-Event", "Player-Status.Fly - FlyPlayerChangedWorld");
+            }
+        }
+        if (ConfigHandler.getPlayerdataConfig().isPsGodEnable()) {
+            if (ConfigHandler.getPlayerdataConfig().isPsGodLogin()) {
+                PlayerdataPlus.getInstance().getServer().getPluginManager().registerEvents(new GodPlayerJoin(), PlayerdataPlus.getInstance());
+                ServerHandler.debugMessage("Register-Event", "Player-Status.God - GodPlayerJoin");
+            }
+            if (ConfigHandler.getPlayerdataConfig().isPsGodLeave()) {
+                PlayerdataPlus.getInstance().getServer().getPluginManager().registerEvents(new GodPlayerQuit(), PlayerdataPlus.getInstance());
+                ServerHandler.debugMessage("Register-Event", "Player-Status.God - GodPlayerQuit");
+            }
+            if (ConfigHandler.getPlayerdataConfig().isPsGodWorld()) {
+                PlayerdataPlus.getInstance().getServer().getPluginManager().registerEvents(new GodPlayerChangedWorld(), PlayerdataPlus.getInstance());
+                ServerHandler.debugMessage("Register-Event", "Player-Status.God - GodPlayerChangedWorld");
             }
         }
     }

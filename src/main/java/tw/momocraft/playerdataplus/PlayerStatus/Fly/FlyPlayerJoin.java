@@ -14,14 +14,10 @@ public class FlyPlayerJoin implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     private void onPlayerJoinEvent(PlayerJoinEvent e) {
-        if (ConfigHandler.getPlayerdataConfig().isPsFly()) {
+        if (ConfigHandler.getPlayerdataConfig().isPsFlyEnable()) {
             if (ConfigHandler.getPlayerdataConfig().isPsFlyLogin()) {
                 FlyControl flyStatus = new FlyControl();
                 List<String> ignorePerms = ConfigHandler.getPlayerdataConfig().getPsFlyPerms();
-                boolean resEnable = flyStatus.getResEnable();
-                boolean cmiEnable = flyStatus.getCmiEnable();
-                boolean cmiTFly = flyStatus.getCmiTFlyEnable();
-                boolean cFly = flyStatus.getCmiCFlyEnable();
 
                 Player player = e.getPlayer();
                 String playerName = player.getName();
@@ -32,14 +28,14 @@ public class FlyPlayerJoin implements Listener {
                             return;
                         }
                     }
-                    if (resEnable) {
-                        if (flyStatus.isResFly(player)) {
+                    if (ConfigHandler.getPlayerdataConfig().isPsFlyRes()) {
+                        if (flyStatus.isFlyRes(player)) {
                             ServerHandler.debugMessage("Player-Status.Fly", playerName, "Join", "bypass", "Residence");
                             return;
                         }
                     }
-                    if (cmiEnable) {
-                        if (flyStatus.isCMIFly(player, cmiTFly, cFly)) {
+                    if (ConfigHandler.getPlayerdataConfig().isPsFlyCMIC() || ConfigHandler.getPlayerdataConfig().isPsFlyCMIT()) {
+                        if (flyStatus.isFlyCMI(player)) {
                             ServerHandler.debugMessage("Player-Status.Fly", playerName, "Join", "bypass", "CMI");
                             return;
                         }

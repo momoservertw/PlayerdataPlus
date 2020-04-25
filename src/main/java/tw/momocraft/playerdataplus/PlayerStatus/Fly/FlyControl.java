@@ -29,15 +29,13 @@ public class FlyControl implements Listener {
     }
 
     public void startSchedule() {
-        if (ConfigHandler.getPlayerdataConfig().isPsFly()) {
+        if (ConfigHandler.getPlayerdataConfig().isPsFlyEnable()) {
             if (ConfigHandler.getPlayerdataConfig().isPsFlySchedule()) {
                 runSchedule = true;
                 ServerHandler.sendConsoleMessage("&6Start checking Fly status for players...");
                 List<String> ignorePerms = ConfigHandler.getPlayerdataConfig().getPsFlyPerms();
-                boolean resEnable = getResEnable();
-                boolean cmiEnable = getCmiEnable();
-                boolean cmiTFly = getCmiTFlyEnable();
-                boolean cFly = getCmiCFlyEnable();
+                boolean resEnable = ConfigHandler.getPlayerdataConfig().isPsFlyRes();
+                boolean cmiEnable = ConfigHandler.getPlayerdataConfig().isPsFlyCMIC() || ConfigHandler.getPlayerdataConfig().isPsFlyCMIT();
 
                 new BukkitRunnable() {
                     String playerName;
@@ -58,13 +56,13 @@ public class FlyControl implements Listener {
                                     }
                                 }
                                 if (resEnable) {
-                                    if (isResFly(player)) {
+                                    if (isFlyRes(player)) {
                                         ServerHandler.debugMessage("Player-Status.Fly", playerName, "Schedule", "bypass", "Residence");
                                         continue;
                                     }
                                 }
                                 if (cmiEnable) {
-                                    if (isCMIFly(player, cmiTFly, cFly)) {
+                                    if (isFlyCMI(player)) {
                                         ServerHandler.debugMessage("Player-Status.Fly", playerName, "Schedule", "bypass", "CMI");
                                         continue;
                                     }
@@ -74,7 +72,8 @@ public class FlyControl implements Listener {
                             }
                         }
                     }
-                }.runTaskTimer(PlayerdataPlus.getInstance(), 0, ConfigHandler.getPlayerdataConfig().getPsFlyInterval());
+                }.runTaskTimer(PlayerdataPlus.getInstance(), 10, ConfigHandler.getPlayerdataConfig().getPsFlyInterval());
+                ServerHandler.debugMessage("Player-Status.Fly", "final", "Schedule", "return");
             }
         }
     }
@@ -88,36 +87,8 @@ public class FlyControl implements Listener {
         return false;
     }
 
-    boolean getResEnable() {
-        if (ConfigHandler.getDepends().ResidenceEnabled()) {
-            return ConfigHandler.getPlayerdataConfig().isPsFlyRes();
-        }
-        return false;
-    }
 
-    boolean getCmiEnable() {
-        return ConfigHandler.getDepends().CMIEnabled();
-    }
-
-    boolean getCmiCFlyEnable() {
-        return false;
-        /*
-        if (getCmiEnable()) {
-            return ConfigHandler.getPlayerdataConfig().isPsFlyCfly();
-        }
-        return false;
-         */
-    }
-
-    boolean getCmiTFlyEnable() {
-        if (getCmiEnable()) {
-            return ConfigHandler.getPlayerdataConfig().isPsFlyTfly();
-        }
-        return false;
-    }
-
-
-    boolean isResFly(Player player) {
+    public boolean isFlyRes(Player player) {
         ClaimedResidence res = Residence.getInstance().getResidenceManager().getByLoc(player);
         if (res != null) {
             return res.getPermissions().playerHas(player, Flags.fly, false);
@@ -125,19 +96,19 @@ public class FlyControl implements Listener {
         return true;
     }
 
-    boolean isCMIFly(Player player, boolean cmiTFly, boolean cmiCFly) {
+    public boolean isFlyCMI(Player player) {
         CMIUser user;
         try {
             user = CMI.getInstance().getPlayerManager().getUser(player);
         } catch (Exception e) {
             return true;
         }
-        if (cmiTFly) {
+        if (ConfigHandler.getPlayerdataConfig().isPsFlyCMIT()) {
             if (user.getTfly() > 0) {
                 return true;
             }
         }
-        if (cmiCFly) {
+        if (ConfigHandler.getPlayerdataConfig().isPsFlyCMIC()) {
             if (PermissionsHandler.hasPermission(player, "cmi.command.flyc")) {
                 return true;
             }

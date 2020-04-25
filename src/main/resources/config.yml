@@ -148,32 +148,33 @@ Nick:
       8: 'dark_gray'
       9: 'blue'
 
-
-
+# Automatically disable the special status of players such as flight mode and creative mode.
+# Improves server security and make special states more customizable.
+# You can set a limit time for players with a temporary permission by LuckPerms.
+# And use ItemJoin to create a one-time item as a reward.
 Player-Status:
   Fly:
     Enable: false
+    # It will ignore cancel if there don't has safe location on the ground.
+    No-Safe-Location:
+      Enable: true
+      # Teleport players to save location and cancel the fly status.
+      Teleport:
+        Enable: true
+        # Search the range of blocks.
+        Range: 5
+        # Checking the down side first.
+        Down-To-Top: true
     # If player has following situation, it will bypass the checking.
     Ignore:
-      # It will ignore cancel if there don't has safe location on the ground.
-      No-Safe-Location:
-        Enable: true
-        # Teleport player to save location and cancel the fly status.
-        Teleport:
-          Enable: true
-          # Search the range of blocks.
-          Range: 5
-          # Checking the down side first.
-          Down-To-Top: true
       Permissions:
         - playerdataplus.bypass.status.fly
         - cmi.command.fly
-      # Bypass checking if he is using CMI fly.
+      # Bypass checking if he is using CMI fly features.
       CMI:
         tfly: true
-      Essentials: true
       Residence: true
-    Auto-Disable:
+    Check:
       Schedule:
         Enable: true
         Interval: 100
@@ -186,7 +187,9 @@ Player-Status:
       Permission:
         - playerdataplus.bypass.status.god
         - cmi.command.god
-    Auto-Disable:
+      CMI:
+        tgod: true
+    Check:
       Schedule:
         Enable: true
         Interval: 100
@@ -198,7 +201,7 @@ Player-Status:
     Ignore:
       Permission:
         - playerdataplus.bypass.status.op
-    Auto-Disable:
+    Check:
       Schedule:
         Enable: true
         Interval: 100
@@ -208,16 +211,37 @@ Player-Status:
   Gamemode:
     Enable: false
     Ignore:
-      Permission:
-        - playerdataplus.bypass.status.gamemode
-        - cmi.command.gm
-    Auto-Disable:
+      Survival:
+        Enable: false
+        Default: "Survival"
+        Permissions:
+          - cmi.command.gm.survival
+      Creative:
+        Enable: true
+        Default: "Survival"
+        Permissions:
+          - cmi.command.gm.creative
+      Adventure:
+        Enable: true
+        Permissions:
+          - cmi.command.gm.adventure
+      Spectator:
+        Enable: true
+        Default: "Survival"
+        Permissions:
+          - cmi.command.gm.spectator
+    Check:
       Schedule:
         Enable: true
         Interval: 100
       Login: true
       Leave: false
       World-Change: false
+    Location:
+      Survival: []
+      Creative: []
+      Adventure: []
+      Spectator: []
 
 Message:
   prefix: '&7[&dPlayerdataPlus&7]&r '

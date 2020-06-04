@@ -26,11 +26,11 @@ public class GodControl implements Listener {
     }
 
     public void startSchedule() {
-        if (ConfigHandler.getPlayerdataConfig().isPsGodEnable()) {
-            if (ConfigHandler.getPlayerdataConfig().isPsGodSchedule()) {
+        if (ConfigHandler.getConfigPath().isPsGodEnable()) {
+            if (ConfigHandler.getConfigPath().isPsGodSchedule()) {
                 runSchedule = true;
                 ServerHandler.sendConsoleMessage("&6Start checking God status for players...");
-                List<String> ignorePerms = ConfigHandler.getPlayerdataConfig().getPsGodPerms();
+                List<String> ignorePerms = ConfigHandler.getConfigPath().getPsGodPerms();
 
                 new BukkitRunnable() {
                     String playerName;
@@ -65,7 +65,7 @@ public class GodControl implements Listener {
                             }
                         }
                     }
-                }.runTaskTimer(PlayerdataPlus.getInstance(), 10, ConfigHandler.getPlayerdataConfig().getPsGodInterval());
+                }.runTaskTimer(PlayerdataPlus.getInstance(), 10, ConfigHandler.getConfigPath().getPsGodInterval());
                 ServerHandler.debugMessage("Player-Status.God", "final", "Schedule", "return");
             }
         }
@@ -82,7 +82,7 @@ public class GodControl implements Listener {
 
 
     public boolean isGodCMI(CMIUser user) {
-        if (ConfigHandler.getPlayerdataConfig().isPsGodCMIT()) {
+        if (ConfigHandler.getConfigPath().isPsGodCMIT()) {
             return user.getTgod() > 0;
         }
         return false;

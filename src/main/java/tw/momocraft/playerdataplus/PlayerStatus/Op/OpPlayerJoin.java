@@ -14,10 +14,10 @@ public class OpPlayerJoin implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     private void onPlayerJoinEvent(PlayerJoinEvent e) {
-        if (ConfigHandler.getPlayerdataConfig().isPsOpEnable()) {
-            if (ConfigHandler.getPlayerdataConfig().isPsOpLogin()) {
+        if (ConfigHandler.getConfigPath().isPsOpEnable()) {
+            if (ConfigHandler.getConfigPath().isPsOpLogin()) {
                 OpControl opControl = new OpControl();
-                List<String> ignorePerms = ConfigHandler.getPlayerdataConfig().getPsGodPerms();
+                List<String> ignorePerms = ConfigHandler.getConfigPath().getPsGodPerms();
 
                 Player player = e.getPlayer();
                 String playerName = player.getName();

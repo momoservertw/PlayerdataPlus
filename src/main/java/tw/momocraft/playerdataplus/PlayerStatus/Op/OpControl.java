@@ -24,11 +24,11 @@ public class OpControl implements Listener {
     }
 
     public void startSchedule() {
-        if (ConfigHandler.getPlayerdataConfig().isPsOpEnable()) {
-            if (ConfigHandler.getPlayerdataConfig().isPsOpSchedule()) {
+        if (ConfigHandler.getConfigPath().isPsOpEnable()) {
+            if (ConfigHandler.getConfigPath().isPsOpSchedule()) {
                 runSchedule = true;
                 ServerHandler.sendConsoleMessage("&6Start checking Op status for players...");
-                List<String> ignorePerms = ConfigHandler.getPlayerdataConfig().getPsOpPerms();
+                List<String> ignorePerms = ConfigHandler.getConfigPath().getPsOpPerms();
 
                 new BukkitRunnable() {
                     String playerName;
@@ -53,7 +53,7 @@ public class OpControl implements Listener {
                             }
                         }
                     }
-                }.runTaskTimer(PlayerdataPlus.getInstance(), 10, ConfigHandler.getPlayerdataConfig().getPsOpInterval());
+                }.runTaskTimer(PlayerdataPlus.getInstance(), 10, ConfigHandler.getConfigPath().getPsOpInterval());
                 ServerHandler.debugMessage("Player-Status.Op", "final", "Schedule", "return");
             }
         }

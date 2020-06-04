@@ -61,7 +61,7 @@ public class PurgeHandler {
 
     public void start(CommandSender sender, String title) {
         run = true;
-        ConfigurationSection cleanConfig = ConfigHandler.getPlayerdataConfig().getCleanConfig();
+        ConfigurationSection cleanConfig = ConfigHandler.getConfigPath().getCleanConfig();
         if (cleanConfig != null) {
             backupPath = getBackupPath();
             backupFile = new File(backupPath);
@@ -95,7 +95,7 @@ public class PurgeHandler {
 
     public void start(CommandSender sender) {
         run = true;
-        ConfigurationSection cleanConfig = ConfigHandler.getPlayerdataConfig().getCleanConfig();
+        ConfigurationSection cleanConfig = ConfigHandler.getConfigPath().getCleanConfig();
         if (cleanConfig != null) {
             this.backupPath = getBackupPath();
             new BukkitRunnable() {
@@ -104,7 +104,7 @@ public class PurgeHandler {
                     ServerHandler.sendMessage(sender, "&6Starting to clean the expired data...");
                     restart = false;
                     cleanTable = HashBasedTable.create();
-                    for (String title : ConfigHandler.getPlayerdataConfig().getCleanList()) {
+                    for (String title : ConfigHandler.getConfigPath().getCleanList()) {
                         cleanManager(title);
                         if (!cleanTable.isEmpty()) {
                             backupManager();
@@ -204,7 +204,7 @@ public class PurgeHandler {
             }
             ServerHandler.sendConsoleMessage("");
         }
-        if (ConfigHandler.getPlayerdataConfig().isBackupToZip()) {
+        if (ConfigHandler.getConfigPath().isBackupToZip()) {
             if (backupFile.exists()) {
                 ServerHandler.sendConsoleMessage("&6Starting to compression the backup folder...");
                 if (zipFiles(backupPath)) {
@@ -214,7 +214,7 @@ public class PurgeHandler {
                 }
             }
         }
-        if (ConfigHandler.getPlayerdataConfig().isCleanLogEnable()) {
+        if (ConfigHandler.getConfigPath().isCleanLogEnable()) {
             ServerHandler.sendConsoleMessage("");
             ServerHandler.sendConsoleMessage("&6Starting to create the log...");
             if (saveLogs(backupFile)) {
@@ -226,8 +226,8 @@ public class PurgeHandler {
     }
 
     private String cleanCustomStatus(String title) {
-        long customExpiredDay = ConfigHandler.getPlayerdataConfig().getCleanExpireTimeMap().get(title);
-        boolean customBackup = ConfigHandler.getPlayerdataConfig().getBackupList().contains(title);
+        long customExpiredDay = ConfigHandler.getConfigPath().getCleanExpireTimeMap().get(title);
+        boolean customBackup = ConfigHandler.getConfigPath().getBackupList().contains(title);
         if (!customBackup || customExpiredDay != 0) {
             return " ("
                     + (!customBackup ? "Backup: false, " : "")
@@ -273,7 +273,7 @@ public class PurgeHandler {
                     ServerHandler.debugMessage("Clean", title, "dataList = isEmpty", "break");
                     return;
                 }
-                int maxData = ConfigHandler.getPlayerdataConfig().getCleanMaxDataSize();
+                int maxData = ConfigHandler.getConfigPath().getCleanMaxDataSize();
                 if (maxData > 0) {
                     if (dataList.size() > maxData) {
                         dataList = dataList.subList(0, maxData);
@@ -303,7 +303,7 @@ public class PurgeHandler {
         List<String> expiredList;
         List<String> cleanedList;
         File dataPath;
-        for (String worldName : ConfigHandler.getPlayerdataConfig().getCleanRegionWorlds()) {
+        for (String worldName : ConfigHandler.getConfigPath().getCleanRegionWorlds()) {
             dataPath = getWorldDataFolder("region", worldName);
             if (dataPath != null) {
                 dataList = getDataList("Regions", dataPath);
@@ -311,7 +311,7 @@ public class PurgeHandler {
                     ServerHandler.debugMessage("Clean", "Regions" + " " + worldName, "dataList = isEmpty", "continue", "check another world");
                     continue;
                 }
-                int maxData = ConfigHandler.getPlayerdataConfig().getCleanMaxDataSize();
+                int maxData = ConfigHandler.getConfigPath().getCleanMaxDataSize();
                 if (maxData > 0) {
                     if (dataList.size() > maxData) {
                         dataList = dataList.subList(0, maxData);
@@ -347,7 +347,7 @@ public class PurgeHandler {
                 for (UUID uuid : userMap.keySet()) {
                     uuidList.add(uuid.toString());
                 }
-                int maxData = ConfigHandler.getPlayerdataConfig().getCleanMaxDataSize();
+                int maxData = ConfigHandler.getConfigPath().getCleanMaxDataSize();
                 if (maxData > 0) {
                     if (uuidList.size() > maxData) {
                         uuidList = uuidList.subList(0, maxData);
@@ -381,7 +381,7 @@ public class PurgeHandler {
                 for (UUID uuid : userSet) {
                     userList.add(uuid.toString());
                 }
-                int maxData = ConfigHandler.getPlayerdataConfig().getCleanMaxDataSize();
+                int maxData = ConfigHandler.getConfigPath().getCleanMaxDataSize();
                 if (maxData > 0) {
                     if (userList.size() > maxData) {
                         userList = userList.subList(0, maxData);
@@ -408,7 +408,7 @@ public class PurgeHandler {
         if (ConfigHandler.getDepends().getVault().vaultEnabled()) {
             if (ConfigHandler.getDepends().AuthMeEnabled()) {
                 List<String> dataList = AuthMeApi.getInstance().getRegisteredNames();
-                int maxData = ConfigHandler.getPlayerdataConfig().getCleanMaxDataSize();
+                int maxData = ConfigHandler.getConfigPath().getCleanMaxDataSize();
                 if (maxData > 0) {
                     if (dataList.size() > maxData) {
                         dataList = dataList.subList(0, maxData);
@@ -433,7 +433,7 @@ public class PurgeHandler {
                 for (String id : linkedAccounts.keySet()) {
                     uuidList.add(linkedAccounts.get(id).toString());
                 }
-                int maxData = ConfigHandler.getPlayerdataConfig().getCleanMaxDataSize();
+                int maxData = ConfigHandler.getConfigPath().getCleanMaxDataSize();
                 if (maxData > 0) {
                     if (uuidList.size() > maxData) {
                         uuidList = uuidList.subList(0, maxData);
@@ -461,7 +461,7 @@ public class PurgeHandler {
             if (ConfigHandler.getDepends().MyPetEnabled()) {
                 MyPet[] myPets = MyPetApi.getMyPetManager().getAllActiveMyPets();
                 List<MyPet> myPetList = new ArrayList<>(Arrays.asList(myPets));
-                int maxData = ConfigHandler.getPlayerdataConfig().getCleanMaxDataSize();
+                int maxData = ConfigHandler.getConfigPath().getCleanMaxDataSize();
                 if (maxData > 0) {
                     if (myPetList.size() > maxData) {
                         myPetList = myPetList.subList(0, maxData);
@@ -585,9 +585,9 @@ public class PurgeHandler {
         List<String> expiredData = new ArrayList<>();
         Date currentDate = new Date();
         long diffDays;
-        long expiredDay = ConfigHandler.getPlayerdataConfig().getCleanExpireTimeMap().get(title);
+        long expiredDay = ConfigHandler.getConfigPath().getCleanExpireTimeMap().get(title);
         if (expiredDay == 0) {
-            expiredDay = ConfigHandler.getPlayerdataConfig().getCleanExpiryDay();
+            expiredDay = ConfigHandler.getConfigPath().getCleanExpiryDay();
         }
         File file;
         Date lastDate;
@@ -608,9 +608,9 @@ public class PurgeHandler {
     private List<String> getExpiredUUIDDataList(String title, List<String> dataList) {
         List<String> expiredList = new ArrayList<>();
         Map<String, String> expiredMap = new HashMap<>();
-        long expiredDay = ConfigHandler.getPlayerdataConfig().getCleanExpireTimeMap().get(title);
+        long expiredDay = ConfigHandler.getConfigPath().getCleanExpireTimeMap().get(title);
         if (expiredDay == 0) {
-            expiredDay = ConfigHandler.getPlayerdataConfig().getCleanExpiryDay();
+            expiredDay = ConfigHandler.getConfigPath().getCleanExpiryDay();
         }
         long diffDays;
         long currentTime = new Date().getTime();
@@ -663,9 +663,9 @@ public class PurgeHandler {
     private List<String> getExpiredPlayerDataList(String title, List<String> dataList) {
         List<String> expiredList = new ArrayList<>();
         Map<String, String> expiredMap = new HashMap<>();
-        long expiredDay = ConfigHandler.getPlayerdataConfig().getCleanExpireTimeMap().get(title);
+        long expiredDay = ConfigHandler.getConfigPath().getCleanExpireTimeMap().get(title);
         if (expiredDay == 0) {
-            expiredDay = ConfigHandler.getPlayerdataConfig().getCleanExpiryDay();
+            expiredDay = ConfigHandler.getConfigPath().getCleanExpiryDay();
         }
         long diffDays;
         long currentTime = new Date().getTime();
@@ -708,9 +708,9 @@ public class PurgeHandler {
 
     private List<String> getExpiredUUIDList(String title, List<String> dataList) {
         List<String> expiredList = new ArrayList<>(dataList);
-        long expiredDay = ConfigHandler.getPlayerdataConfig().getCleanExpireTimeMap().get(title);
+        long expiredDay = ConfigHandler.getConfigPath().getCleanExpireTimeMap().get(title);
         if (expiredDay == 0) {
-            expiredDay = ConfigHandler.getPlayerdataConfig().getCleanExpiryDay();
+            expiredDay = ConfigHandler.getConfigPath().getCleanExpiryDay();
         }
         long diffDays;
         long currentTime = new Date().getTime();
@@ -754,9 +754,9 @@ public class PurgeHandler {
 
     private List<String> getExpiredPlayerList(String title, List<String> dataList) {
         List<String> expiredList = new ArrayList<>(dataList);
-        long expiredDay = ConfigHandler.getPlayerdataConfig().getCleanExpireTimeMap().get(title);
+        long expiredDay = ConfigHandler.getConfigPath().getCleanExpireTimeMap().get(title);
         if (expiredDay == 0) {
-            expiredDay = ConfigHandler.getPlayerdataConfig().getCleanExpiryDay();
+            expiredDay = ConfigHandler.getConfigPath().getCleanExpiryDay();
         }
         long diffDays;
         long currentTime = new Date().getTime();
@@ -791,9 +791,9 @@ public class PurgeHandler {
     }
 
     private boolean getExpiredUUID(String title, String data) {
-        long expiredDay = ConfigHandler.getPlayerdataConfig().getCleanExpireTimeMap().get(title);
+        long expiredDay = ConfigHandler.getConfigPath().getCleanExpireTimeMap().get(title);
         if (expiredDay == 0) {
-            expiredDay = ConfigHandler.getPlayerdataConfig().getCleanExpiryDay();
+            expiredDay = ConfigHandler.getConfigPath().getCleanExpiryDay();
         }
         long diffDays;
         long currentTime = new Date().getTime();
@@ -833,7 +833,7 @@ public class PurgeHandler {
     }
 
     private List<String> getUnignoreRegions(String worldName, List<String> expiredList) {
-        List<String> ignoreRegionList = ConfigHandler.getPlayerdataConfig().getCleanIgnoreRegions();
+        List<String> ignoreRegionList = ConfigHandler.getConfigPath().getCleanIgnoreRegions();
         int regionHighX;
         int regionLowX;
         int regionHighZ;
@@ -885,7 +885,7 @@ public class PurgeHandler {
                         resLowZ = area.getLowLoc().getBlockZ();
                         if (regionHighX >= resHighX && resHighX >= regionLowX || regionHighX >= resLowX && resLowX >= regionLowX) {
                             if (regionHighZ >= resHighZ && resHighZ >= regionLowZ || regionHighZ >= resLowZ && resLowZ >= regionLowZ) {
-                                if (ConfigHandler.getPlayerdataConfig().isCleanRegionBypassRes()) {
+                                if (ConfigHandler.getConfigPath().isCleanRegionBypassRes()) {
                                     ServerHandler.debugMessage("Clean - Regions", worldName + " r." + region + ".mac", "has-residence \"" + resHighX + "." + resHighY + "." + resHighZ + "\"", "bypass");
                                     i.remove();
                                     continue back;
@@ -919,8 +919,8 @@ public class PurgeHandler {
 
     private String getBackupPath() {
         String backupTimeName = getBackupTimeName();
-        String backupMode = ConfigHandler.getPlayerdataConfig().getBackupMode();
-        String backupFolderName = ConfigHandler.getPlayerdataConfig().getBackupFolderName();
+        String backupMode = ConfigHandler.getConfigPath().getBackupMode();
+        String backupFolderName = ConfigHandler.getConfigPath().getBackupFolderName();
         if (backupMode == null) {
             backupMode = "plugin";
             ServerHandler.sendConsoleMessage("&cThe option &8\"&eClean.Settings.Backup.Name&8\" &cis missing, using the default value \"plugin\".");
@@ -932,7 +932,7 @@ public class PurgeHandler {
                 backupPath = PlayerdataPlus.getInstance().getDataFolder().getPath() + "\\" + backupFolderName + "\\" + backupTimeName;
                 break;
             case "custom":
-                backupCustomPath = ConfigHandler.getPlayerdataConfig().getBackupCustomPath();
+                backupCustomPath = ConfigHandler.getConfigPath().getBackupCustomPath();
                 if (backupCustomPath != null) {
                     backupPath = backupCustomPath + "\\" + backupFolderName + "\\" + backupTimeName;
                 } else {
@@ -967,9 +967,9 @@ public class PurgeHandler {
         ConfigHandler.getLogger().createLog();
         DateFormat dateFormat = new SimpleDateFormat("YYYY/MM/dd HH:mm");
         String date = dateFormat.format(new Date());
-        long expiredDay = ConfigHandler.getPlayerdataConfig().getCleanExpiryDay();
-        boolean autoClean = ConfigHandler.getPlayerdataConfig().isCleanAutoEnable();
-        boolean toZip = ConfigHandler.getPlayerdataConfig().isBackupToZip();
+        long expiredDay = ConfigHandler.getConfigPath().getCleanExpiryDay();
+        boolean autoClean = ConfigHandler.getConfigPath().isCleanAutoEnable();
+        boolean toZip = ConfigHandler.getConfigPath().isBackupToZip();
         StringBuilder sb = new StringBuilder();
         for (String value : cleanTable.rowKeySet()) {
             sb.append(value);
@@ -1025,7 +1025,7 @@ public class PurgeHandler {
         } else {
             titleName = title;
         }
-        if (!ConfigHandler.getPlayerdataConfig().isBackupEnable() || !ConfigHandler.getPlayerdataConfig().isBackupEnable(title)) {
+        if (!ConfigHandler.getConfigPath().isBackupEnable() || !ConfigHandler.getConfigPath().isBackupEnable(title)) {
             // Backup is disabled - only delete the file.
             for (String fileName : expiredList) {
                 File dataFile = new File(dataPath + "\\" + fileName);

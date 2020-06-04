@@ -45,7 +45,7 @@ public class TabComplete implements TabCompleter {
         } else if ((args.length == 2) && (args[0].equalsIgnoreCase("clean"))) {
             if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.clean")) {
                 commands.add("stop");
-                commands.addAll(ConfigHandler.getPlayerdataConfig().getBackupList());
+                commands.addAll(ConfigHandler.getConfigPath().getBackupList());
             }
         } else if ((args.length == 2) && (args[0].equalsIgnoreCase("nick"))) {
             commands.add("off");

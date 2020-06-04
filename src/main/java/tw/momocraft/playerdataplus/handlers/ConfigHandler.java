@@ -29,23 +29,23 @@ public class ConfigHandler {
     private static YamlConfiguration configYAML;
     private static YamlConfiguration spigotYAML;
     private static DependAPI depends;
+    private static ConfigPath configPath;
     private static UpdateHandler updater;
     private static Logger logger;
     private static ColorCorrespond colors;
-    private static PlayerdataConfig playerdata;
 
 
     public static void generateData(boolean reload) {
         configFile();
         setDepends(new DependAPI());
         sendUtilityDepends();
-        setPlayerdataConfig(new PlayerdataConfig());
+        setConfigPath(new ConfigPath());
         setUpdater(new UpdateHandler());
         setLogger(new Logger());
         setColorConvert(new ColorCorrespond());
 
-        if (!reload && getPlayerdataConfig().isCleanAutoEnable()) {
-            if (ConfigHandler.getPlayerdataConfig().isTimeoutWarning() && ConfigHandler.getPlayerdataConfig().getTimeoutTime() < 180) {
+        if (!reload && getConfigPath().isCleanAutoEnable()) {
+            if (ConfigHandler.getConfigPath().isTimeoutWarning() && ConfigHandler.getConfigPath().getTimeoutTime() < 180) {
                 ServerHandler.sendConsoleMessage("&cIf your \"timeout-time\" setting in spigot.yml is too low, it may cause the server to restart in the middle of cleaning.");
                 ServerHandler.sendConsoleMessage("&cPlease set a higher number of seconds based on the number of server players, especially for the first time.");
                 ServerHandler.sendConsoleMessage("&6Cleanup process has ended.");
@@ -57,18 +57,18 @@ public class ConfigHandler {
                         PurgeHandler purgeHandler = new PurgeHandler();
                         purgeHandler.start(Bukkit.getConsoleSender());
                     }
-                }.runTaskLater(PlayerdataPlus.getInstance(), getPlayerdataConfig().getCleanAutoDelay());
+                }.runTaskLater(PlayerdataPlus.getInstance(), getConfigPath().getCleanAutoDelay());
             }
         }
 
-        if (ConfigHandler.getPlayerdataConfig().isPsFlyEnable()) {
-            if (ConfigHandler.getPlayerdataConfig().isPsFlySchedule()) {
+        if (ConfigHandler.getConfigPath().isPsFlyEnable()) {
+            if (ConfigHandler.getConfigPath().isPsFlySchedule()) {
                 FlyControl flyControl = new FlyControl();
                 flyControl.startSchedule();
             }
         }
-        if (ConfigHandler.getPlayerdataConfig().isPsGodEnable()) {
-            if (ConfigHandler.getPlayerdataConfig().isPsGodSchedule()) {
+        if (ConfigHandler.getConfigPath().isPsGodEnable()) {
+            if (ConfigHandler.getConfigPath().isPsGodSchedule()) {
                 GodControl godControl = new GodControl();
                 godControl.startSchedule();
             }
@@ -79,30 +79,30 @@ public class ConfigHandler {
         PlayerdataPlus.getInstance().getCommand("playerdataplus").setExecutor(new Commands());
         PlayerdataPlus.getInstance().getCommand("playerdataplus").setTabCompleter(new TabComplete());
 
-        if (ConfigHandler.getPlayerdataConfig().isPsFlyEnable()) {
-            if (ConfigHandler.getPlayerdataConfig().isPsFlyLogin()) {
+        if (ConfigHandler.getConfigPath().isPsFlyEnable()) {
+            if (ConfigHandler.getConfigPath().isPsFlyLogin()) {
                 PlayerdataPlus.getInstance().getServer().getPluginManager().registerEvents(new FlyPlayerJoin(), PlayerdataPlus.getInstance());
                 ServerHandler.debugMessage("Register-Event", "Player-Status.Fly - FlyPlayerJoin");
             }
-            if (ConfigHandler.getPlayerdataConfig().isPsFlyLeave()) {
+            if (ConfigHandler.getConfigPath().isPsFlyLeave()) {
                 PlayerdataPlus.getInstance().getServer().getPluginManager().registerEvents(new FlyPlayerQuit(), PlayerdataPlus.getInstance());
                 ServerHandler.debugMessage("Register-Event", "Player-Status.Fly - FlyPlayerQuit");
             }
-            if (ConfigHandler.getPlayerdataConfig().isPsFlyWorld()) {
+            if (ConfigHandler.getConfigPath().isPsFlyWorld()) {
                 PlayerdataPlus.getInstance().getServer().getPluginManager().registerEvents(new FlyPlayerChangedWorld(), PlayerdataPlus.getInstance());
                 ServerHandler.debugMessage("Register-Event", "Player-Status.Fly - FlyPlayerChangedWorld");
             }
         }
-        if (ConfigHandler.getPlayerdataConfig().isPsGodEnable()) {
-            if (ConfigHandler.getPlayerdataConfig().isPsGodLogin()) {
+        if (ConfigHandler.getConfigPath().isPsGodEnable()) {
+            if (ConfigHandler.getConfigPath().isPsGodLogin()) {
                 PlayerdataPlus.getInstance().getServer().getPluginManager().registerEvents(new GodPlayerJoin(), PlayerdataPlus.getInstance());
                 ServerHandler.debugMessage("Register-Event", "Player-Status.God - GodPlayerJoin");
             }
-            if (ConfigHandler.getPlayerdataConfig().isPsGodLeave()) {
+            if (ConfigHandler.getConfigPath().isPsGodLeave()) {
                 PlayerdataPlus.getInstance().getServer().getPluginManager().registerEvents(new GodPlayerQuit(), PlayerdataPlus.getInstance());
                 ServerHandler.debugMessage("Register-Event", "Player-Status.God - GodPlayerQuit");
             }
-            if (ConfigHandler.getPlayerdataConfig().isPsGodWorld()) {
+            if (ConfigHandler.getConfigPath().isPsGodWorld()) {
                 PlayerdataPlus.getInstance().getServer().getPluginManager().registerEvents(new GodPlayerChangedWorld(), PlayerdataPlus.getInstance());
                 ServerHandler.debugMessage("Register-Event", "Player-Status.God - GodPlayerChangedWorld");
             }
@@ -115,29 +115,6 @@ public class ConfigHandler {
             getConfigData(path);
         }
         return getPath(path, file, false);
-    }
-
-    public static FileConfiguration getServerConfig(String path) {
-        File file = new File(Bukkit.getWorldContainer(), path);
-        if (spigotYAML == null) {
-            getServerConfigData(path);
-        }
-        return getServerPath(path, file, false);
-    }
-
-    private static FileConfiguration getServerConfigData(String path) {
-        File file = new File(Bukkit.getWorldContainer(), path);
-        return getServerPath(path, file, true);
-    }
-
-    private static YamlConfiguration getServerPath(String path, File file, boolean saveData) {
-        if (path.contains("spigot.yml")) {
-            if (saveData) {
-                spigotYAML = YamlConfiguration.loadConfiguration(file);
-            }
-            return spigotYAML;
-        }
-        return null;
     }
 
     private static FileConfiguration getConfigData(String path) {
@@ -191,6 +168,29 @@ public class ConfigHandler {
         getConfig("config.yml").options().copyDefaults(false);
     }
 
+    public static FileConfiguration getServerConfig(String path) {
+        File file = new File(Bukkit.getWorldContainer(), path);
+        if (spigotYAML == null) {
+            getServerConfigData(path);
+        }
+        return getServerPath(path, file, false);
+    }
+
+    private static FileConfiguration getServerConfigData(String path) {
+        File file = new File(Bukkit.getWorldContainer(), path);
+        return getServerPath(path, file, true);
+    }
+
+    private static YamlConfiguration getServerPath(String path, File file, boolean saveData) {
+        if (path.contains("spigot.yml")) {
+            if (saveData) {
+                spigotYAML = YamlConfiguration.loadConfiguration(file);
+            }
+            return spigotYAML;
+        }
+        return null;
+    }
+
     private static void sendUtilityDepends() {
         ServerHandler.sendConsoleMessage("&fHooked: "
                 + (getDepends().getVault().vaultEnabled() ? "Vault, " : "")
@@ -236,12 +236,12 @@ public class ConfigHandler {
         return logger;
     }
 
-    private static void setPlayerdataConfig(PlayerdataConfig playerdataConfig) {
-        playerdata = playerdataConfig;
+    private static void setConfigPath(ConfigPath configPath) {
+        ConfigHandler.configPath = configPath;
     }
 
-    public static PlayerdataConfig getPlayerdataConfig() {
-        return playerdata;
+    public static ConfigPath getConfigPath() {
+        return configPath;
     }
 
     private static void setColorConvert(ColorCorrespond colorCorrespond) {

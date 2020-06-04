@@ -14,10 +14,10 @@ public class FlyPlayerChangedWorld implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     private void onPlayerChangedWorldEvent(PlayerChangedWorldEvent e) {
-        if (ConfigHandler.getPlayerdataConfig().isPsFlyEnable()) {
-            if (ConfigHandler.getPlayerdataConfig().isPsFlyWorld()) {
+        if (ConfigHandler.getConfigPath().isPsFlyEnable()) {
+            if (ConfigHandler.getConfigPath().isPsFlyWorld()) {
                 FlyControl flyStatus = new FlyControl();
-                List<String> ignorePerms = ConfigHandler.getPlayerdataConfig().getPsFlyPerms();
+                List<String> ignorePerms = ConfigHandler.getConfigPath().getPsFlyPerms();
 
                 Player player = e.getPlayer();
                 String playerName = player.getName();
@@ -28,13 +28,13 @@ public class FlyPlayerChangedWorld implements Listener {
                             return;
                         }
                     }
-                    if (ConfigHandler.getPlayerdataConfig().isPsFlyRes()) {
+                    if (ConfigHandler.getConfigPath().isPsFlyRes()) {
                         if (flyStatus.isFlyRes(player)) {
                             ServerHandler.debugMessage("Player-Status.Fly", playerName, "World-Change", "bypass", "Residence");
                             return;
                         }
                     }
-                    if (ConfigHandler.getPlayerdataConfig().isPsFlyCMIC() || ConfigHandler.getPlayerdataConfig().isPsFlyCMIT()) {
+                    if (ConfigHandler.getConfigPath().isPsFlyCMIC() || ConfigHandler.getConfigPath().isPsFlyCMIT()) {
                         if (flyStatus.isFlyCMI(player)) {
                             ServerHandler.debugMessage("Player-Status.Fly", playerName, "World-Change", "bypass", "CMI");
                             return;

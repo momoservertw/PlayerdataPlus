@@ -16,10 +16,10 @@ public class GodPlayerJoin implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     private void onPlayerJoinEvent(PlayerJoinEvent e) {
-        if (ConfigHandler.getPlayerdataConfig().isPsGodEnable()) {
-            if (ConfigHandler.getPlayerdataConfig().isPsGodLogin()) {
+        if (ConfigHandler.getConfigPath().isPsGodEnable()) {
+            if (ConfigHandler.getConfigPath().isPsGodLogin()) {
                 GodControl godControl = new GodControl();
-                List<String> ignorePerms = ConfigHandler.getPlayerdataConfig().getPsGodPerms();
+                List<String> ignorePerms = ConfigHandler.getConfigPath().getPsGodPerms();
 
                 Player player = e.getPlayer();
                 String playerName = player.getName();

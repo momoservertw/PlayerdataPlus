@@ -13,10 +13,10 @@ import java.util.List;
 public class GodPlayerQuit implements Listener {
 
     private void onPlayerQuitEvent(PlayerQuitEvent e) {
-        if (ConfigHandler.getPlayerdataConfig().isPsGodEnable()) {
-            if (ConfigHandler.getPlayerdataConfig().isPsGodLeave()) {
+        if (ConfigHandler.getConfigPath().isPsGodEnable()) {
+            if (ConfigHandler.getConfigPath().isPsGodLeave()) {
                 GodControl godControl = new GodControl();
-                List<String> ignorePerms = ConfigHandler.getPlayerdataConfig().getPsGodPerms();
+                List<String> ignorePerms = ConfigHandler.getConfigPath().getPsGodPerms();
 
                 Player player = e.getPlayer();
                 String playerName = player.getName();

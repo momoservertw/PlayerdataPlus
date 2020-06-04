@@ -11,10 +11,10 @@ import java.util.List;
 public class FlyPlayerQuit implements Listener {
 
     private void onPlayerQuitEvent(PlayerQuitEvent e) {
-        if (ConfigHandler.getPlayerdataConfig().isPsFlyEnable()) {
-            if (ConfigHandler.getPlayerdataConfig().isPsFlyLeave()) {
+        if (ConfigHandler.getConfigPath().isPsFlyEnable()) {
+            if (ConfigHandler.getConfigPath().isPsFlyLeave()) {
                 FlyControl flyStatus = new FlyControl();
-                List<String> ignorePerms = ConfigHandler.getPlayerdataConfig().getPsFlyPerms();
+                List<String> ignorePerms = ConfigHandler.getConfigPath().getPsFlyPerms();
 
                 Player player = e.getPlayer();
                 String playerName = player.getName();
@@ -25,13 +25,13 @@ public class FlyPlayerQuit implements Listener {
                             return;
                         }
                     }
-                    if (ConfigHandler.getPlayerdataConfig().isPsFlyRes()) {
+                    if (ConfigHandler.getConfigPath().isPsFlyRes()) {
                         if (flyStatus.isFlyRes(player)) {
                             ServerHandler.debugMessage("Player-Status.Fly", playerName, "Leave", "bypass", "Residence");
                             return;
                         }
                     }
-                    if (ConfigHandler.getPlayerdataConfig().isPsFlyCMIC() || ConfigHandler.getPlayerdataConfig().isPsFlyCMIT()) {
+                    if (ConfigHandler.getConfigPath().isPsFlyCMIC() || ConfigHandler.getConfigPath().isPsFlyCMIT()) {
                         if (flyStatus.isFlyCMI(player)) {
                             ServerHandler.debugMessage("Player-Status.Fly", playerName, "Leave", "bypass", "CMI");
                             return;

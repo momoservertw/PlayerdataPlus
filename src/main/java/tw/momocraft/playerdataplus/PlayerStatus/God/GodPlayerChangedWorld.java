@@ -16,10 +16,10 @@ public class GodPlayerChangedWorld implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     private void onPlayerChangedWorldEvent(PlayerChangedWorldEvent e) {
-        if (ConfigHandler.getPlayerdataConfig().isPsGodEnable()) {
-            if (ConfigHandler.getPlayerdataConfig().isPsGodWorld()) {
+        if (ConfigHandler.getConfigPath().isPsGodEnable()) {
+            if (ConfigHandler.getConfigPath().isPsGodWorld()) {
                 GodControl godControl = new GodControl();
-                List<String> ignorePerms = ConfigHandler.getPlayerdataConfig().getPsGodPerms();
+                List<String> ignorePerms = ConfigHandler.getConfigPath().getPsGodPerms();
 
                 Player player = e.getPlayer();
                 String playerName = player.getName();

@@ -14,10 +14,10 @@ public class OpPlayerChangedWorld implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     private void onPlayerChangedWorldEvent(PlayerChangedWorldEvent e) {
-        if (ConfigHandler.getPlayerdataConfig().isPsOpEnable()) {
-            if (ConfigHandler.getPlayerdataConfig().isPsOpWorld()) {
+        if (ConfigHandler.getConfigPath().isPsOpEnable()) {
+            if (ConfigHandler.getConfigPath().isPsOpWorld()) {
                 OpControl opControl = new OpControl();
-                List<String> ignorePerms = ConfigHandler.getPlayerdataConfig().getPsOpPerms();
+                List<String> ignorePerms = ConfigHandler.getConfigPath().getPsOpPerms();
 
                 Player player = e.getPlayer();
                 String playerName = player.getName();

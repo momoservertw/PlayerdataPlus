@@ -11,10 +11,10 @@ import java.util.List;
 public class OpPlayerQuit implements Listener {
 
     private void onPlayerQuitEvent(PlayerQuitEvent e) {
-        if (ConfigHandler.getPlayerdataConfig().isPsOpEnable()) {
-            if (ConfigHandler.getPlayerdataConfig().isPsOpLeave()) {
+        if (ConfigHandler.getConfigPath().isPsOpEnable()) {
+            if (ConfigHandler.getConfigPath().isPsOpLeave()) {
                 OpControl opControl = new OpControl();
-                List<String> ignorePerms = ConfigHandler.getPlayerdataConfig().getPsOpPerms();
+                List<String> ignorePerms = ConfigHandler.getConfigPath().getPsOpPerms();
 
                 Player player = e.getPlayer();
                 String playerName = player.getName();

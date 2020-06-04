@@ -75,7 +75,7 @@ public class Commands implements CommandExecutor {
             return true;
         } else if (args.length == 1 && args[0].equalsIgnoreCase("clean")) {
             if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.clean")) {
-                if (ConfigHandler.getPlayerdataConfig().isTimeoutWarning() && ConfigHandler.getPlayerdataConfig().getTimeoutTime() < 180) {
+                if (ConfigHandler.getConfigPath().isTimeoutWarning() && ConfigHandler.getConfigPath().getTimeoutTime() < 180) {
                     ServerHandler.sendConsoleMessage("&cIf your \"timeout-time\" setting in spigot.yml is too low, it may cause the server to restart in the middle of cleaning.");
                     ServerHandler.sendConsoleMessage("&cPlease set a higher number of seconds based on the number of server players, especially for the first time.");
                     ServerHandler.sendConsoleMessage("&6Cleanup process has ended.");
@@ -93,7 +93,7 @@ public class Commands implements CommandExecutor {
             return true;
         } else if (args.length == 2 && args[0].equalsIgnoreCase("clean")) {
             if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.clean")) {
-                if (ConfigHandler.getPlayerdataConfig().isTimeoutWarning() && ConfigHandler.getPlayerdataConfig().getTimeoutTime() < 180) {
+                if (ConfigHandler.getConfigPath().isTimeoutWarning() && ConfigHandler.getConfigPath().getTimeoutTime() < 180) {
                     ServerHandler.sendConsoleMessage("&cIf your \"timeout-time\" setting in spigot.yml is too low, it may cause the server to restart in the middle of cleaning.");
                     ServerHandler.sendConsoleMessage("&cPlease set a higher number of seconds based on the number of server players, especially for the first time.");
                     ServerHandler.sendConsoleMessage("&6Cleanup process has ended.");
@@ -112,7 +112,7 @@ public class Commands implements CommandExecutor {
         } else if (args.length == 2 && args[0].equalsIgnoreCase("clean") && args[1].equalsIgnoreCase("stop")) {
             if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.clean")) {
 
-                if (ConfigHandler.getPlayerdataConfig().isTimeoutWarning() && ConfigHandler.getPlayerdataConfig().getTimeoutTime() < 180) {
+                if (ConfigHandler.getConfigPath().isTimeoutWarning() && ConfigHandler.getConfigPath().getTimeoutTime() < 180) {
                     ServerHandler.sendConsoleMessage("&cIf your \"timeout-time\" setting in spigot.yml is too low, it may cause the server to restart in the middle of cleaning.");
                     ServerHandler.sendConsoleMessage("&cPlease set a higher number of seconds based on the number of server players, especially for the first time.");
                     ServerHandler.sendConsoleMessage("&6Cleanup process has ended.");

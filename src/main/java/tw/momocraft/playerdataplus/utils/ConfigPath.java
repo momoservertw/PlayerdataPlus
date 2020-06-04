@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 
 
-public class PlayerdataConfig {
+public class ConfigPath {
     private int timeoutTime;
     private boolean cleanAutoEnable;
     private long cleanAutoDelay;
@@ -77,10 +77,22 @@ public class PlayerdataConfig {
     private boolean psGmLeave;
     private boolean psGmWorld;
 
+    private boolean transferUser;
+    private boolean tfPlayerdata;
+    private boolean tfStats;
+    private boolean tfAdvancements;
+    private boolean tfEconomy;
+    private boolean tfPlayerPoints;
+    private boolean tfLuckPerms;
+    private boolean tfAuthMe;
+    private boolean tfCMINick;
+    private boolean tfResidence;
+    private boolean tfNameTagEdit;
+
 
     private boolean flyResEnable;
 
-    public PlayerdataConfig() {
+    public ConfigPath() {
         setUp();
     }
 

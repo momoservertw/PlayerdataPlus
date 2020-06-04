@@ -15,13 +15,13 @@ public class GmPlayerChangedWorld implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     private void onPlayerChangedWorldEvent(PlayerChangedWorldEvent e) {
-        if (ConfigHandler.getPlayerdataConfig().isPsGmEnable()) {
-            if (ConfigHandler.getPlayerdataConfig().isPsGmWorld()) {
+        if (ConfigHandler.getConfigPath().isPsGmEnable()) {
+            if (ConfigHandler.getConfigPath().isPsGmWorld()) {
                 GmControl gmControl = new GmControl();
-                List<String> gm0IgnorePerms = ConfigHandler.getPlayerdataConfig().getPsGm0Perms();
-                List<String> gm1IgnorePerms = ConfigHandler.getPlayerdataConfig().getPsGm1Perms();
-                List<String> gm2IgnorePerms = ConfigHandler.getPlayerdataConfig().getPsGm2Perms();
-                List<String> gm3IgnorePerms = ConfigHandler.getPlayerdataConfig().getPsGm3Perms();
+                List<String> gm0IgnorePerms = ConfigHandler.getConfigPath().getPsGm0Perms();
+                List<String> gm1IgnorePerms = ConfigHandler.getConfigPath().getPsGm1Perms();
+                List<String> gm2IgnorePerms = ConfigHandler.getConfigPath().getPsGm2Perms();
+                List<String> gm3IgnorePerms = ConfigHandler.getConfigPath().getPsGm3Perms();
 
                 Player player = e.getPlayer();
                 String playerName = player.getName();
@@ -33,7 +33,7 @@ public class GmPlayerChangedWorld implements Listener {
                                 return;
                             }
                         }
-                        player.setGameMode(GameMode.valueOf(ConfigHandler.getPlayerdataConfig().getPsGm1Default().toUpperCase()));
+                        player.setGameMode(GameMode.valueOf(ConfigHandler.getConfigPath().getPsGm1Default().toUpperCase()));
                         ServerHandler.debugMessage("Player-Status.Gm1", playerName, "World-Change", "cancel", "final");
                         break;
                     case "ADVENTURE":
@@ -43,7 +43,7 @@ public class GmPlayerChangedWorld implements Listener {
                                 return;
                             }
                         }
-                        player.setGameMode(GameMode.valueOf(ConfigHandler.getPlayerdataConfig().getPsGm2Default().toUpperCase()));
+                        player.setGameMode(GameMode.valueOf(ConfigHandler.getConfigPath().getPsGm2Default().toUpperCase()));
                         ServerHandler.debugMessage("Player-Status.Gm2", playerName, "World-Change", "cancel", "final");
                         break;
                     case "SPECTATOR":
@@ -53,7 +53,7 @@ public class GmPlayerChangedWorld implements Listener {
                                 return;
                             }
                         }
-                        player.setGameMode(GameMode.valueOf(ConfigHandler.getPlayerdataConfig().getPsGm3Default().toUpperCase()));
+                        player.setGameMode(GameMode.valueOf(ConfigHandler.getConfigPath().getPsGm3Default().toUpperCase()));
                         ServerHandler.debugMessage("Player-Status.Gm3", playerName, "World-Change", "cancel", "final");
                         break;
                     default:
@@ -63,7 +63,7 @@ public class GmPlayerChangedWorld implements Listener {
                                 return;
                             }
                         }
-                        player.setGameMode(GameMode.valueOf(ConfigHandler.getPlayerdataConfig().getPsGm0Default().toUpperCase()));
+                        player.setGameMode(GameMode.valueOf(ConfigHandler.getConfigPath().getPsGm0Default().toUpperCase()));
                         ServerHandler.debugMessage("Player-Status.Gm1", playerName, "World-Change", "cancel", "final");
                         break;
                 }

@@ -21,12 +21,14 @@ public class OpPlayerQuit implements Listener {
                 if (player.isOp()) {
                     if (!ignorePerms.isEmpty()) {
                         if (opControl.isPerms(player, ignorePerms)) {
-                            ServerHandler.debugMessage("Player-Status.Op", playerName, "World-Change", "bypass", "Permissions");
+                            ServerHandler.sendFeatureMessage("Player-Status.Op", playerName, "World-Change", "bypass", "Permissions",
+                        new Throwable().getStackTrace()[0]);
                             return;
                         }
                     }
                     player.setOp(false);
-                    ServerHandler.debugMessage("Player-Status.Op", playerName, "World-Change", "cancel", "final");
+                    ServerHandler.sendFeatureMessage("Player-Status.Op", playerName, "World-Change", "cancel", "final",
+                        new Throwable().getStackTrace()[0]);
                 }
             }
         }

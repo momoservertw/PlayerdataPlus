@@ -19,11 +19,10 @@ public class VaultAPI {
     private void enableFeatures() {
         if (PlayerdataPlus.getInstance().getServer().getPluginManager().getPlugin("Vault") != null) {
             if (!this.setupEconomy()) {
-                //ServerHandler.sendErrorMessage("&cCan not find the Economy plugin.");
+                ServerHandler.sendErrorMessage("&cCan not find the Economy plugin.");
             }
             if (!this.setupPermissions()) {
                 ServerHandler.sendErrorMessage("&cCan not find the Permission plugin.");
-                ServerHandler.sendErrorMessage("&cYou can only clean the data: Logs and Regions");
             }
         }
     }

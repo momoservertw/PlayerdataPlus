@@ -16,6 +16,8 @@ public class DependAPI {
     private boolean NameTagEdit = false;
     private boolean Essentials = false;
     private boolean MultiverseCore = false;
+    private boolean PlayerPoints = false;
+    private boolean Bank = false;
     private VaultAPI vault;
 
     public DependAPI() {
@@ -32,6 +34,8 @@ public class DependAPI {
         this.setNameTagEditStatus(Bukkit.getServer().getPluginManager().getPlugin("NameTagEdit") != null);
         this.setEssentialsStatus(Bukkit.getServer().getPluginManager().getPlugin("Essentials") != null);
         this.setMultiverseCoreStatus(Bukkit.getServer().getPluginManager().getPlugin("MultiverseCore") != null);
+        this.setPlayerPointsStatus(Bukkit.getServer().getPluginManager().getPlugin("PlayerPoints") != null);
+        this.setBankStatus(Bukkit.getServer().getPluginManager().getPlugin("Bank") != null);
         this.setVault();
     }
 
@@ -88,6 +92,15 @@ public class DependAPI {
         return this.MultiverseCore;
     }
 
+    public boolean PlayerPointsEnabled() {
+        return this.PlayerPoints;
+    }
+
+    public boolean BankEnabled() {
+        return this.Bank;
+    }
+
+
 
     private void setCMIStatus(boolean bool) {
         this.CMI = bool;
@@ -132,6 +145,10 @@ public class DependAPI {
     private void setEssentialsStatus(boolean bool) { this.Essentials = bool; }
 
     private void setMultiverseCoreStatus(boolean bool) { this.MultiverseCore = bool; }
+
+    private void setPlayerPointsStatus(boolean bool) { this.PlayerPoints = bool; }
+
+    private void setBankStatus(boolean bool) { this.Bank = bool; }
 
 
     public VaultAPI getVault() {

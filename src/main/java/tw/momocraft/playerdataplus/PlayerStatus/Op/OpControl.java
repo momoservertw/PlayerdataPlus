@@ -2,7 +2,6 @@ package tw.momocraft.playerdataplus.PlayerStatus.Op;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitRunnable;
 import tw.momocraft.playerdataplus.PlayerdataPlus;
 import tw.momocraft.playerdataplus.handlers.ConfigHandler;
@@ -11,7 +10,7 @@ import tw.momocraft.playerdataplus.handlers.ServerHandler;
 
 import java.util.List;
 
-public class OpControl implements Listener {
+public class OpControl {
 
     private boolean runSchedule = false;
 
@@ -44,17 +43,20 @@ public class OpControl implements Listener {
                             if (player.isOp()) {
                                 if (!ignorePerms.isEmpty()) {
                                     if (isPerms(player, ignorePerms)) {
-                                        ServerHandler.debugMessage("Player-Status.Op", playerName, "World-Change", "bypass", "Permissions");
+                                        ServerHandler.sendFeatureMessage("Player-Status.Op", playerName, "World-Change", "bypass", "Permissions",
+                        new Throwable().getStackTrace()[0]);
                                         return;
                                     }
                                 }
                                 player.setOp(false);
-                                ServerHandler.debugMessage("Player-Status.Op", playerName, "World-Change", "cancel", "final");
+                                ServerHandler.sendFeatureMessage("Player-Status.Op", playerName, "World-Change", "cancel", "final",
+                        new Throwable().getStackTrace()[0]);
                             }
                         }
                     }
                 }.runTaskTimer(PlayerdataPlus.getInstance(), 10, ConfigHandler.getConfigPath().getPsOpInterval());
-                ServerHandler.debugMessage("Player-Status.Op", "final", "Schedule", "return");
+                ServerHandler.sendFeatureMessage("Player-Status.Op", "final", "Schedule", "return",
+                        new Throwable().getStackTrace()[0]);
             }
         }
     }

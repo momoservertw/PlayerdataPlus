@@ -21,24 +21,28 @@ public class FlyPlayerQuit implements Listener {
                 if (player.isFlying()) {
                     if (!ignorePerms.isEmpty()) {
                         if (flyStatus.isPerms(player, ignorePerms)) {
-                            ServerHandler.debugMessage("Player-Status.Fly", playerName, "Leave", "bypass", "Permissions");
+                            ServerHandler.sendFeatureMessage("Player-Status.Fly", playerName, "Leave", "bypass", "Permissions",
+                                    new Throwable().getStackTrace()[0]);
                             return;
                         }
                     }
                     if (ConfigHandler.getConfigPath().isPsFlyRes()) {
                         if (flyStatus.isFlyRes(player)) {
-                            ServerHandler.debugMessage("Player-Status.Fly", playerName, "Leave", "bypass", "Residence");
+                            ServerHandler.sendFeatureMessage("Player-Status.Fly", playerName, "Leave", "bypass", "Residence",
+                                    new Throwable().getStackTrace()[0]);
                             return;
                         }
                     }
                     if (ConfigHandler.getConfigPath().isPsFlyCMIC() || ConfigHandler.getConfigPath().isPsFlyCMIT()) {
                         if (flyStatus.isFlyCMI(player)) {
-                            ServerHandler.debugMessage("Player-Status.Fly", playerName, "Leave", "bypass", "CMI");
+                            ServerHandler.sendFeatureMessage("Player-Status.Fly", playerName, "Leave", "bypass", "CMI",
+                                    new Throwable().getStackTrace()[0]);
                             return;
                         }
                     }
                     player.setFlying(false);
-                    ServerHandler.debugMessage("Player-Status.Fly", playerName, "Leave", "cancel", "final");
+                    ServerHandler.sendFeatureMessage("Player-Status.Fly", playerName, "Leave", "cancel", "final",
+                            new Throwable().getStackTrace()[0]);
                 }
             }
         }

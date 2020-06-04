@@ -26,42 +26,50 @@ public class GmPlayerQuit implements Listener {
                     case "CREATIVE":
                         if (!gm1IgnorePerms.isEmpty()) {
                             if (gmControl.isPerms(player, gm1IgnorePerms)) {
-                                ServerHandler.debugMessage("Player-Status.Gm1", playerName, "Leave", "bypass", "Permissions");
+                                ServerHandler.sendFeatureMessage("Player-Status.Gm1", playerName, "Leave", "bypass", "Permissions",
+                        new Throwable().getStackTrace()[0]);
                                 return;
                             }
                         }
                         player.setGameMode(GameMode.valueOf(ConfigHandler.getConfigPath().getPsGm1Default().toUpperCase()));
-                        ServerHandler.debugMessage("Player-Status.Gm1", playerName, "Leave", "cancel", "final");
+                        ServerHandler.sendFeatureMessage("Player-Status.Gm1", playerName, "Leave", "cancel", "final",
+                        new Throwable().getStackTrace()[0]);
                         break;
                     case "ADVENTURE":
                         if (!gm2IgnorePerms.isEmpty()) {
                             if (gmControl.isPerms(player, gm2IgnorePerms)) {
-                                ServerHandler.debugMessage("Player-Status.Gm2", playerName, "Leave", "bypass", "Permissions");
+                                ServerHandler.sendFeatureMessage("Player-Status.Gm2", playerName, "Leave", "bypass", "Permissions",
+                        new Throwable().getStackTrace()[0]);
                                 return;
                             }
                         }
                         player.setGameMode(GameMode.valueOf(ConfigHandler.getConfigPath().getPsGm2Default().toUpperCase()));
-                        ServerHandler.debugMessage("Player-Status.Gm2", playerName, "Leave", "cancel", "final");
+                        ServerHandler.sendFeatureMessage("Player-Status.Gm2", playerName, "Leave", "cancel", "final",
+                        new Throwable().getStackTrace()[0]);
                         break;
                     case "SPECTATOR":
                         if (!gm3IgnorePerms.isEmpty()) {
                             if (gmControl.isPerms(player, gm3IgnorePerms)) {
-                                ServerHandler.debugMessage("Player-Status.Gm3", playerName, "Leave", "bypass", "Permissions");
+                                ServerHandler.sendFeatureMessage("Player-Status.Gm3", playerName, "Leave", "bypass", "Permissions",
+                        new Throwable().getStackTrace()[0]);
                                 return;
                             }
                         }
                         player.setGameMode(GameMode.valueOf(ConfigHandler.getConfigPath().getPsGm3Default().toUpperCase()));
-                        ServerHandler.debugMessage("Player-Status.Gm3", playerName, "Leave", "cancel", "final");
+                        ServerHandler.sendFeatureMessage("Player-Status.Gm3", playerName, "Leave", "cancel", "final",
+                        new Throwable().getStackTrace()[0]);
                         break;
                     default:
                         if (!gm0IgnorePerms.isEmpty()) {
                             if (gmControl.isPerms(player, gm0IgnorePerms)) {
-                                ServerHandler.debugMessage("Player-Status.Gm0", playerName, "Leave", "bypass", "Permissions");
+                                ServerHandler.sendFeatureMessage("Player-Status.Gm0", playerName, "Leave", "bypass", "Permissions",
+                        new Throwable().getStackTrace()[0]);
                                 return;
                             }
                         }
                         player.setGameMode(GameMode.valueOf(ConfigHandler.getConfigPath().getPsGm0Default().toUpperCase()));
-                        ServerHandler.debugMessage("Player-Status.Gm1", playerName, "Leave", "cancel", "final");
+                        ServerHandler.sendFeatureMessage("Player-Status.Gm1", playerName, "Leave", "cancel", "final",
+                        new Throwable().getStackTrace()[0]);
                         break;
                 }
             }

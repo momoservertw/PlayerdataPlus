@@ -3,7 +3,6 @@ package tw.momocraft.playerdataplus.PlayerStatus.Gamemode;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitRunnable;
 import tw.momocraft.playerdataplus.PlayerdataPlus;
 import tw.momocraft.playerdataplus.handlers.ConfigHandler;
@@ -12,7 +11,7 @@ import tw.momocraft.playerdataplus.handlers.ServerHandler;
 
 import java.util.List;
 
-public class GmControl implements Listener {
+public class GmControl {
 
     private boolean runSchedule = false;
 
@@ -51,48 +50,57 @@ public class GmControl implements Listener {
                                 case "CREATIVE":
                                     if (!gm1IgnorePerms.isEmpty()) {
                                         if (isPerms(player, gm1IgnorePerms)) {
-                                            ServerHandler.debugMessage("Player-Status.Gm1", playerName, "Schedule", "bypass", "Permissions");
+                                            ServerHandler.sendFeatureMessage("Player-Status.Gm1", playerName, "Schedule", "bypass", "Permissions",
+                                                    new Throwable().getStackTrace()[0]);
                                             return;
                                         }
                                     }
                                     player.setGameMode(GameMode.valueOf(ConfigHandler.getConfigPath().getPsGm1Default().toUpperCase()));
-                                    ServerHandler.debugMessage("Player-Status.Gm1", playerName, "Schedule", "cancel", "final");
+                                    ServerHandler.sendFeatureMessage("Player-Status.Gm1", playerName, "Schedule", "cancel", "final",
+                                            new Throwable().getStackTrace()[0]);
                                     break;
                                 case "ADVENTURE":
                                     if (!gm2IgnorePerms.isEmpty()) {
                                         if (isPerms(player, gm2IgnorePerms)) {
-                                            ServerHandler.debugMessage("Player-Status.Gm2", playerName, "Schedule", "bypass", "Permissions");
+                                            ServerHandler.sendFeatureMessage("Player-Status.Gm2", playerName, "Schedule", "bypass", "Permissions",
+                                                    new Throwable().getStackTrace()[0]);
                                             return;
                                         }
                                     }
                                     player.setGameMode(GameMode.valueOf(ConfigHandler.getConfigPath().getPsGm2Default().toUpperCase()));
-                                    ServerHandler.debugMessage("Player-Status.Gm2", playerName, "Schedule", "cancel", "final");
+                                    ServerHandler.sendFeatureMessage("Player-Status.Gm2", playerName, "Schedule", "cancel", "final",
+                                            new Throwable().getStackTrace()[0]);
                                     break;
                                 case "SPECTATOR":
                                     if (!gm3IgnorePerms.isEmpty()) {
                                         if (isPerms(player, gm3IgnorePerms)) {
-                                            ServerHandler.debugMessage("Player-Status.Gm3", playerName, "Schedule", "bypass", "Permissions");
+                                            ServerHandler.sendFeatureMessage("Player-Status.Gm3", playerName, "Schedule", "bypass", "Permissions",
+                                                    new Throwable().getStackTrace()[0]);
                                             return;
                                         }
                                     }
                                     player.setGameMode(GameMode.valueOf(ConfigHandler.getConfigPath().getPsGm3Default().toUpperCase()));
-                                    ServerHandler.debugMessage("Player-Status.Gm3", playerName, "Schedule", "cancel", "final");
+                                    ServerHandler.sendFeatureMessage("Player-Status.Gm3", playerName, "Schedule", "cancel", "final",
+                                            new Throwable().getStackTrace()[0]);
                                     break;
                                 default:
                                     if (!gm0IgnorePerms.isEmpty()) {
                                         if (isPerms(player, gm0IgnorePerms)) {
-                                            ServerHandler.debugMessage("Player-Status.Gm0", playerName, "Schedule", "bypass", "Permissions");
+                                            ServerHandler.sendFeatureMessage("Player-Status.Gm0", playerName, "Schedule", "bypass", "Permissions",
+                                                    new Throwable().getStackTrace()[0]);
                                             return;
                                         }
                                     }
                                     player.setGameMode(GameMode.valueOf(ConfigHandler.getConfigPath().getPsGm0Default().toUpperCase()));
-                                    ServerHandler.debugMessage("Player-Status.Gm1", playerName, "Schedule", "cancel", "final");
+                                    ServerHandler.sendFeatureMessage("Player-Status.Gm1", playerName, "Schedule", "cancel", "final",
+                                            new Throwable().getStackTrace()[0]);
                                     break;
                             }
                         }
                     }
                 }.runTaskTimer(PlayerdataPlus.getInstance(), 10, ConfigHandler.getConfigPath().getPsGmInterval());
-                ServerHandler.debugMessage("Player-Status.Gm", "final", "Schedule", "return");
+                ServerHandler.sendFeatureMessage("Player-Status.Gm", "final", "Schedule", "return",
+                        new Throwable().getStackTrace()[0]);
             }
         }
     }

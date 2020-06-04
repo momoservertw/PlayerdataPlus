@@ -243,6 +243,22 @@ Player-Status:
       Adventure: []
       Spectator: []
 
+Transfer-User:
+  Enable: false
+  List:
+    Server:
+      Playerdata: true
+      Stats: true
+      Advancements: true
+    Economy: true
+    PlayerPoints: true
+    AuthMe: true
+    CMI:
+      Nick: true
+    NameTagEdit: true
+    Residence: true
+    LuckPerms: true
+
 Message:
   prefix: '&7[&dPlayerdataPlus&7]&r '
   noPermission: '&cYou do not have permission to use that command!'

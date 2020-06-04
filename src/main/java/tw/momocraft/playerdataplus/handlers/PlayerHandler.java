@@ -40,7 +40,7 @@ public class PlayerHandler {
     }
 
     public static OfflinePlayer getOfflinePlayer(String playerName) {
-        List<String> priority = ConfigHandler.getConfig("config.yml").getStringList("Clean.Settings.Offline-Player.Priority-Order");
+        List<String> priority = ConfigHandler.getConfigPath().getCleanPriority();
         for (String check : priority) {
             switch (check) {
                 case "LuckPerms":
@@ -100,6 +100,77 @@ public class PlayerHandler {
                             for (OfflinePlayer player : playersOnlineOld) {
                                 if (player.getName().equalsIgnoreCase(playerName)) {
                                     return player;
+                                }
+                            }
+                        }
+                    } catch (Exception e) {
+                        ServerHandler.sendDebugTrace(e);
+                    }
+                    break;
+            }
+        }
+        return null;
+    }
+
+    public static UUID getOfflineUUID(String playerName) {
+        List<String> priority = ConfigHandler.getConfigPath().getCleanPriority();
+        for (String check : priority) {
+            switch (check) {
+                case "LuckPerms":
+                    if (ConfigHandler.getDepends().LuckPermsEnabled()) {
+                        User luckUser = LuckPermsProvider.get().getUserManager().getUser(playerName);
+                        if (luckUser != null) {
+                            return luckUser.getUniqueId();
+                        }
+                    }
+                    break;
+                case "CMI":
+                    if (ConfigHandler.getDepends().CMIEnabled()) {
+                        CMIUser cmiUser = CMI.getInstance().getPlayerManager().getUser(playerName);
+                        if (cmiUser != null) {
+                            return cmiUser.getUniqueId();
+                        }
+                    }
+                    break;
+                case "Playerdata":
+                    Collection<?> playersOnlineNew;
+                    OfflinePlayer[] playersOnlineOld;
+                    try {
+                        if (Bukkit.class.getMethod("getOfflinePlayers", new Class<?>[0]).getReturnType() == Collection.class) {
+                            playersOnlineNew = ((Collection<?>) Bukkit.class.getMethod("getOfflinePlayers", new Class<?>[0]).invoke(null, new Object[0]));
+                            for (Object objPlayer : playersOnlineNew) {
+                                Player player = ((Player) objPlayer);
+                                if (player.getName().equalsIgnoreCase(playerName)) {
+                                    return player.getUniqueId();
+                                }
+                            }
+                        } else {
+                            playersOnlineOld = ((OfflinePlayer[]) Bukkit.class.getMethod("getOfflinePlayers", new Class<?>[0]).invoke(null, new Object[0]));
+                            for (OfflinePlayer player : playersOnlineOld) {
+                                if (player.getName().equalsIgnoreCase(playerName)) {
+                                    return player.getUniqueId();
+                                }
+                            }
+                        }
+                    } catch (Exception e) {
+                        ServerHandler.sendDebugTrace(e);
+                    }
+                    break;
+                default:
+                    try {
+                        if (Bukkit.class.getMethod("getOfflinePlayers", new Class<?>[0]).getReturnType() == Collection.class) {
+                            playersOnlineNew = ((Collection<?>) Bukkit.class.getMethod("getOfflinePlayers", new Class<?>[0]).invoke(null, new Object[0]));
+                            for (Object objPlayer : playersOnlineNew) {
+                                Player player = ((Player) objPlayer);
+                                if (player.getName().equalsIgnoreCase(playerName)) {
+                                    return player.getUniqueId();
+                                }
+                            }
+                        } else {
+                            playersOnlineOld = ((OfflinePlayer[]) Bukkit.class.getMethod("getOfflinePlayers", new Class<?>[0]).invoke(null, new Object[0]));
+                            for (OfflinePlayer player : playersOnlineOld) {
+                                if (player.getName().equalsIgnoreCase(playerName)) {
+                                    return player.getUniqueId();
                                 }
                             }
                         }

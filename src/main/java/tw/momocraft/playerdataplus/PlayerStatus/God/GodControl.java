@@ -4,7 +4,6 @@ import com.Zrips.CMI.CMI;
 import com.Zrips.CMI.Containers.CMIUser;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitRunnable;
 import tw.momocraft.playerdataplus.PlayerdataPlus;
 import tw.momocraft.playerdataplus.handlers.ConfigHandler;
@@ -13,7 +12,7 @@ import tw.momocraft.playerdataplus.handlers.ServerHandler;
 
 import java.util.List;
 
-public class GodControl implements Listener {
+public class GodControl {
 
     private boolean runSchedule = false;
 
@@ -52,21 +51,25 @@ public class GodControl implements Listener {
                             if (user.isGod()) {
                                 if (!ignorePerms.isEmpty()) {
                                     if (isPerms(player, ignorePerms)) {
-                                        ServerHandler.debugMessage("Player-Status.God", playerName, "World-Change", "bypass", "Permissions");
+                                        ServerHandler.sendFeatureMessage("Player-Status.God", playerName, "World-Change", "bypass", "Permissions",
+                        new Throwable().getStackTrace()[0]);
                                         return;
                                     }
                                 }
                                 if (isGodCMI(user)) {
-                                    ServerHandler.debugMessage("Player-Status.God", playerName, "World-Change", "bypass", "CMI");
+                                    ServerHandler.sendFeatureMessage("Player-Status.God", playerName, "World-Change", "bypass", "CMI",
+                        new Throwable().getStackTrace()[0]);
                                     return;
                                 }
                                 user.setGod(false);
-                                ServerHandler.debugMessage("Player-Status.God", playerName, "World-Change", "cancel", "final");
+                                ServerHandler.sendFeatureMessage("Player-Status.God", playerName, "World-Change", "cancel", "final",
+                        new Throwable().getStackTrace()[0]);
                             }
                         }
                     }
                 }.runTaskTimer(PlayerdataPlus.getInstance(), 10, ConfigHandler.getConfigPath().getPsGodInterval());
-                ServerHandler.debugMessage("Player-Status.God", "final", "Schedule", "return");
+                ServerHandler.sendFeatureMessage("Player-Status.God", "final", "Schedule", "return",
+                        new Throwable().getStackTrace()[0]);
             }
         }
     }

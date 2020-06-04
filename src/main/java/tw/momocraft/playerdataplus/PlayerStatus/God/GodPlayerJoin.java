@@ -32,16 +32,19 @@ public class GodPlayerJoin implements Listener {
                 if (user.isGod()) {
                     if (!ignorePerms.isEmpty()) {
                         if (godControl.isPerms(player, ignorePerms)) {
-                            ServerHandler.debugMessage("Player-Status.God", playerName, "Join", "bypass", "Permissions");
+                            ServerHandler.sendFeatureMessage("Player-Status.God", playerName, "Join", "bypass", "Permissions",
+                        new Throwable().getStackTrace()[0]);
                             return;
                         }
                     }
                     if (godControl.isGodCMI(user)) {
-                        ServerHandler.debugMessage("Player-Status.God", playerName, "Join", "bypass", "CMI");
+                        ServerHandler.sendFeatureMessage("Player-Status.God", playerName, "Join", "bypass", "CMI",
+                        new Throwable().getStackTrace()[0]);
                         return;
                     }
                     user.setGod(false);
-                    ServerHandler.debugMessage("Player-Status.God", playerName, "Join", "cancel", "final");
+                    ServerHandler.sendFeatureMessage("Player-Status.God", playerName, "Join", "cancel", "final",
+                        new Throwable().getStackTrace()[0]);
                 }
             }
         }

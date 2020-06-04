@@ -97,14 +97,14 @@
             <artifactId>CMI</artifactId>
             <scope>system</scope>
             <systemPath>${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/CMIAPI7.6.2.0.jar</systemPath>
-            <version>LATEST</version>
+            <version>LEGACY</version>
         </dependency>
         <!--Residence API-->
         <dependency>
             <groupId>me.Residence</groupId>
             <artifactId>Residence</artifactId>
             <scope>system</scope>
-            <systemPath>${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/Residence4.8.8.2.jar</systemPath>
+            <systemPath>${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/Residence4.9.0.6.jar</systemPath>
             <version>LEGACY</version>
         </dependency>
         <!--PlaceholderAPI API-->
@@ -127,7 +127,7 @@
             <artifactId>MysqlPlayerDataBridge</artifactId>
             <scope>system</scope>
             <systemPath>
-                ${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/MysqlPlayerDataBridge-v3.31.0.jar
+                ${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/MysqlPlayerDataBridge-v3.33.3.jar
             </systemPath>
             <version>LEGACY</version>
         </dependency>
@@ -145,7 +145,7 @@
             <groupId>me.SkinsRestorer</groupId>
             <artifactId>SkinsRestorer</artifactId>
             <scope>system</scope>
-            <systemPath>${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/SkinsRestorer-13.7.5.jar
+            <systemPath>${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/SkinsRestorer-13.7.9.jar
             </systemPath>
             <version>LEGACY</version>
         </dependency>
@@ -168,7 +168,7 @@
             <groupId>me.MyPet</groupId>
             <artifactId>MyPet</artifactId>
             <scope>system</scope>
-            <systemPath>${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/MyPet-3.9-SNAPSHOT-B1510.jar
+            <systemPath>${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/MyPet-3.11-SNAPSHOT-B1543.jar
             </systemPath>
             <version>LATEST</version>
         </dependency>
@@ -192,6 +192,22 @@
             <scope>system</scope>
             <systemPath>${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/Multiverse-Core-4.0.0.jar
             </systemPath>
+            <version>LEGACY</version>
+        </dependency>
+        <!--PlayerPoints API-->
+        <dependency>
+            <groupId>org.black_ixx</groupId>
+            <artifactId>PlayerPoints</artifactId>
+            <scope>system</scope>
+            <systemPath>${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/PlayerPoints.jar</systemPath>
+            <version>LEGACY</version>
+        </dependency>
+        <!--Bank API-->
+        <dependency>
+            <groupId>me.Bank</groupId>
+            <artifactId>Bank</artifactId>
+            <scope>system</scope>
+            <systemPath>${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/bank-latest.jar</systemPath>
             <version>LEGACY</version>
         </dependency>
     </dependencies>

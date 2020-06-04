@@ -7,7 +7,6 @@ import com.bekvon.bukkit.residence.containers.Flags;
 import com.bekvon.bukkit.residence.protection.ClaimedResidence;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitRunnable;
 import tw.momocraft.playerdataplus.PlayerdataPlus;
 import tw.momocraft.playerdataplus.handlers.ConfigHandler;
@@ -16,7 +15,7 @@ import tw.momocraft.playerdataplus.handlers.ServerHandler;
 
 import java.util.List;
 
-public class FlyControl implements Listener {
+public class FlyControl {
 
     private boolean runSchedule = false;
 
@@ -51,29 +50,34 @@ public class FlyControl implements Listener {
                                 playerName = player.getName();
                                 if (!ignorePerms.isEmpty()) {
                                     if (isPerms(player, ignorePerms)) {
-                                        ServerHandler.debugMessage("Player-Status.Fly", playerName, "Schedule", "bypass", "Permissions");
+                                        ServerHandler.sendFeatureMessage("Player-Status.Fly", playerName, "Schedule", "bypass", "Permissions",
+                                                new Throwable().getStackTrace()[0]);
                                         continue;
                                     }
                                 }
                                 if (resEnable) {
                                     if (isFlyRes(player)) {
-                                        ServerHandler.debugMessage("Player-Status.Fly", playerName, "Schedule", "bypass", "Residence");
+                                        ServerHandler.sendFeatureMessage("Player-Status.Fly", playerName, "Schedule", "bypass", "Residence",
+                                                new Throwable().getStackTrace()[0]);
                                         continue;
                                     }
                                 }
                                 if (cmiEnable) {
                                     if (isFlyCMI(player)) {
-                                        ServerHandler.debugMessage("Player-Status.Fly", playerName, "Schedule", "bypass", "CMI");
+                                        ServerHandler.sendFeatureMessage("Player-Status.Fly", playerName, "Schedule", "bypass", "CMI",
+                                                new Throwable().getStackTrace()[0]);
                                         continue;
                                     }
                                 }
                                 player.setFlying(false);
-                                ServerHandler.debugMessage("Player-Status.Fly", playerName, "Schedule", "cancel", "final");
+                                ServerHandler.sendFeatureMessage("Player-Status.Fly", playerName, "Schedule", "cancel", "final",
+                                        new Throwable().getStackTrace()[0]);
                             }
                         }
                     }
                 }.runTaskTimer(PlayerdataPlus.getInstance(), 10, ConfigHandler.getConfigPath().getPsFlyInterval());
-                ServerHandler.debugMessage("Player-Status.Fly", "final", "Schedule", "return");
+                ServerHandler.sendFeatureMessage("Player-Status.Fly", "final", "Schedule", "return",
+                        new Throwable().getStackTrace()[0]);
             }
         }
     }

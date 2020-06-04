@@ -26,6 +26,18 @@ public class ServerHandler {
         }
     }
 
+    public static void sendDebugMessage(String message, boolean check) {
+        if (!check) {
+            if (!ConfigHandler.getDebugging()) {
+                return;
+            }
+        }
+        String prefix = "&7[&dPlayerdataPlus_Debug&7] ";
+        message = prefix + message;
+        message = ChatColor.translateAlternateColorCodes('&', message);
+        PlayerdataPlus.getInstance().getServer().getConsoleSender().sendMessage(message);
+    }
+
     public static void sendErrorMessage(String message) {
         String prefix = "&7[&cPlayerdataPlus_ERROR&7]&c ";
         message = prefix + message;
@@ -56,61 +68,56 @@ public class ServerHandler {
         }
     }
 
-    public static void debugMessage(String feature, String depiction) {
-        if (ConfigHandler.getDebugging()) {
-            ServerHandler.sendDebugMessage("&8" + feature + " - &f" + depiction);
+
+    public static void sendFeatureMessage(String feature, String target, String check, String action, String detail, StackTraceElement ste) {
+        if (!ConfigHandler.getDebugging()) {
+            return;
+        }
+        switch (action) {
+            case "cancel":
+            case "remove":
+            case "kill":
+            case "damage":
+                ServerHandler.sendDebugMessage("&f" + feature + "&8 - &f" + target + "&8 : &f" + check + "&8, &c" + action + "&8, &7" + detail
+                        + " &8(" + ste.getClassName() + " " + ste.getMethodName() + " " + ste.getLineNumber() + ")", true);
+                break;
+            case "continue":
+            case "bypass":
+            case "change":
+                ServerHandler.sendDebugMessage("&f" + feature + "&8 - &f" + target + "&8 : &f" + check + "&8, &e" + action + "&8, &7" + detail
+                        + " &8(" + ste.getClassName() + " " + ste.getMethodName() + " " + ste.getLineNumber() + ")", true);
+                break;
+            case "return":
+            default:
+                ServerHandler.sendDebugMessage("&f" + feature + "&8 - &f" + target + "&8 : &f" + check + "&8, &a" + action + "&8, &7" + detail
+                        + " &8(" + ste.getClassName() + " " + ste.getMethodName() + " " + ste.getLineNumber() + ")", true);
+                break;
         }
     }
 
-    public static void debugMessage(String feature, String target, String check, String action, String detail) {
-        if (ConfigHandler.getDebugging()) {
-            if (action.equals("return")) {
-                ServerHandler.sendDebugMessage("&8" + feature + " - &f" + target + "&8 : &7" + check + "&8, " + "&a" + action + "&8, " + detail);
-            } else if (action.equals("cancel")) {
-                ServerHandler.sendDebugMessage("&8" + feature + " - &f" + target + "&8 : &7" + check + "&8, " + "&c" + action + "&8, " + detail);
-            } else if (action.equals("continue")) {
-                ServerHandler.sendDebugMessage("&8" + feature + " - &f" + target + "&8 : &7" + check + "&8, " + "&e" + action + "&8, " + detail);
-            } else if (action.equals("break")) {
-                ServerHandler.sendDebugMessage("&8" + feature + " - &f" + target + "&8 : &7" + check + "&8, " + "&e" + action + "&8, " + detail);
-            } else if (action.equals("bypass")) {
-                ServerHandler.sendDebugMessage("&8" + feature + " - &f" + target + "&8 : &7" + check + "&8, " + "&e" + action + "&8, " + detail);
-            } else if (action.equals("remove")) {
-                ServerHandler.sendDebugMessage("&8" + feature + " - &f" + target + "&8 : &7" + check + "&8, " + "&c" + action + "&8, " + detail);
-            } else if (action.equals("change")) {
-                ServerHandler.sendDebugMessage("&8" + feature + " - &f" + target + "&8 : &7" + check + "&8, " + "&e" + action + "&8, " + detail);
-            } else if (action.equals("kill")) {
-                ServerHandler.sendDebugMessage("&8" + feature + " - &f" + target + "&8 : &7" + check + "&8, " + "&c" + action + "&8, " + detail);
-            } else if (action.equals("damage")) {
-                ServerHandler.sendDebugMessage("&8" + feature + " - &f" + target + "&8 : &7" + check + "&8, " + "&c" + action + "&8, " + detail);
-            } else if (action.equals("set")) {
-                ServerHandler.sendDebugMessage("&8" + feature + " - &f" + target + "&8 : &7" + check + "&8, " + "&e" + action + "&8, " + detail);
-            }
+    public static void sendFeatureMessage(String feature, String target, String check, String action, StackTraceElement ste) {
+        if (!ConfigHandler.getDebugging()) {
+            return;
         }
-    }
-
-    public static void debugMessage(String feature, String target, String check, String action) {
-        if (ConfigHandler.getDebugging()) {
-            if (action.equals("return")) {
-                ServerHandler.sendDebugMessage("&8" + feature + " - &f" + target + "&8 : &7" + check + "&8, " + "&a" + action);
-            } else if (action.equals("cancel")) {
-                ServerHandler.sendDebugMessage("&8" + feature + " - &f" + target + "&8 : &7" + check + "&8, " + "&c" + action);
-            } else if (action.equals("continue")) {
-                ServerHandler.sendDebugMessage("&8" + feature + " - &f" + target + "&8 : &7" + check + "&8, " + "&e" + action);
-            } else if (action.equals("break")) {
-                ServerHandler.sendDebugMessage("&8" + feature + " - &f" + target + "&8 : &7" + check + "&8, " + "&e" + action);
-            } else if (action.equals("bypass")) {
-                ServerHandler.sendDebugMessage("&8" + feature + " - &f" + target + "&8 : &7" + check + "&8, " + "&e" + action);
-            } else if (action.equals("remove")) {
-                ServerHandler.sendDebugMessage("&8" + feature + " - &f" + target + "&8 : &7" + check + "&8, " + "&c" + action);
-            } else if (action.equals("change")) {
-                ServerHandler.sendDebugMessage("&8" + feature + " - &f" + target + "&8 : &7" + check + "&8, " + "&e" + action);
-            } else if (action.equals("kill")) {
-                ServerHandler.sendDebugMessage("&8" + feature + " - &f" + target + "&8 : &7" + check + "&8, " + "&c" + action);
-            } else if (action.equals("damage")) {
-                ServerHandler.sendDebugMessage("&8" + feature + " - &f" + target + "&8 : &7" + check + "&8, " + "&c" + action);
-            } else if (action.equals("set")) {
-                ServerHandler.sendDebugMessage("&8" + feature + " - &f" + target + "&8 : &7" + check + "&8, " + "&e" + action);
-            }
+        switch (action) {
+            case "cancel":
+            case "remove":
+            case "kill":
+            case "damage":
+                ServerHandler.sendDebugMessage("&f" + feature + "&8 - &f" + target + "&8 : &f" + check + "&8, &c" + action
+                        + " &8(" + ste.getClassName() + " " + ste.getMethodName() + " " + ste.getLineNumber() + ")", true);
+                break;
+            case "continue":
+            case "bypass":
+            case "change":
+                ServerHandler.sendDebugMessage("&f" + feature + "&8 - &f" + target + "&8 : &f" + check + "&8, &e" + action
+                        + " &8(" + ste.getClassName() + " " + ste.getMethodName() + " " + ste.getLineNumber() + ")", true);
+                break;
+            case "return":
+            default:
+                ServerHandler.sendDebugMessage("&f" + feature + "&8 - &f" + target + "&8 : &f" + check + "&8, &a" + action
+                        + " &8(" + ste.getClassName() + " " + ste.getMethodName() + " " + ste.getLineNumber() + ")", true);
+                break;
         }
     }
 

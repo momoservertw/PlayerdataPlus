@@ -82,29 +82,35 @@ public class ConfigHandler {
         if (ConfigHandler.getConfigPath().isPsFlyEnable()) {
             if (ConfigHandler.getConfigPath().isPsFlyLogin()) {
                 PlayerdataPlus.getInstance().getServer().getPluginManager().registerEvents(new FlyPlayerJoin(), PlayerdataPlus.getInstance());
-                ServerHandler.debugMessage("Register-Event", "Player-Status.Fly - FlyPlayerJoin");
+                ServerHandler.sendFeatureMessage("Register-Event", "Player-Status.Fly", "FlyPlayerJoin", "continue",
+                        new Throwable().getStackTrace()[0]);
             }
             if (ConfigHandler.getConfigPath().isPsFlyLeave()) {
                 PlayerdataPlus.getInstance().getServer().getPluginManager().registerEvents(new FlyPlayerQuit(), PlayerdataPlus.getInstance());
-                ServerHandler.debugMessage("Register-Event", "Player-Status.Fly - FlyPlayerQuit");
+                ServerHandler.sendFeatureMessage("Register-Event", "Player-Status.Fly", "FlyPlayerQuit", "continue",
+                        new Throwable().getStackTrace()[0]);
             }
             if (ConfigHandler.getConfigPath().isPsFlyWorld()) {
                 PlayerdataPlus.getInstance().getServer().getPluginManager().registerEvents(new FlyPlayerChangedWorld(), PlayerdataPlus.getInstance());
-                ServerHandler.debugMessage("Register-Event", "Player-Status.Fly - FlyPlayerChangedWorld");
+                ServerHandler.sendFeatureMessage("Register-Event", "Player-Status.Fly", "FlyPlayerChangedWorld", "continue",
+                        new Throwable().getStackTrace()[0]);
             }
         }
         if (ConfigHandler.getConfigPath().isPsGodEnable()) {
             if (ConfigHandler.getConfigPath().isPsGodLogin()) {
                 PlayerdataPlus.getInstance().getServer().getPluginManager().registerEvents(new GodPlayerJoin(), PlayerdataPlus.getInstance());
-                ServerHandler.debugMessage("Register-Event", "Player-Status.God - GodPlayerJoin");
+                ServerHandler.sendFeatureMessage("Register-Event", "Player-Status.God", "GodPlayerJoin", "continue",
+                        new Throwable().getStackTrace()[0]);
             }
             if (ConfigHandler.getConfigPath().isPsGodLeave()) {
                 PlayerdataPlus.getInstance().getServer().getPluginManager().registerEvents(new GodPlayerQuit(), PlayerdataPlus.getInstance());
-                ServerHandler.debugMessage("Register-Event", "Player-Status.God - GodPlayerQuit");
+                ServerHandler.sendFeatureMessage("Register-Event", "Player-Status.God", "GodPlayerQuit", "continue",
+                        new Throwable().getStackTrace()[0]);
             }
             if (ConfigHandler.getConfigPath().isPsGodWorld()) {
                 PlayerdataPlus.getInstance().getServer().getPluginManager().registerEvents(new GodPlayerChangedWorld(), PlayerdataPlus.getInstance());
-                ServerHandler.debugMessage("Register-Event", "Player-Status.God - GodPlayerChangedWorld");
+                ServerHandler.sendFeatureMessage("Register-Event", "Player-Status.God", "GodPlayerChangedWorld", "continue",
+                        new Throwable().getStackTrace()[0]);
             }
         }
     }
@@ -204,7 +210,10 @@ public class ConfigHandler {
                 + (getDepends().LuckPermsEnabled() ? "LuckPerms, " : "")
                 + (getDepends().MyPetEnabled() ? "MyPet, " : "")
                 + (getDepends().AuthMeEnabled() ? "Authme, " : "")
-                + (getDepends().EssentialsEnabled() ? "Essentials" : "")
+                + (getDepends().EssentialsEnabled() ? "Essentials," : "")
+                + (getDepends().MultiverseCoreEnabled() ? "MultiverseCore," : "")
+                + (getDepends().PlayerPointsEnabled() ? "PlayerPoints," : "")
+                + (getDepends().BankEnabled() ? "Bank," : "")
         );
     }
 

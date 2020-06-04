@@ -32,16 +32,19 @@ public class GodPlayerChangedWorld implements Listener {
                 if (user.isGod()) {
                     if (!ignorePerms.isEmpty()) {
                         if (godControl.isPerms(player, ignorePerms)) {
-                            ServerHandler.debugMessage("Player-Status.God", playerName, "World-Change", "bypass", "Permissions");
+                            ServerHandler.sendFeatureMessage("Player-Status.God", playerName, "World-Change", "bypass", "Permissions",
+                        new Throwable().getStackTrace()[0]);
                             return;
                         }
                     }
                     if (godControl.isGodCMI(user)) {
-                        ServerHandler.debugMessage("Player-Status.God", playerName, "World-Change", "bypass", "CMI");
+                        ServerHandler.sendFeatureMessage("Player-Status.God", playerName, "World-Change", "bypass", "CMI",
+                        new Throwable().getStackTrace()[0]);
                         return;
                     }
                     user.setGod(false);
-                    ServerHandler.debugMessage("Player-Status.God", playerName, "World-Change", "cancel", "final");
+                    ServerHandler.sendFeatureMessage("Player-Status.God", playerName, "World-Change", "cancel", "final",
+                        new Throwable().getStackTrace()[0]);
                 }
             }
         }

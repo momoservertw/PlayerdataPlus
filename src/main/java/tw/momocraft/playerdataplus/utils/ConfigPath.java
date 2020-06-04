@@ -10,7 +10,10 @@ import java.util.List;
 
 
 public class ConfigPath {
+
+
     private int timeoutTime;
+    private List<String> cleanPriority;
     private boolean cleanAutoEnable;
     private long cleanAutoDelay;
     private boolean timeoutWarning;
@@ -98,6 +101,8 @@ public class ConfigPath {
 
     private void setUp() {
         timeoutTime = ConfigHandler.getServerConfig("spigot.yml").getInt("settings.timeout-time");
+
+        cleanPriority = ConfigHandler.getConfig("config.yml").getStringList("Clean.Settings.Offline-Player.Priority-Order");
         cleanAutoEnable = ConfigHandler.getConfig("config.yml").getBoolean("Clean.Settings.Auto-Clean.Enable");
         cleanAutoDelay = ConfigHandler.getConfig("config.yml").getLong("Clean.Settings.Auto-Clean.Delay") * 20;
         timeoutWarning = ConfigHandler.getConfig("config.yml").getBoolean("Clean.Settings.Timeout-Warning");
@@ -189,6 +194,11 @@ public class ConfigPath {
         psGmLogin = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.Op.Check.Login");
         psGmLeave = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.Op.Check.Leave");
         psGmWorld = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.Op.Check.World-Change");
+    }
+
+
+    public List<String> getCleanPriority() {
+        return cleanPriority;
     }
 
     public int getCleanMaxDataSize() {

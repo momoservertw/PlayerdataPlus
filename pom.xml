@@ -210,6 +210,22 @@
             <systemPath>${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/bank-latest.jar</systemPath>
             <version>LEGACY</version>
         </dependency>
+        <!--MaSuiteTeleports API-->
+        <dependency>
+            <groupId>me.MaSuiteTeleports</groupId>
+            <artifactId>MaSuiteTeleports</artifactId>
+            <scope>system</scope>
+            <systemPath>${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/MaSuiteTeleports.jar</systemPath>
+            <version>LEGACY</version>
+        </dependency>
+        <!--MaSuiteCore API-->
+        <dependency>
+            <groupId>me.Bank</groupId>
+            <artifactId>MaSuiteCore</artifactId>
+            <scope>system</scope>
+            <systemPath>${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/MaSuiteCore.jar</systemPath>
+            <version>LEGACY</version>
+        </dependency>
     </dependencies>
 
 </project>

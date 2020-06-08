@@ -2,90 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="55df3580-7d8b-4dd9-afca-eac36992f8e3" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/extra/MyPet-3.11-SNAPSHOT-B1543.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/extra/MysqlPlayerDataBridge-v3.33.3.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/extra/MythicMobs-4.9.2-SNAPSHOT.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/extra/PlayerPoints.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/extra/Residence4.9.0.6.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/extra/SkinsRestorer-13.7.9.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/extra/bank-latest.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/utils/PlayerPointsAPI.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/extra/MaSuiteCore.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/extra/MaSuiteTeleports.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/PlayerStatus/Fly/FlyControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/PlayerStatus/Fly/FlyControl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/PlayerStatus/Fly/FlyPlayerChangedWorld.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/PlayerStatus/Fly/FlyPlayerChangedWorld.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/PlayerStatus/Fly/FlyPlayerJoin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/PlayerStatus/Fly/FlyPlayerJoin.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/PlayerStatus/Fly/FlyPlayerQuit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/PlayerStatus/Fly/FlyPlayerQuit.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/PlayerStatus/Gamemode/GmControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/PlayerStatus/Gamemode/GmControl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/PlayerStatus/Gamemode/GmPlayerChangedWorld.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/PlayerStatus/Gamemode/GmPlayerChangedWorld.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/PlayerStatus/Gamemode/GmPlayerJoin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/PlayerStatus/Gamemode/GmPlayerJoin.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/PlayerStatus/Gamemode/GmPlayerQuit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/PlayerStatus/Gamemode/GmPlayerQuit.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/PlayerStatus/God/GodControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/PlayerStatus/God/GodControl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/PlayerStatus/God/GodPlayerChangedWorld.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/PlayerStatus/God/GodPlayerChangedWorld.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/PlayerStatus/God/GodPlayerJoin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/PlayerStatus/God/GodPlayerJoin.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/PlayerStatus/God/GodPlayerQuit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/PlayerStatus/God/GodPlayerQuit.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/PlayerStatus/Op/OpControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/PlayerStatus/Op/OpControl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/PlayerStatus/Op/OpPlayerChangedWorld.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/PlayerStatus/Op/OpPlayerChangedWorld.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/PlayerStatus/Op/OpPlayerJoin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/PlayerStatus/Op/OpPlayerJoin.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/PlayerStatus/Op/OpPlayerQuit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/PlayerStatus/Op/OpPlayerQuit.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/extra/MyPet-3.9-SNAPSHOT-B1510.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/extra/MysqlPlayerDataBridge-v3.31.0.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/extra/MythicMobs-4.8.0-SNAPSHOT.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/extra/Residence4.8.8.2.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/extra/SkinsRestorer-13.7.5.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/handlers/ConfigHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/handlers/ConfigHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/handlers/PlayerHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/handlers/PlayerHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/handlers/PurgeHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/handlers/PurgeHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/handlers/ServerHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/handlers/ServerHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/utils/ConfigPath.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/utils/ConfigPath.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/utils/DependAPI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/utils/DependAPI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/utils/Nick.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/utils/Nick.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/utils/UserConvert.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/utils/UserConvert.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/utils/VaultAPI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/utils/VaultAPI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/config.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/Commands.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/PlayerStatus/Fly/FlyControl$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/PlayerStatus/Fly/FlyControl.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/PlayerStatus/Fly/FlyPlayerChangedWorld.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/PlayerStatus/Fly/FlyPlayerJoin.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/PlayerStatus/Fly/FlyPlayerQuit.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/PlayerStatus/Gamemode/GmControl$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/PlayerStatus/Gamemode/GmControl.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/PlayerStatus/Gamemode/GmPlayerChangedWorld.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/PlayerStatus/Gamemode/GmPlayerJoin.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/PlayerStatus/Gamemode/GmPlayerQuit.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/PlayerStatus/God/GodControl$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/PlayerStatus/God/GodControl.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/PlayerStatus/God/GodPlayerChangedWorld.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/PlayerStatus/God/GodPlayerJoin.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/PlayerStatus/God/GodPlayerQuit.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/PlayerStatus/Op/OpControl$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/PlayerStatus/Op/OpControl.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/PlayerStatus/Op/OpPlayerChangedWorld.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/PlayerStatus/Op/OpPlayerJoin.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/PlayerStatus/Op/OpPlayerQuit.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/PlayerdataPlus.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/handlers/ConfigHandler$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/handlers/ConfigHandler.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/handlers/PermissionsHandler.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/handlers/PlayerHandler.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/handlers/PurgeHandler$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/handlers/PurgeHandler$2.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/handlers/PurgeHandler.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/handlers/ServerHandler.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/handlers/UpdateHandler.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/utils/BungeeCord.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/utils/ColorCorrespond.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/utils/DependAPI.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/utils/Language$Lang.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/utils/Language.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/utils/Logger.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/utils/Nick.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/utils/PlayerdataConfig.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/utils/TabComplete.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/utils/Utils.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/utils/VaultAPI.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -118,7 +39,7 @@
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/PlayerStatus/Gamemode" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -189,26 +110,26 @@
     </state>
     <state x="421" y="95" key="FileChooserDialogImpl/0.0.1280.680@0.0.1280.680" timestamp="1583572921300" />
     <state x="421" y="96" key="FileChooserDialogImpl/0.0.1280.689@0.0.1280.689" timestamp="1587350766978" />
-    <state width="1237" height="193" key="GridCell.Tab.0.bottom" timestamp="1591239012559">
+    <state width="1237" height="193" key="GridCell.Tab.0.bottom" timestamp="1591283973071">
       <screen x="0" y="0" width="1280" height="689" />
     </state>
     <state width="1237" height="145" key="GridCell.Tab.0.bottom/0.0.1280.680@0.0.1280.680" timestamp="1583855340519" />
-    <state width="1237" height="193" key="GridCell.Tab.0.bottom/0.0.1280.689@0.0.1280.689" timestamp="1591239012559" />
-    <state width="1237" height="193" key="GridCell.Tab.0.center" timestamp="1591239012559">
+    <state width="1237" height="193" key="GridCell.Tab.0.bottom/0.0.1280.689@0.0.1280.689" timestamp="1591283973071" />
+    <state width="1237" height="193" key="GridCell.Tab.0.center" timestamp="1591283973071">
       <screen x="0" y="0" width="1280" height="689" />
     </state>
     <state width="1237" height="145" key="GridCell.Tab.0.center/0.0.1280.680@0.0.1280.680" timestamp="1583855340519" />
-    <state width="1237" height="193" key="GridCell.Tab.0.center/0.0.1280.689@0.0.1280.689" timestamp="1591239012559" />
-    <state width="1237" height="193" key="GridCell.Tab.0.left" timestamp="1591239012559">
+    <state width="1237" height="193" key="GridCell.Tab.0.center/0.0.1280.689@0.0.1280.689" timestamp="1591283973071" />
+    <state width="1237" height="193" key="GridCell.Tab.0.left" timestamp="1591283973071">
       <screen x="0" y="0" width="1280" height="689" />
     </state>
     <state width="1237" height="145" key="GridCell.Tab.0.left/0.0.1280.680@0.0.1280.680" timestamp="1583855340518" />
-    <state width="1237" height="193" key="GridCell.Tab.0.left/0.0.1280.689@0.0.1280.689" timestamp="1591239012559" />
-    <state width="1237" height="193" key="GridCell.Tab.0.right" timestamp="1591239012559">
+    <state width="1237" height="193" key="GridCell.Tab.0.left/0.0.1280.689@0.0.1280.689" timestamp="1591283973071" />
+    <state width="1237" height="193" key="GridCell.Tab.0.right" timestamp="1591283973071">
       <screen x="0" y="0" width="1280" height="689" />
     </state>
     <state width="1237" height="145" key="GridCell.Tab.0.right/0.0.1280.680@0.0.1280.680" timestamp="1583855340519" />
-    <state width="1237" height="193" key="GridCell.Tab.0.right/0.0.1280.689@0.0.1280.689" timestamp="1591239012559" />
+    <state width="1237" height="193" key="GridCell.Tab.0.right/0.0.1280.689@0.0.1280.689" timestamp="1591283973071" />
     <state x="142" y="0" key="SettingsEditor" timestamp="1583572475254">
       <screen x="0" y="0" width="1280" height="680" />
     </state>

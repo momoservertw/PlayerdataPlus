@@ -26,8 +26,8 @@ public class UserConvert {
         UUID uuid2 = PlayerHandler.getOfflineUUID(name2);
 
         convertPlayerdata(uuid1, uuid2);
-        convertAdvancements(uuid1, uuid2);
-        convertStats(uuid1, uuid2);
+        //convertAdvancements(uuid1, uuid2);
+        //convertStats(uuid1, uuid2);
 
         convertMoney(name1, name2, uuid1, uuid2, replace);
         convertPoints(uuid1, uuid2, replace);
@@ -70,7 +70,7 @@ public class UserConvert {
         }
     }
 
-    private void convertPlayerdata(String name1, String name2) {
+    private void convertPlayerdata(UUID uuid1, UUID uuid2) {
 
     }
 
@@ -115,9 +115,8 @@ public class UserConvert {
     }
 
     /**
-     *
-     * @param name1 the name of first player.
-     * @param name2 the name of target player.
+     * @param name1   the name of first player.
+     * @param name2   the name of target player.
      * @param replace clear the target player data first.
      */
     private void convertResidence(String name1, String name2, boolean replace) {

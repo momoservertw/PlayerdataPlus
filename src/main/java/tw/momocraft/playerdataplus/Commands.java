@@ -4,8 +4,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import tw.momocraft.playerdataplus.PlayerStatus.Fly.FlyControl;
-import tw.momocraft.playerdataplus.PlayerStatus.God.GodControl;
+import tw.momocraft.playerdataplus.PlayerStatus.PlayerStatusControl;
 import tw.momocraft.playerdataplus.handlers.*;
 import tw.momocraft.playerdataplus.utils.Language;
 import tw.momocraft.playerdataplus.utils.Nick;
@@ -245,46 +244,21 @@ public class Commands implements CommandExecutor {
             }
             Language.sendLangMessage("Message.noPermission", sender);
             return true;
-        } else if (args.length == 4 && args[0].equalsIgnoreCase("playerstatus")) {
+        } else if (args.length == 3 && args[0].equalsIgnoreCase("playerstatus")) {
             if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.playerstatus")) {
-                if (args[3].equalsIgnoreCase("start")) {
-                    if (args[2].equalsIgnoreCase("fly")) {
-                        FlyControl flyControl = new FlyControl();
-                        if (flyControl.isRunSchedule()) {
-                            ServerHandler.sendConsoleMessage("&cThe process of Fly-Status is still running!");
-                        } else {
-                            flyControl.startSchedule();
-                        }
-                        return true;
-                    } else
-                    if (args[2].equalsIgnoreCase("god")) {
-                        GodControl godControl = new GodControl();
-                        if (godControl.isRunSchedule()) {
-                            ServerHandler.sendConsoleMessage("&cThe process of God-Status is still running!");
-                        } else {
-                            godControl.startSchedule();
-                        }
-                        return true;
+                if (args[2].equalsIgnoreCase("start")) {
+                    if (PlayerStatusControl.isSchedule()) {
+                        ServerHandler.sendConsoleMessage("&cThe process of Fly-Status is still running!");
+                    } else {
+                        PlayerStatusControl.startSchedule();
                     }
-                } else if (args[3].equalsIgnoreCase("stop")) {
-                    if (args[2].equalsIgnoreCase("fly")) {
-                        FlyControl flyControl = new FlyControl();
-                        if (flyControl.isRunSchedule()) {
-                            flyControl.setRunSchedule(false);
-                            ServerHandler.sendConsoleMessage("&6Stops the Fly-Status process after finished this checking.");
-                        } else {
-                            ServerHandler.sendConsoleMessage("&cThe process of Fly-Status isn't running now.");
-                        }
-                        return true;
-                    } else if (args[2].equalsIgnoreCase("god")) {
-                        GodControl godControl = new GodControl();
-                        if (godControl.isRunSchedule()) {
-                            godControl.setRunSchedule(false);
-                            ServerHandler.sendConsoleMessage("&6Stops the God-Status process after finished this checking.");
-                        } else {
-                            ServerHandler.sendConsoleMessage("&cThe process of God-Status isn't running now.");
-                        }
-                        return true;
+                    return true;
+                } else if (args[2].equalsIgnoreCase("stop")) {
+                    if (PlayerStatusControl.isSchedule()) {
+                        PlayerStatusControl.setSchedule(false);
+                        ServerHandler.sendConsoleMessage("&6The Fly-Status process after finished this checking.");
+                    } else {
+                        ServerHandler.sendConsoleMessage("&cThe process of Fly-Status isn't running now.");
                     }
                 }
             } else {

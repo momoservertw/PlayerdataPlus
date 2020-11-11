@@ -49,6 +49,7 @@ public class PurgeHandler {
 
     /**
      * Set the
+     *
      * @param run the status of Cleanup process.
      */
     public void setRun(boolean run) {
@@ -244,16 +245,19 @@ public class PurgeHandler {
         if (dataPath != null) {
             dataList = getDataList("Logs", dataPath);
             if (dataList.isEmpty()) {
-                ServerHandler.sendFeatureMessage("Clean", "Logs", "dataList = isEmpty", "continue");
+                ServerHandler.sendFeatureMessage("Clean", "Logs", "dataList", "return",
+                        new Throwable().getStackTrace()[0]);
                 return;
             }
         } else {
-            ServerHandler.sendFeatureMessage("Clean", "Logs", "dataPath = null", "continue");
+            ServerHandler.sendFeatureMessage("Clean", "Logs", "dataPath", "return",
+                    new Throwable().getStackTrace()[0]);
             return;
         }
         List<String> expiredList = getExpiredDataList("Logs", dataList, dataPath);
         if (expiredList.isEmpty()) {
-            ServerHandler.sendFeatureMessage("Clean", "Logs", "expiredList = isEmpty", "break");
+            ServerHandler.sendFeatureMessage("Clean", "Logs", "expiredList", "return",
+                    new Throwable().getStackTrace()[0]);
             return;
         }
         List<String> cleanedList = deleteFiles("Logs", null, dataPath, expiredList);
@@ -270,7 +274,8 @@ public class PurgeHandler {
             if (dataPath != null) {
                 dataList = getDataList(title, dataPath);
                 if (dataList.isEmpty()) {
-                    ServerHandler.sendFeatureMessage("Clean", title, "dataList = isEmpty", "break");
+                    ServerHandler.sendFeatureMessage("Clean", title, "dataList", "return",
+                            new Throwable().getStackTrace()[0]);
                     return;
                 }
                 int maxData = ConfigHandler.getConfigPath().getCleanMaxDataSize();
@@ -281,12 +286,14 @@ public class PurgeHandler {
                     }
                 }
             } else {
-                ServerHandler.sendFeatureMessage("Clean", title, "dataPath = null", "continue");
+                ServerHandler.sendFeatureMessage("Clean", title, "dataPath", "return",
+                        new Throwable().getStackTrace()[0]);
                 return;
             }
             List<String> expiredList = getExpiredUUIDDataList(title, dataList);
             if (expiredList.isEmpty()) {
-                ServerHandler.sendFeatureMessage("Clean", title, "expiredList = isEmpty", "break");
+                ServerHandler.sendFeatureMessage("Clean", title, "expiredList", "return",
+                        new Throwable().getStackTrace()[0]);
                 return;
             }
             List<String> cleanedList = deleteFiles(title, null, dataPath, expiredList);
@@ -308,7 +315,8 @@ public class PurgeHandler {
             if (dataPath != null) {
                 dataList = getDataList("Regions", dataPath);
                 if (dataList.isEmpty()) {
-                    ServerHandler.sendFeatureMessage("Clean", "Regions" + " " + worldName, "dataList = isEmpty", "continue", "check another world");
+                    ServerHandler.sendFeatureMessage("Clean", "Regions " + worldName, "dataList", "continue", "check another world",
+                            new Throwable().getStackTrace()[0]);
                     continue;
                 }
                 int maxData = ConfigHandler.getConfigPath().getCleanMaxDataSize();
@@ -319,17 +327,20 @@ public class PurgeHandler {
                     }
                 }
             } else {
-                ServerHandler.sendFeatureMessage("Clean", "Regions" + " " + worldName, "dataPath = isEmpty", "continue", "check another world");
+                ServerHandler.sendFeatureMessage("Clean", "Regions " + worldName, "dataPath", "continue", "check another world",
+                        new Throwable().getStackTrace()[0]);
                 continue;
             }
             expiredList = getExpiredDataList("Regions", dataList, dataPath);
             if (expiredList.isEmpty()) {
-                ServerHandler.sendFeatureMessage("Clean", "Regions", "expiredList = isEmpty", "break");
+                ServerHandler.sendFeatureMessage("Clean", "Regions", "expiredList", "break",
+                        new Throwable().getStackTrace()[0]);
                 break;
             }
             List<String> unignoredList = getUnignoreRegions(worldName, expiredList);
             if (unignoredList.isEmpty()) {
-                ServerHandler.sendFeatureMessage("Clean", "Regions", "unignoredList = isEmpty", "break");
+                ServerHandler.sendFeatureMessage("Clean", "Regions", "unignoredList", "break",
+                        new Throwable().getStackTrace()[0]);
                 break;
             }
             cleanedList = deleteFiles("Regions", worldName, dataPath, unignoredList);
@@ -597,9 +608,11 @@ public class PurgeHandler {
             diffDays = TimeUnit.DAYS.convert(Math.abs(currentDate.getTime() - lastDate.getTime()), TimeUnit.MILLISECONDS);
             if (diffDays > expiredDay) {
                 expiredData.add(data);
-                ServerHandler.sendFeatureMessage("Clean", title, "ExpiredDataList", "remove", data);
+                ServerHandler.sendFeatureMessage("Clean", title, "expiredDataList", "continue", data,
+                        new Throwable().getStackTrace()[0]);
             } else {
-                ServerHandler.sendFeatureMessage("Clean", title, "ExpiredDataList", "bypass", data + "&f not expired");
+                ServerHandler.sendFeatureMessage("Clean", title, "expiredDataList", "bypass", data,
+                        new Throwable().getStackTrace()[0]);
             }
         }
         return expiredData;
@@ -628,7 +641,8 @@ public class PurgeHandler {
             try {
                 playerUUID = UUID.fromString(data);
             } catch (IllegalArgumentException e) {
-                ServerHandler.sendFeatureMessage("Clean", title, "ExpiredUUIDDataList", "bypass", data + "&f not UUID");
+                ServerHandler.sendFeatureMessage("Clean", title, "expiredUUIDDataList", "bypass", data + "&f not UUID",
+                        new Throwable().getStackTrace()[0]);
                 expiredList.remove(expiredMap.get(data));
                 break;
             }
@@ -647,12 +661,15 @@ public class PurgeHandler {
                     }
                     diffDays = TimeUnit.DAYS.convert(Math.abs(lastTime - currentTime), TimeUnit.MILLISECONDS);
                     if (diffDays > expiredDay) {
-                        ServerHandler.sendFeatureMessage("Clean", title, "ExpiredUUIDDataList", "remove", data);
+                        ServerHandler.sendFeatureMessage("Clean", title, "expiredUUIDDataList", "remove", data,
+                                new Throwable().getStackTrace()[0]);
                         continue;
                     }
-                    ServerHandler.sendFeatureMessage("Clean", title, "ExpiredUUIDDataList", "bypass", data + "&f not expired");
+                    ServerHandler.sendFeatureMessage("Clean", title, "expiredUUIDDataList", "bypass", data + "&f not expired",
+                            new Throwable().getStackTrace()[0]);
                 } else {
-                    ServerHandler.sendFeatureMessage("Clean", title, "ExpiredUUIDDataList", "bypass", data + "&f has bypass permission");
+                    ServerHandler.sendFeatureMessage("Clean", title, "expiredUUIDDataList", "bypass", data + "&f has bypass permission",
+                            new Throwable().getStackTrace()[0]);
                 }
                 expiredList.remove(expiredMap.get(data));
             }
@@ -693,12 +710,15 @@ public class PurgeHandler {
                     }
                     diffDays = TimeUnit.DAYS.convert(Math.abs(lastTime - currentTime), TimeUnit.MILLISECONDS);
                     if (diffDays > expiredDay) {
-                        ServerHandler.sendFeatureMessage("Clean", title, "ExpiredPlayerDataList", "remove", data);
+                        ServerHandler.sendFeatureMessage("Clean", title, "ExpiredPlayerDataList", "remove", data,
+                                new Throwable().getStackTrace()[0]);
                         continue;
                     }
-                    ServerHandler.sendFeatureMessage("Clean", title, "ExpiredPlayerDataList", "bypass", data + "&f not expired");
+                    ServerHandler.sendFeatureMessage("Clean", title, "ExpiredPlayerDataList", "bypass", data,
+                            new Throwable().getStackTrace()[0]);
                 } else {
-                    ServerHandler.sendFeatureMessage("Clean", title, "ExpiredPlayerDataList", "bypass", data + "&f has bypass permission");
+                    ServerHandler.sendFeatureMessage("Clean", title, "ExpiredPlayerDataList", "bypass", data + "&f has bypass permission",
+                            new Throwable().getStackTrace()[0]);
                 }
                 expiredList.remove(expiredMap.get(data));
             }
@@ -721,7 +741,8 @@ public class PurgeHandler {
             try {
                 playerUUID = UUID.fromString(data);
             } catch (IllegalArgumentException e) {
-                ServerHandler.sendFeatureMessage("Clean", title, "ExpiredUUIDList", "bypass", data + "&f not UUID");
+                ServerHandler.sendFeatureMessage("Clean", title, "ExpiredUUIDList", "bypass", data + "&f not UUID",
+                        new Throwable().getStackTrace()[0]);
                 expiredList.remove(data);
                 break;
             }
@@ -739,12 +760,15 @@ public class PurgeHandler {
                     }
                     diffDays = TimeUnit.DAYS.convert(Math.abs(lastTime - currentTime), TimeUnit.MILLISECONDS);
                     if (diffDays > expiredDay) {
-                        ServerHandler.sendFeatureMessage("Clean", title, "ExpiredUUIDList", "remove", data);
+                        ServerHandler.sendFeatureMessage("Clean", title, "ExpiredUUIDList", "remove", data,
+                                new Throwable().getStackTrace()[0]);
                         continue;
                     }
-                    ServerHandler.sendFeatureMessage("Clean", title, "ExpiredUUIDList", "bypass", data + "&f not expired");
+                    ServerHandler.sendFeatureMessage("Clean", title, "ExpiredUUIDList", "bypass", data + "&f not expired",
+                            new Throwable().getStackTrace()[0]);
                 } else {
-                    ServerHandler.sendFeatureMessage("Clean", title, "ExpiredUUIDList", "bypass", data + "&f has bypass permission");
+                    ServerHandler.sendFeatureMessage("Clean", title, "ExpiredUUIDList", "bypass", data + "&f has bypass permission",
+                            new Throwable().getStackTrace()[0]);
                 }
                 expiredList.remove(data);
             }
@@ -777,12 +801,15 @@ public class PurgeHandler {
                     }
                     diffDays = TimeUnit.DAYS.convert(Math.abs(lastTime - currentTime), TimeUnit.MILLISECONDS);
                     if (diffDays > expiredDay) {
-                        ServerHandler.sendFeatureMessage("Clean", title, "ExpiredPlayerList", "remove", data);
+                        ServerHandler.sendFeatureMessage("Clean", title, "ExpiredPlayerList", "remove", data,
+                                new Throwable().getStackTrace()[0]);
                         continue;
                     }
-                    ServerHandler.sendFeatureMessage("Clean", title, "ExpiredPlayerList", "bypass", data + "&f not expired");
+                    ServerHandler.sendFeatureMessage("Clean", title, "ExpiredPlayerList", "bypass", data + "&f not expired",
+                            new Throwable().getStackTrace()[0]);
                 } else {
-                    ServerHandler.sendFeatureMessage("Clean", title, "ExpiredPlayerList", "bypass", data + "&f has bypass permission");
+                    ServerHandler.sendFeatureMessage("Clean", title, "ExpiredPlayerList", "bypass", data + "&f has bypass permission",
+                            new Throwable().getStackTrace()[0]);
                 }
                 expiredList.remove(data);
             }
@@ -803,7 +830,8 @@ public class PurgeHandler {
         try {
             playerUUID = UUID.fromString(data);
         } catch (IllegalArgumentException e) {
-            ServerHandler.sendFeatureMessage("Clean", title, "ExpiredUUIDList", "bypass", data + "&f not UUID");
+            ServerHandler.sendFeatureMessage("Clean", title, "ExpiredUUIDList", "bypass", data + "&f not UUID",
+                    new Throwable().getStackTrace()[0]);
             return false;
         }
         offlinePlayer = Bukkit.getOfflinePlayer(playerUUID);
@@ -820,12 +848,15 @@ public class PurgeHandler {
                 }
                 diffDays = TimeUnit.DAYS.convert(Math.abs(lastTime - currentTime), TimeUnit.MILLISECONDS);
                 if (diffDays > expiredDay) {
-                    ServerHandler.sendFeatureMessage("Clean", title, "ExpiredUUIDList", "remove", data);
+                    ServerHandler.sendFeatureMessage("Clean", title, "ExpiredUUIDList", "remove", data,
+                            new Throwable().getStackTrace()[0]);
                     return true;
                 }
-                ServerHandler.sendFeatureMessage("Clean", title, "ExpiredUUIDList", "bypass", data + "&f not expired");
+                ServerHandler.sendFeatureMessage("Clean", title, "ExpiredUUIDList", "bypass", data + "&f not expired",
+                        new Throwable().getStackTrace()[0]);
             } else {
-                ServerHandler.sendFeatureMessage("Clean", title, "ExpiredUUIDList", "bypass", data + "&f has bypass permission");
+                ServerHandler.sendFeatureMessage("Clean", title, "ExpiredUUIDList", "bypass", data + "&f has bypass permission",
+                        new Throwable().getStackTrace()[0]);
             }
             return false;
         }
@@ -861,7 +892,10 @@ public class PurgeHandler {
             if (ignoreMap.keySet().contains(worldName)) {
                 if (ignoreMap.get(worldName).contains(region)) {
                     i.remove();
-                    ServerHandler.sendFeatureMessage("Clean", "Regions " + worldName + " r." + region + ".mac", "ignore-regions", "bypass");
+                    ServerHandler.sendFeatureMessage("Clean", "Logs", "DataList", "continue",
+                            new Throwable().getStackTrace()[0]);
+                    ServerHandler.sendFeatureMessage("Clean", "Regions " + worldName + " r." + region + ".mac", "ignore-regions", "bypass",
+                            new Throwable().getStackTrace()[0]);
                     continue;
                 }
             }
@@ -886,7 +920,8 @@ public class PurgeHandler {
                         if (regionHighX >= resHighX && resHighX >= regionLowX || regionHighX >= resLowX && resLowX >= regionLowX) {
                             if (regionHighZ >= resHighZ && resHighZ >= regionLowZ || regionHighZ >= resLowZ && resLowZ >= regionLowZ) {
                                 if (ConfigHandler.getConfigPath().isCleanRegionBypassRes()) {
-                                    ServerHandler.sendFeatureMessage("Clean - Regions", worldName + " r." + region + ".mac", "has-residence \"" + resHighX + "." + resHighY + "." + resHighZ + "\"", "bypass");
+                                    ServerHandler.sendFeatureMessage("Clean - Regions", worldName + " r." + region + ".mac", "has-residence \"" + resHighX + "." + resHighY + "." + resHighZ + "\"", "bypass",
+                                            new Throwable().getStackTrace()[0]);
                                     i.remove();
                                     continue back;
                                 } else {
@@ -895,7 +930,8 @@ public class PurgeHandler {
                                     if (res != null) {
                                         ResidencePermissions perms = res.getPermissions();
                                         if (perms.has("bypassclean", false)) {
-                                            ServerHandler.sendFeatureMessage("Clean - Regions", worldName + " r." + region + ".mac", "has-residence-bypass-flag \"" + resHighX + "." + resHighY + "." + resHighZ + "\"", "bypass");
+                                            ServerHandler.sendFeatureMessage("Clean - Regions", worldName + " r." + region + ".mac", "has-residence-bypass-flag \"" + resHighX + "." + resHighY + "." + resHighZ + "\"", "bypass",
+                                                    new Throwable().getStackTrace()[0]);
                                             i.remove();
                                             continue back;
                                         }

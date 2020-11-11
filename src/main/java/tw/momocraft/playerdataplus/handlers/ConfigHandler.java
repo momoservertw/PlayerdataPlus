@@ -7,14 +7,9 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.scheduler.BukkitRunnable;
 import tw.momocraft.playerdataplus.Commands;
-import tw.momocraft.playerdataplus.PlayerStatus.Fly.FlyPlayerJoin;
-import tw.momocraft.playerdataplus.PlayerStatus.Fly.FlyPlayerQuit;
-import tw.momocraft.playerdataplus.PlayerStatus.Fly.FlyControl;
-import tw.momocraft.playerdataplus.PlayerStatus.Fly.FlyPlayerChangedWorld;
-import tw.momocraft.playerdataplus.PlayerStatus.God.GodControl;
-import tw.momocraft.playerdataplus.PlayerStatus.God.GodPlayerChangedWorld;
-import tw.momocraft.playerdataplus.PlayerStatus.God.GodPlayerJoin;
-import tw.momocraft.playerdataplus.PlayerStatus.God.GodPlayerQuit;
+import tw.momocraft.playerdataplus.PlayerStatus.PlayerStatusControl;
+import tw.momocraft.playerdataplus.PlayerStatus.listeners.PlayerChangedWorld;
+import tw.momocraft.playerdataplus.PlayerStatus.listeners.PlayerJoin;
 import tw.momocraft.playerdataplus.PlayerdataPlus;
 import tw.momocraft.playerdataplus.utils.*;
 
@@ -33,7 +28,6 @@ public class ConfigHandler {
     private static UpdateHandler updater;
     private static Logger logger;
     private static ColorCorrespond colors;
-
 
     public static void generateData(boolean reload) {
         configFile();
@@ -60,17 +54,9 @@ public class ConfigHandler {
                 }.runTaskLater(PlayerdataPlus.getInstance(), getConfigPath().getCleanAutoDelay());
             }
         }
-
-        if (ConfigHandler.getConfigPath().isPsFlyEnable()) {
-            if (ConfigHandler.getConfigPath().isPsFlySchedule()) {
-                FlyControl flyControl = new FlyControl();
-                flyControl.startSchedule();
-            }
-        }
-        if (ConfigHandler.getConfigPath().isPsGodEnable()) {
-            if (ConfigHandler.getConfigPath().isPsGodSchedule()) {
-                GodControl godControl = new GodControl();
-                godControl.startSchedule();
+        if (ConfigHandler.getConfigPath().isPlayerStatus()) {
+            if (ConfigHandler.getConfigPath().isPsSchdeule()) {
+                PlayerStatusControl.startSchedule();
             }
         }
     }
@@ -79,37 +65,15 @@ public class ConfigHandler {
         PlayerdataPlus.getInstance().getCommand("playerdataplus").setExecutor(new Commands());
         PlayerdataPlus.getInstance().getCommand("playerdataplus").setTabCompleter(new TabComplete());
 
-        if (ConfigHandler.getConfigPath().isPsFlyEnable()) {
-            if (ConfigHandler.getConfigPath().isPsFlyLogin()) {
-                PlayerdataPlus.getInstance().getServer().getPluginManager().registerEvents(new FlyPlayerJoin(), PlayerdataPlus.getInstance());
-                ServerHandler.sendFeatureMessage("Register-Event", "Player-Status.Fly", "FlyPlayerJoin", "continue",
+        if (ConfigHandler.getConfigPath().isPlayerStatus()) {
+            if (ConfigHandler.getConfigPath().isPsLogin()) {
+                PlayerdataPlus.getInstance().getServer().getPluginManager().registerEvents(new PlayerJoin(), PlayerdataPlus.getInstance());
+                ServerHandler.sendFeatureMessage("Register-Event", "Player-Status", "FlyPlayerJoin", "continue",
                         new Throwable().getStackTrace()[0]);
             }
-            if (ConfigHandler.getConfigPath().isPsFlyLeave()) {
-                PlayerdataPlus.getInstance().getServer().getPluginManager().registerEvents(new FlyPlayerQuit(), PlayerdataPlus.getInstance());
-                ServerHandler.sendFeatureMessage("Register-Event", "Player-Status.Fly", "FlyPlayerQuit", "continue",
-                        new Throwable().getStackTrace()[0]);
-            }
-            if (ConfigHandler.getConfigPath().isPsFlyWorld()) {
-                PlayerdataPlus.getInstance().getServer().getPluginManager().registerEvents(new FlyPlayerChangedWorld(), PlayerdataPlus.getInstance());
-                ServerHandler.sendFeatureMessage("Register-Event", "Player-Status.Fly", "FlyPlayerChangedWorld", "continue",
-                        new Throwable().getStackTrace()[0]);
-            }
-        }
-        if (ConfigHandler.getConfigPath().isPsGodEnable()) {
-            if (ConfigHandler.getConfigPath().isPsGodLogin()) {
-                PlayerdataPlus.getInstance().getServer().getPluginManager().registerEvents(new GodPlayerJoin(), PlayerdataPlus.getInstance());
-                ServerHandler.sendFeatureMessage("Register-Event", "Player-Status.God", "GodPlayerJoin", "continue",
-                        new Throwable().getStackTrace()[0]);
-            }
-            if (ConfigHandler.getConfigPath().isPsGodLeave()) {
-                PlayerdataPlus.getInstance().getServer().getPluginManager().registerEvents(new GodPlayerQuit(), PlayerdataPlus.getInstance());
-                ServerHandler.sendFeatureMessage("Register-Event", "Player-Status.God", "GodPlayerQuit", "continue",
-                        new Throwable().getStackTrace()[0]);
-            }
-            if (ConfigHandler.getConfigPath().isPsGodWorld()) {
-                PlayerdataPlus.getInstance().getServer().getPluginManager().registerEvents(new GodPlayerChangedWorld(), PlayerdataPlus.getInstance());
-                ServerHandler.sendFeatureMessage("Register-Event", "Player-Status.God", "GodPlayerChangedWorld", "continue",
+            if (ConfigHandler.getConfigPath().isPsWorldChange()) {
+                PlayerdataPlus.getInstance().getServer().getPluginManager().registerEvents(new PlayerChangedWorld(), PlayerdataPlus.getInstance());
+                ServerHandler.sendFeatureMessage("Register-Event", "Player-Status", "FlyPlayerJoin", "continue",
                         new Throwable().getStackTrace()[0]);
             }
         }

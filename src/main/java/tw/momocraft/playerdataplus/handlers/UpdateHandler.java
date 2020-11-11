@@ -1,84 +1,77 @@
 package tw.momocraft.playerdataplus.handlers;
-import org.bukkit.Bukkit;
+
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import tw.momocraft.playerdataplus.PlayerdataPlus;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.net.URL;
-import java.util.Collection;
+import java.net.URLConnection;
 
+/**
+ * This class is part of ItemJoin.
+ * https://github.com/RockinChaos/ItemJoin
+ */
 public class UpdateHandler {
 
-	private boolean updatesAllowed = ConfigHandler.getConfig("config.yml").getBoolean("Check-Updates");
-	private final int PROJECTID = 75169;
-	private final String HOST = "https://api.spigotmc.org/legacy/update.php?resource=" + PROJECTID;
-	private String versionExact = PlayerdataPlus.getInstance().getDescription().getVersion();
-	private boolean betaVersion = versionExact.contains("-SNAPSHOT") || versionExact.contains("-BETA") || versionExact.contains("-ALPHA");
-	private String localeVersionRaw = versionExact.split("-")[0];
-	private String latestVersionRaw;
-	private double localeVersion = Double.parseDouble(localeVersionRaw.replace(".", ""));
-	private double latestVersion;
+	private final int PROJECTID = 76878;
 
-	UpdateHandler(){
+	private final String HOST = "https://api.spigotmc.org/legacy/update.php?resource=" + this.PROJECTID;
+	private String versionExact = PlayerdataPlus.getInstance().getDescription().getVersion();
+	private String localeVersion = this.versionExact.split("-")[0];
+	private String latestVersion;
+
+	private boolean updatesAllowed = ConfigHandler.getConfig("config.yml").getBoolean("Check-Updates");
+
+	/**
+	 * Initializes the UpdateHandler and Checks for Updates upon initialization.
+	 */
+	public UpdateHandler() {
 		this.checkUpdates(PlayerdataPlus.getInstance().getServer().getConsoleSender());
 	}
 
-	public void checkUpdates(CommandSender sender) {
+	/**
+	 * Checks to see if an update is required, notifying the console window and online op players.
+	 *
+	 * @param sender  - The executor of the update checking.
+	 */
+	public void checkUpdates(final CommandSender sender) {
 		if (this.updateNeeded(sender) && this.updatesAllowed) {
-			ServerHandler.sendMessage(sender, "&aNew version is available &8- &6v" + this.localeVersionRaw + " &f-> &ev" + this.latestVersionRaw);
-			ServerHandler.sendMessage(sender, "&ehttps://www.spigotmc.org/resources/playerdataplus.75169/history");
-			this.sendNotifications();
+			ServerHandler.sendMessage(sender, "&aNew version is available: " + "&e&lv" + this.latestVersion);
+			ServerHandler.sendMessage(sender, "&ehttps://www.spigotmc.org/resources/entityplus.70510/history");
 		} else if (this.updatesAllowed) {
 			ServerHandler.sendMessage(sender, "&fYou are up to date!");
 		}
 	}
 
-	private Boolean updateNeeded(CommandSender sender) {
+	/**
+	 * Directly checks to see if the spigotmc host has an update available.
+	 *
+	 * @param sender  - The executor of the update checking.
+	 * @return If an update is needed.
+	 */
+	private boolean updateNeeded(final CommandSender sender) {
 		if (this.updatesAllowed) {
 			ServerHandler.sendMessage(sender, "&fChecking for updates...");
 			try {
-				InputStream input = (InputStream) new URL(this.HOST).openStream();
-				BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+				URLConnection connection = new URL(this.HOST + "?_=" + System.currentTimeMillis()).openConnection();
+				BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 				String version = reader.readLine();
 				reader.close();
 				if (version.length() <= 7) {
-					this.latestVersionRaw = version.replaceAll("[a-z]", "").replace("-SNAPSHOT", "").replace("-BETA", "").replace("-ALPHA", "").replace("-RELEASE", "");
-					this.latestVersion = Double.parseDouble(this.latestVersionRaw.replace(".", ""));
-					if (this.latestVersion == this.localeVersion && this.betaVersion || this.localeVersion > this.latestVersion && !this.betaVersion || this.latestVersion > this.localeVersion) {
+					this.latestVersion = version.replaceAll("[a-z]", "").replace("-SNAPSHOT", "").replace("-BETA", "").replace("-ALPHA", "").replace("-RELEASE", "");
+					String[] latestSplit = this.latestVersion.split("\\.");
+					String[] localeSplit = this.localeVersion.split("\\.");
+					if ((Integer.parseInt(latestSplit[0]) > Integer.parseInt(localeSplit[0]) ||
+							Integer.parseInt(latestSplit[1]) > Integer.parseInt(localeSplit[1]) || Integer.parseInt(latestSplit[2]) > Integer.parseInt(localeSplit[2]))) {
 						return true;
 					}
 				}
 			} catch (Exception e) {
-				ServerHandler.sendMessage(sender, "&cThere is an error occurred while checking the updates.");
-				ServerHandler.sendDebugTrace(e);
+				ServerHandler.sendMessage(sender, "&cFailed to check for updates, connection could not be made.");
 				return false;
 			}
 		}
 		return false;
-	}
-
-	private void sendNotifications() {
-		try {
-			Collection< ? > playersOnline = null;
-			Player[] playersOnlineOld = null;
-			if (Bukkit.class.getMethod("getOnlinePlayers", new Class < ? > [0]).getReturnType() == Collection.class) {
-				if (Bukkit.class.getMethod("getOnlinePlayers", new Class < ? > [0]).getReturnType() == Collection.class) {
-					playersOnline = ((Collection < ? > ) Bukkit.class.getMethod("getOnlinePlayers", new Class < ? > [0]).invoke(null, new Object[0]));
-					for (Object objPlayer: playersOnline) {
-						if (((Player) objPlayer).isOp()) {
-							ServerHandler.sendPlayerMessage(((Player) objPlayer), "&aNew version is available &8- &ev" + this.localeVersionRaw + " -> v" + this.latestVersionRaw);
-						}
-					}
-				}
-			} else {
-				playersOnlineOld = ((Player[]) Bukkit.class.getMethod("getOnlinePlayers", new Class < ? > [0]).invoke(null, new Object[0]));
-				for (Player objPlayer: playersOnlineOld) {
-					if (objPlayer.isOp()) {
-						ServerHandler.sendPlayerMessage(objPlayer, "&aNew version is available &8- &ev" + this.localeVersionRaw + " -> v" + this.latestVersionRaw);
-					}
-				}
-			}
-		} catch (Exception e) { ServerHandler.sendDebugTrace(e); }
 	}
 }

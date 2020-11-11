@@ -70,11 +70,17 @@
             <artifactId>guava</artifactId>
             <version>18.0</version>
         </dependency>
+        <!--MySQL API-->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.41</version>
+        </dependency>
         <!--Spigot API-->
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.15.2-R0.1-SNAPSHOT</version>
+            <version>1.16.4-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <!--CraftBukkit API-->
@@ -104,7 +110,7 @@
             <groupId>me.Residence</groupId>
             <artifactId>Residence</artifactId>
             <scope>system</scope>
-            <systemPath>${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/Residence4.9.0.6.jar</systemPath>
+            <systemPath>${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/Residence4.9.2.0.jar</systemPath>
             <version>LEGACY</version>
         </dependency>
         <!--PlaceholderAPI API-->
@@ -127,16 +133,7 @@
             <artifactId>MysqlPlayerDataBridge</artifactId>
             <scope>system</scope>
             <systemPath>
-                ${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/MysqlPlayerDataBridge-v3.33.3.jar
-            </systemPath>
-            <version>LEGACY</version>
-        </dependency>
-        <!--ChatControlPro API-->
-        <dependency>
-            <groupId>me.ChatControlPro</groupId>
-            <artifactId>ChatControlPro</artifactId>
-            <scope>system</scope>
-            <systemPath>${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/ChatControlProAPI_8.0.11.jar
+                ${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/MysqlPlayerDataBridge-v3.35.0.jar
             </systemPath>
             <version>LEGACY</version>
         </dependency>
@@ -200,30 +197,6 @@
             <artifactId>PlayerPoints</artifactId>
             <scope>system</scope>
             <systemPath>${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/PlayerPoints.jar</systemPath>
-            <version>LEGACY</version>
-        </dependency>
-        <!--Bank API-->
-        <dependency>
-            <groupId>me.Bank</groupId>
-            <artifactId>Bank</artifactId>
-            <scope>system</scope>
-            <systemPath>${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/bank-latest.jar</systemPath>
-            <version>LEGACY</version>
-        </dependency>
-        <!--MaSuiteTeleports API-->
-        <dependency>
-            <groupId>me.MaSuiteTeleports</groupId>
-            <artifactId>MaSuiteTeleports</artifactId>
-            <scope>system</scope>
-            <systemPath>${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/MaSuiteTeleports.jar</systemPath>
-            <version>LEGACY</version>
-        </dependency>
-        <!--MaSuiteCore API-->
-        <dependency>
-            <groupId>me.Bank</groupId>
-            <artifactId>MaSuiteCore</artifactId>
-            <scope>system</scope>
-            <systemPath>${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/MaSuiteCore.jar</systemPath>
             <version>LEGACY</version>
         </dependency>
     </dependencies>

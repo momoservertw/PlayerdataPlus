@@ -1,16 +1,20 @@
 package tw.momocraft.playerdataplus.utils;
 
 import org.bukkit.configuration.ConfigurationSection;
+import tw.momocraft.playerdataplus.PlayerStatus.PlayerStatusMap;
 import tw.momocraft.playerdataplus.handlers.ConfigHandler;
+import tw.momocraft.playerdataplus.utils.locationutils.LocationMap;
+import tw.momocraft.playerdataplus.utils.locationutils.LocationUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 
 public class ConfigPath {
 
+    //  ============================================== //
+    //         General Settings                        //
+    //  ============================================== //
+    private static LocationUtils locationUtils;
 
     private int timeoutTime;
     private List<String> cleanPriority;
@@ -33,53 +37,22 @@ public class ConfigPath {
     private String backupFolderName;
     private String backupCustomPath;
 
-    private boolean psFlyEnable;
-    private List<String> psFlyPerms;
-    private boolean psFlyCMIT;
-    private boolean psFlyCMIC;
-    private boolean psFlyRes;
-    private boolean psFlySchedule;
-    private int psFlyInterval;
-    private boolean psFlyLogin;
-    private boolean psFlyLeave;
-    private boolean psFlyWorld;
 
-    private boolean psGodEnable;
-    private List<String> psGodPerms;
-    private boolean psGodCMIT;
-    private boolean psGodSchedule;
-    private int psGodInterval;
-    private boolean psGodLogin;
-    private boolean psGodLeave;
-    private boolean psGodWorld;
+    //  ============================================== //
+    //         PlayerStatus Settings                   //
+    //  ============================================== //
 
-    private boolean psOpEnable;
-    private List<String> psOpPerms;
-    private boolean psOpSchedule;
-    private int psOpInterval;
-    private boolean psOpLogin;
-    private boolean psOpLeave;
-    private boolean psOpWorld;
+    private boolean playerStatus;
+    private Map<String, PlayerStatusMap> playerStatusProp = new HashMap<>();
 
-    private boolean psGmEnable;
-    private boolean psGm0Enable;
-    private boolean psGm1Enable;
-    private boolean psGm2Enable;
-    private boolean psGm3Enable;
-    private List<String> psGm0Perms;
-    private List<String> psGm1Perms;
-    private List<String> psGm2Perms;
-    private List<String> psGm3Perms;
-    private String psGm0Default;
-    private String psGm1Default;
-    private String psGm2Default;
-    private String psGm3Default;
-    private boolean psGmSchedule;
-    private int psGmInterval;
-    private boolean psGmLogin;
-    private boolean psGmLeave;
-    private boolean psGmWorld;
+    private boolean psLogin;
+    private boolean psWorldChange;
+    private boolean psSchdeule;
+    private int psSchdeuleInterval;
 
+    //  ============================================== //
+    //         User-Convertor Settings                   //
+    //  ============================================== //
     private boolean transferUser;
     private boolean tfPlayerdata;
     private boolean tfStats;
@@ -100,8 +73,15 @@ public class ConfigPath {
     }
 
     private void setUp() {
+        locationUtils = new LocationUtils();
+
         timeoutTime = ConfigHandler.getServerConfig("spigot.yml").getInt("settings.timeout-time");
 
+        setUpClean();
+        setUpPlayerStatus();
+    }
+
+    private void setUpClean() {
         cleanPriority = ConfigHandler.getConfig("config.yml").getStringList("Clean.Settings.Offline-Player.Priority-Order");
         cleanAutoEnable = ConfigHandler.getConfig("config.yml").getBoolean("Clean.Settings.Auto-Clean.Enable");
         cleanAutoDelay = ConfigHandler.getConfig("config.yml").getLong("Clean.Settings.Auto-Clean.Delay") * 20;
@@ -133,67 +113,75 @@ public class ConfigPath {
                 }
             }
         }
+    }
 
-        psFlyEnable = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.Fly.Enable");
-        psFlyPerms = ConfigHandler.getConfig("config.yml").getStringList("Player-Status.Fly.Ignore.Permissions");
-        if (ConfigHandler.getDepends().CMIEnabled()) {
-            psFlyCMIT = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.Fly.Ignore.CMI.tfly");
-            psFlyCMIC = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.Fly.Ignore.CMI.cfly");
-        } else {
-            psFlyCMIT = false;
-            psFlyCMIC = false;
+    private void setUpPlayerStatus() {
+        playerStatus = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.Enable");
+        if (!playerStatus) {
+            return;
         }
-        if (ConfigHandler.getDepends().ResidenceEnabled()) {
-            psFlyRes = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.Fly.Ignore.Residence");
-        } else {
-            psFlyRes = false;
+        psLogin = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.Settings.Check.Login");
+        psWorldChange = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.Settings.Check.World-Change");
+        psSchdeule = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.Settings.Check.Schedule.Enable");
+        psSchdeuleInterval = ConfigHandler.getConfig("config.yml").getInt("Player-Status.Settings.Check.Schedule.Interval");
+
+        PlayerStatusMap playerStatusMap;
+        ConfigurationSection groupsConfig = ConfigHandler.getConfig("config.yml").getConfigurationSection("Player-Status");
+        if (groupsConfig != null) {
+            List<LocationMap> locMaps;
+            for (String group : groupsConfig.getKeys(false)) {
+                if (ConfigHandler.getConfig("config.yml").getBoolean("Player-Status." + group + ".Enable")) {
+                    // Checking the CMI enabled.
+                    if (group.equals("God") && !ConfigHandler.getDepends().CMIEnabled()) {
+                        continue;
+                    }
+                    playerStatusMap = new PlayerStatusMap();
+                    playerStatusMap.setIgnorePerms(ConfigHandler.getConfig("config.yml").getStringList("Player-Status." + group + ".Ignore.Permissions"));
+                    // Adding the location setting.
+                    locMaps = locationUtils.getSpeLocMaps("config.yml", "Player-Status." + group + ".Location");
+                    if (!locMaps.isEmpty()) {
+                        playerStatusMap.setLocMaps(locMaps);
+                    }
+                    // Adding the special setting for CMI.
+                    if (group.equals("Fly") && ConfigHandler.getDepends().CMIEnabled()) {
+                        playerStatusMap.setFlyCMIT(ConfigHandler.getConfig("config.yml").getBoolean("Player-Status." + group + ".Ignore.CMI.tfly"));
+                        playerStatusMap.setFlyCMIC(ConfigHandler.getConfig("config.yml").getBoolean("Player-Status." + group + ".Ignore.CMI.cfly"));
+                        playerStatusMap.setFlyRes(ConfigHandler.getConfig("config.yml").getBoolean("Player-Status." + group + ".Ignore.Residence"));
+                    } else if (group.equals("God") && ConfigHandler.getDepends().CMIEnabled()) {
+                        playerStatusMap.setGodCMIT(ConfigHandler.getConfig("config.yml").getBoolean("Player-Status." + group + ".Ignore.CMI.tgod"));
+                    }
+                    playerStatusProp.put(group, playerStatusMap);
+                }
+            }
         }
-        psFlySchedule = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.Fly.Check.Schedule.Enable");
-        psFlyInterval = ConfigHandler.getConfig("config.yml").getInt("Player-Status.Fly.Check.Schedule.Interval");
-        psFlyLogin = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.Fly.Check.Login");
-        psFlyLeave = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.Fly.Check.Leave");
-        psFlyWorld = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.Fly.Check.World-Change");
+    }
 
-        psGodEnable = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.God.Enable");
-        psGodPerms = ConfigHandler.getConfig("config.yml").getStringList("Player-Status.God.Ignore.Permissions");
-        if (ConfigHandler.getDepends().CMIEnabled()) {
-            psGodCMIT = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.God.Ignore.CMI.tgod");
-        } else {
-            psGodCMIT = false;
-        }
-        psGodSchedule = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.God.Check.Schedule.Enable");
-        psGodInterval = ConfigHandler.getConfig("config.yml").getInt("Player-Status.God.Check.Schedule.Interval");
-        psGodLogin = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.God.Check.Login");
-        psGodLeave = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.God.Check.Leave");
-        psGodWorld = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.God.Check.World-Change");
+    public static LocationUtils getLocationUtils() {
+        return locationUtils;
+    }
 
-        psOpEnable = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.Op.Enable");
-        psOpPerms = ConfigHandler.getConfig("config.yml").getStringList("Player-Status.Op.Ignore.Permissions");
-        psOpSchedule = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.Op.Check.Schedule.Enable");
-        psOpInterval = ConfigHandler.getConfig("config.yml").getInt("Player-Status.Op.Check.Schedule.Interval");
-        psOpLogin = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.Op.Check.Login");
-        psOpLeave = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.Op.Check.Leave");
-        psOpWorld = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.Op.Check.World-Change");
+    public Map<String, PlayerStatusMap> getPlayerStatusProp() {
+        return playerStatusProp;
+    }
 
-        psGmEnable = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.Gamemode.Enable");
-        psGm0Enable = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.Ignore.Survival.Enable");
-        psGm0Perms = ConfigHandler.getConfig("config.yml").getStringList("Player-Status.Ignore.Survival.Permissions");
-        psGm0Default = ConfigHandler.getConfig("config.yml").getString("Player-Status.Ignore.Survival.Default");
-        psGm1Enable = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.Ignore.Creative.Enable");
-        psGm1Perms = ConfigHandler.getConfig("config.yml").getStringList("Player-Status.Ignore.Creative.Permissions");
-        psGm1Default = ConfigHandler.getConfig("config.yml").getString("Player-Status.Ignore.Creative.Default");
-        psGm2Enable = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.Ignore.Adventure.Enable");
-        psGm2Perms = ConfigHandler.getConfig("config.yml").getStringList("Player-Status.Ignore.Adventure.Permissions");
-        psGm2Default = ConfigHandler.getConfig("config.yml").getString("Player-Status.Ignore.Adventure.Default");
-        psGm3Enable = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.Ignore.Spectator.Enable");
-        psGm3Perms = ConfigHandler.getConfig("config.yml").getStringList("Player-Status.Ignore.Spectator.Permissions");
-        psGm3Default = ConfigHandler.getConfig("config.yml").getString("Player-Status.Ignore.Spectator.Default");
+    public boolean isPlayerStatus() {
+        return playerStatus;
+    }
 
-        psGmSchedule = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.Op.Check.Schedule.Enable");
-        psGmInterval = ConfigHandler.getConfig("config.yml").getInt("Player-Status.Op.Check.Schedule.Interval");
-        psGmLogin = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.Op.Check.Login");
-        psGmLeave = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.Op.Check.Leave");
-        psGmWorld = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.Op.Check.World-Change");
+    public boolean isPsLogin() {
+        return psLogin;
+    }
+
+    public boolean isPsWorldChange() {
+        return psWorldChange;
+    }
+
+    public boolean isPsSchdeule() {
+        return psSchdeule;
+    }
+
+    public int getPsSchdeuleInterval() {
+        return psSchdeuleInterval;
     }
 
 
@@ -279,181 +267,6 @@ public class ConfigPath {
 
     public List<String> getBackupList() {
         return backupList;
-    }
-
-
-    public boolean isPsFlyEnable() {
-        return psFlyEnable;
-    }
-
-    public boolean isPsFlyRes() {
-        return psFlyRes;
-    }
-
-    public boolean isPsFlyCMIT() {
-        return psFlyCMIT;
-    }
-
-    public boolean isPsFlyCMIC() {
-        return psFlyCMIC;
-    }
-
-    public List<String> getPsFlyPerms() {
-        return psFlyPerms;
-    }
-
-    public boolean isPsFlySchedule() {
-        return psFlySchedule;
-    }
-
-    public int getPsFlyInterval() {
-        return psFlyInterval;
-    }
-
-    public boolean isPsFlyLogin() {
-        return psFlyLogin;
-    }
-
-    public boolean isPsFlyLeave() {
-        return psFlyLeave;
-    }
-
-    public boolean isPsFlyWorld() {
-        return psFlyWorld;
-    }
-
-
-    public boolean isPsGodEnable() {
-        return psGodEnable;
-    }
-
-    public boolean isPsGodCMIT() {
-        return psGodCMIT;
-    }
-
-    public List<String> getPsGodPerms() {
-        return psGodPerms;
-    }
-
-    public boolean isPsGodSchedule() {
-        return psGodSchedule;
-    }
-
-    public int getPsGodInterval() {
-        return psGodInterval;
-    }
-
-    public boolean isPsGodLogin() {
-        return psGodLogin;
-    }
-
-    public boolean isPsGodLeave() {
-        return psGodLeave;
-    }
-
-    public boolean isPsGodWorld() {
-        return psGodWorld;
-    }
-
-    public boolean isPsOpEnable() {
-        return psOpEnable;
-    }
-
-    public List<String> getPsOpPerms() {
-        return psOpPerms;
-    }
-
-    public boolean isPsOpSchedule() {
-        return psOpSchedule;
-    }
-
-    public int getPsOpInterval() {
-        return psOpInterval;
-    }
-
-    public boolean isPsOpLogin() {
-        return psOpLogin;
-    }
-
-    public boolean isPsOpLeave() {
-        return psOpLeave;
-    }
-
-    public boolean isPsOpWorld() {
-        return psOpWorld;
-    }
-
-
-    public boolean isPsGmEnable() {
-        return psGmEnable;
-    }
-
-    public boolean isPsGm0Enable() {
-        return psGm0Enable;
-    }
-
-    public boolean isPsGm1Enable() {
-        return psGm1Enable;
-    }
-
-    public boolean isPsGm2Enable() {
-        return psGm2Enable;
-    }
-
-    public boolean isPsGm3Enable() {
-        return psGm3Enable;
-    }
-
-    public List<String> getPsGm0Perms() {
-        return psGm0Perms;
-    }
-
-    public List<String> getPsGm1Perms() {
-        return psGm1Perms;
-    }
-
-    public List<String> getPsGm2Perms() {
-        return psGm2Perms;
-    }
-
-    public List<String> getPsGm3Perms() {
-        return psGm3Perms;
-    }
-
-    public boolean isPsGmSchedule() {
-        return psGmSchedule;
-    }
-
-    public int getPsGmInterval() {
-        return psGmInterval;
-    }
-
-    public boolean isPsGmLogin() {
-        return psGmLogin;
-    }
-
-    public boolean isPsGmLeave() {
-        return psGmLeave;
-    }
-
-    public boolean isPsGmWorld() {
-        return psGmWorld;
-    }
-
-    public String getPsGm0Default() {
-        return psGm0Default;
-    }
-
-    public String getPsGm1Default() {
-        return psGm1Default;
-    }
-
-    public String getPsGm2Default() {
-        return psGm2Default;
-    }
-
-    public String getPsGm3Default() {
-        return psGm3Default;
     }
 }
 

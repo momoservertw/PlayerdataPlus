@@ -1,15 +1,33 @@
 # --{ =-=-=-=-=-=-=-=-=-= PlayerdataPlus's Configuration Settings, by Momocraft =-=-=-=-=-=-=-=-=-= }--
 Config-Version: 4
-# If you want to see if the player data is out of date or bypassed, you can turn on the Debug mode.
 Debugging: false
 Check-Updates: true
+
+General:
+  # Specifying the spawn locations.
+  # More information: https://github.com/momoservertw/PlayerPlus/wiki/Location
+  Location:
+    NormalWorlds:
+      Worlds:
+        - world
+    NetherWorlds:
+      Worlds:
+        - world_nether
+    EndWorlds:
+      Worlds:
+        - world_the_end
+    NormalBorder:
+      Worlds:
+        - world
+      Area:
+        S: 10000
 
 # Clean the old data and improve the server's performance.
 # Player bypass permission: playerdataplus.bypass.clean
 Clean:
   Settings:
     Offline-Player:
-      # The sequence of checking offline player permission.
+      # The sequence of getting offline player data.
       Priority-Order:
         - LuckPerms
         - CMI
@@ -148,39 +166,34 @@ Nick:
       8: 'dark_gray'
       9: 'blue'
 
-# Automatically disable the special status of players such as flight mode and creative mode.
-# Improves server security and make special states more customizable.
-# You can set a limit time for players with a temporary permission by LuckPerms.
-# And use ItemJoin to create a one-time item as a reward.
+# Automatically set the players' status such as flight mode and creative mode.
 Player-Status:
-  Fly:
-    Enable: false
-    # It will ignore cancel if there don't has safe location on the ground.
-    No-Safe-Location:
-      Enable: true
-      # Teleport players to save location and cancel the fly status.
-      Teleport:
-        Enable: true
-        # Search the range of blocks.
-        Range: 5
-        # Checking the down side first.
-        Down-To-Top: true
-    # If player has following situation, it will bypass the checking.
-    Ignore:
-      Permissions:
-        - playerdataplus.bypass.status.fly
-        - cmi.command.fly
-      # Bypass checking if he is using CMI fly features.
-      CMI:
-        tfly: true
-      Residence: true
+  Enable: false
+  Settings:
     Check:
       Schedule:
         Enable: true
         Interval: 100
       Login: true
-      Leave: false
       World-Change: false
+  Fly:
+    Enable: false
+    Auto-Disable:
+      Enable: false
+      # Teleport players to save location and cancel the fly status.
+      Teleport: true
+      Ignore:
+        Permissions:
+          - playerdataplus.bypass.status.fly
+          - cmi.command.fly
+        CMI:
+          tfly: true
+          cfly: true
+        Residence: true
+      Location:
+        - world
+        - world_nether
+        - world_the_end
   God:
     Enable: false
     Ignore:
@@ -189,61 +202,49 @@ Player-Status:
         - cmi.command.god
       CMI:
         tgod: true
-    Check:
-      Schedule:
-        Enable: true
-        Interval: 100
-      Login: true
-      Leave: false
-      World-Change: false
+    Location:
+      - world
+      - world_nether
+      - world_the_end
   Op:
     Enable: false
     Ignore:
       Permission:
         - playerdataplus.bypass.status.op
-    Check:
-      Schedule:
-        Enable: true
-        Interval: 100
-      Login: true
-      Leave: false
-      World-Change: false
-  Gamemode:
-    Enable: false
-    Ignore:
-      Survival:
-        Enable: false
-        Default: "Survival"
-        Permissions:
-          - cmi.command.gm.survival
-      Creative:
-        Enable: true
-        Default: "Survival"
-        Permissions:
-          - cmi.command.gm.creative
-      Adventure:
-        Enable: true
-        Permissions:
-          - cmi.command.gm.adventure
-      Spectator:
-        Enable: true
-        Default: "Survival"
-        Permissions:
-          - cmi.command.gm.spectator
-    Check:
-      Schedule:
-        Enable: true
-        Interval: 100
-      Login: true
-      Leave: false
-      World-Change: false
     Location:
-      Survival: []
-      Creative: []
-      Adventure: []
-      Spectator: []
+      - world
+      - world_nether
+      - world_the_end
+  Gamemode-Survival:
+    Enable: false
+    Default: "Survival"
+    Ignore:
+      Permissions:
+        - cmi.command.gm.survival
+    Location: []
+  Gamemode-Creative:
+    Enable: true
+    Default: "Survival"
+    Ignore:
+      Permissions:
+        - cmi.command.gm.creative
+    Location: []
+  Gamemode-Adventure:
+    Enable: true
+    Default: "Survival"
+    Ignore:
+      Permissions:
+        - cmi.command.gm.adventure
+    Location: []
+  Gamemode-Spectator:
+    Enable: true
+    Default: "Survival"
+    Ignore:
+      Permissions:
+        - cmi.command.gm.spectator
+    Location: []
 
-Transfer-User:
+User-Convertor:
   Enable: false
   List:
     Server:
@@ -258,6 +259,20 @@ Transfer-User:
     NameTagEdit: true
     Residence: true
     LuckPerms: true
+
+MyCommand:
+  # Clone a file which only has the following variables.
+  YAML-Cleaner:
+    Variables:
+      - points
+  MySQL-Convertor:
+    Settings:
+      MySQL:
+        username: root
+        password: ''
+        hostname: localhost
+        port: 3306
+        database: mycommand
 
 Message:
   prefix: '&7[&dPlayerdataPlus&7]&r '

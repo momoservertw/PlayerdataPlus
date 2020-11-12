@@ -266,6 +266,7 @@ MyCommand:
     Variables:
       - points
   MySQL-Convertor:
+    Enable: false
     Settings:
       MySQL:
         username: root

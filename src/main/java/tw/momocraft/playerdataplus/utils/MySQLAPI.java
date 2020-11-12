@@ -1,6 +1,5 @@
 package tw.momocraft.playerdataplus.utils;
 
-import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 import org.bukkit.entity.Player;
 import tw.momocraft.playerdataplus.handlers.ConfigHandler;
 
@@ -36,7 +35,6 @@ public class MySQLAPI {
             //with the method getConnection() from DriverManager, we're trying to set
             //the connection's url, username, password to the variables we made earlier and
             //trying to get a connection at the same time. JDBC allows us to do this.
-            createTab("");
         } catch (SQLException e) { //catching errors)
             e.printStackTrace(); //prints out SQLException errors to the console (if any)
         }
@@ -54,8 +52,7 @@ public class MySQLAPI {
         }
     }
 
-    public void createTab(String tab) {
-        String sql = "CREATE TABLE IF NOT EXISTS playerdata(PLAYER varchar(255) NOT NULL, VARIABLE varchar(255) NOT NULL, CONTENT varchar(255) NULL) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;";
+    public void createTab(String sql) {
         // prepare the statement to be executed
         try {
             PreparedStatement stmt = connection.prepareStatement(sql);
@@ -78,10 +75,11 @@ public class MySQLAPI {
     }
 
 
-    public void addScore(Player player, int score) throws SQLException {
-        PreparedStatement stat = connection.prepareStatement("INSERT INTO PlayerScore(Player_Name,Score) VALUES (?,?)");
-        stat.setString(1, player.getName());
-        stat.setInt(2, score);
+    public void addValue(String value1, String value2, String value3) throws SQLException {
+        PreparedStatement stat = connection.prepareStatement("INSERT INTO playerdata(PLAYER,VARIABLE,CONTENT) VALUES (?,?,?)");
+        stat.setString(1, value1);
+        stat.setString(2, value2);
+        stat.setString(3, value3);
         stat.executeQuery();
     }
 

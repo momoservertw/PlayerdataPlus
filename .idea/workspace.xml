@@ -5,11 +5,31 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="55df3580-7d8b-4dd9-afca-eac36992f8e3" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/extra/MaSuiteCore.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/extra/MaSuiteTeleports.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/utils/UserConvert.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/utils/UserConvert.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/Commands.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/Commands.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/PlayerdataPlus.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/PlayerdataPlus.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/handlers/ConfigHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/handlers/ConfigHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/handlers/PurgeHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/utils/clean/PurgeHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/utils/ConfigPath.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/utils/ConfigPath.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/utils/DependAPI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/utils/DependAPI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/utils/Logger.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/utils/Logger.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/utils/MySQLAPI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/utils/MySQLAPI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/config.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/PlayerdataPlus-1.1.3.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/PlayerdataPlus-1.1.3.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/config.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/Commands.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/Commands.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/PlayerdataPlus.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/PlayerdataPlus.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/handlers/ConfigHandler$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/handlers/ConfigHandler$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/handlers/ConfigHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/handlers/ConfigHandler.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/handlers/PurgeHandler$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/handlers/PurgeHandler$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/handlers/PurgeHandler.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/utils/ConfigPath.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/utils/ConfigPath.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/utils/DependAPI.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/utils/DependAPI.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/utils/Logger.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/utils/Logger.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/utils/MySQLAPI.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/utils/MySQLAPI.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -73,7 +93,7 @@
       <recent name="C:\Users\Sayuri\IdeaProjects\PlayerdataPlus\src\main\java\tw\momocraft\playerdataplus\PlayerStatus" />
     </key>
   </component>
-  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SpellCheckerSettings" BundledDictionaries="0" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" Dictionaries="0" CorrectionsLimit="5" DefaultDictionary="application-level" UseSingleDictionary="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -91,6 +111,10 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="426" y="230" width="450" height="239" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes" timestamp="1605061310049">
+      <screen x="0" y="0" width="1280" height="689" />
+    </state>
+    <state x="426" y="230" width="450" height="239" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes/0.0.1280.689@0.0.1280.689" timestamp="1605061310049" />
     <state x="247" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1605020927724">
       <screen x="0" y="0" width="1707" height="920" />
     </state>
@@ -99,21 +123,25 @@
       <screen x="0" y="0" width="1707" height="920" />
     </state>
     <state x="584" y="207" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/2560.10.1707.920/0.0.1707.920@0.0.1707.920" timestamp="1605031386987" />
-    <state width="1663" height="242" key="GridCell.Tab.0.bottom" timestamp="1605037528384">
-      <screen x="0" y="0" width="1707" height="920" />
+    <state width="1237" height="193" key="GridCell.Tab.0.bottom" timestamp="1605123804943">
+      <screen x="0" y="0" width="1280" height="689" />
     </state>
+    <state width="1237" height="193" key="GridCell.Tab.0.bottom/0.0.1280.689@0.0.1280.689" timestamp="1605123804943" />
     <state width="1663" height="242" key="GridCell.Tab.0.bottom/2560.10.1707.920/0.0.1707.920@0.0.1707.920" timestamp="1605037528384" />
-    <state width="1663" height="242" key="GridCell.Tab.0.center" timestamp="1605037528384">
-      <screen x="0" y="0" width="1707" height="920" />
+    <state width="1237" height="193" key="GridCell.Tab.0.center" timestamp="1605123804943">
+      <screen x="0" y="0" width="1280" height="689" />
     </state>
+    <state width="1237" height="193" key="GridCell.Tab.0.center/0.0.1280.689@0.0.1280.689" timestamp="1605123804943" />
     <state width="1663" height="242" key="GridCell.Tab.0.center/2560.10.1707.920/0.0.1707.920@0.0.1707.920" timestamp="1605037528384" />
-    <state width="1663" height="242" key="GridCell.Tab.0.left" timestamp="1605037528383">
-      <screen x="0" y="0" width="1707" height="920" />
+    <state width="1237" height="193" key="GridCell.Tab.0.left" timestamp="1605123804943">
+      <screen x="0" y="0" width="1280" height="689" />
     </state>
+    <state width="1237" height="193" key="GridCell.Tab.0.left/0.0.1280.689@0.0.1280.689" timestamp="1605123804943" />
     <state width="1663" height="242" key="GridCell.Tab.0.left/2560.10.1707.920/0.0.1707.920@0.0.1707.920" timestamp="1605037528383" />
-    <state width="1663" height="242" key="GridCell.Tab.0.right" timestamp="1605037528384">
-      <screen x="0" y="0" width="1707" height="920" />
+    <state width="1237" height="193" key="GridCell.Tab.0.right" timestamp="1605123804943">
+      <screen x="0" y="0" width="1280" height="689" />
     </state>
+    <state width="1237" height="193" key="GridCell.Tab.0.right/0.0.1280.689@0.0.1280.689" timestamp="1605123804943" />
     <state width="1663" height="242" key="GridCell.Tab.0.right/2560.10.1707.920/0.0.1707.920@0.0.1707.920" timestamp="1605037528384" />
     <state x="556" y="163" width="594" height="594" key="find.popup" timestamp="1605015310241">
       <screen x="0" y="0" width="1707" height="920" />

@@ -3,11 +3,15 @@ package tw.momocraft.playerdataplus;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import tw.momocraft.playerdataplus.PlayerStatus.PlayerStatusControl;
 import tw.momocraft.playerdataplus.handlers.*;
 import tw.momocraft.playerdataplus.utils.Language;
 import tw.momocraft.playerdataplus.utils.Nick;
+import tw.momocraft.playerdataplus.utils.clean.PurgeHandler;
+
+import java.sql.SQLException;
 
 public class Commands implements CommandExecutor {
 
@@ -259,6 +263,32 @@ public class Commands implements CommandExecutor {
                         ServerHandler.sendConsoleMessage("&6The Fly-Status process after finished this checking.");
                     } else {
                         ServerHandler.sendConsoleMessage("&cThe process of Fly-Status isn't running now.");
+                    }
+                }
+            } else {
+                Language.sendLangMessage("Message.noPermission", sender);
+            }
+            return true;
+        } else if (args.length == 1 && args[0].equalsIgnoreCase("mycmdconvert")) {
+            if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.mycmdconvert")) {
+                ConfigurationSection playerdatasConfig = ConfigHandler.getConfig("playerdata.yml").getConfigurationSection("");
+                ConfigurationSection playerConfig;
+                String value;
+                if (playerdatasConfig != null) {
+                    for (String uuid : playerdatasConfig.getKeys(false)) {
+                        playerConfig = ConfigHandler.getConfig("playerdata.yml").getConfigurationSection(uuid);
+                        if (playerConfig != null) {
+                            for (String key : playerConfig.getKeys(false)) {
+                                value = ConfigHandler.getConfig("playerdata.yml").getString(uuid + "." + key);
+                                try {
+                                    ConfigHandler.getMySQLAPI().addValue(uuid, key, value);
+                                    ServerHandler.sendFeatureMessage("MyCommand MySQL-Convertor", uuid, "mysql", "continue", key + ": " + value,
+                                            new Throwable().getStackTrace()[0]);
+                                } catch (SQLException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
                     }
                 }
             } else {

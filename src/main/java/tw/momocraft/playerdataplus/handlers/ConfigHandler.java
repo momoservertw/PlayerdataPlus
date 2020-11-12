@@ -23,6 +23,8 @@ public class ConfigHandler {
 
     private static YamlConfiguration configYAML;
     private static YamlConfiguration spigotYAML;
+    private static YamlConfiguration mycmdPlayerYAML;
+    private static YamlConfiguration mycmdVarYAML;
     private static DependAPI depends;
     private static ConfigPath configPath;
     private static UpdateHandler updater;
@@ -30,7 +32,7 @@ public class ConfigHandler {
     private static ColorCorrespond colors;
 
     public static void generateData(boolean reload) {
-        configFile();
+        genConfigFile("config.yml");
         setDepends(new DependAPI());
         sendUtilityDepends();
         setConfigPath(new ConfigPath());
@@ -79,86 +81,106 @@ public class ConfigHandler {
         }
     }
 
-    public static FileConfiguration getConfig(String path) {
-        File file = new File(PlayerdataPlus.getInstance().getDataFolder(), path);
-        if (configYAML == null) {
-            getConfigData(path);
+    public static FileConfiguration getConfig(String fileName) {
+        File filePath = PlayerdataPlus.getInstance().getDataFolder();
+        File file;
+        switch (fileName) {
+            case "config.yml":
+                filePath = Bukkit.getWorldContainer();
+                if (configYAML == null) {
+                    getConfigData(filePath, fileName);
+                }
+                break;
+            case "spigot.yml":
+                if (spigotYAML == null) {
+                    getConfigData(filePath, fileName);
+                }
+                break;
+            case "playerdata.yml":
+                filePath = Bukkit.getPluginManager().getPlugin("MyCommand").getDataFolder();
+                if (mycmdPlayerYAML == null) {
+                    getConfigData(filePath, fileName);
+                }
+                break;
+            case "othersdb.yml":
+                filePath = Bukkit.getPluginManager().getPlugin("MyCommand").getDataFolder();
+                if (mycmdVarYAML == null) {
+                    getConfigData(filePath, fileName);
+                }
+                break;
+            default:
+                break;
         }
-        return getPath(path, file, false);
+        file = new File(filePath, fileName);
+        return getPath(fileName, file, false);
     }
 
-    private static FileConfiguration getConfigData(String path) {
-        File file = new File(PlayerdataPlus.getInstance().getDataFolder(), path);
+    private static FileConfiguration getConfigData(File filePath, String fileName) {
+        File file = new File(filePath, fileName);
         if (!(file).exists()) {
             try {
-                PlayerdataPlus.getInstance().saveResource(path, false);
+                PlayerdataPlus.getInstance().saveResource(fileName, false);
             } catch (Exception e) {
-                PlayerdataPlus.getInstance().getLogger().warning("Cannot save " + path + " to disk!");
+                PlayerdataPlus.getInstance().getLogger().warning("Cannot save " + fileName + " to disk!");
                 return null;
             }
         }
-        return getPath(path, file, true);
+        return getPath(fileName, file, true);
     }
 
-    private static YamlConfiguration getPath(String path, File file, boolean saveData) {
-        if (path.contains("config.yml")) {
+    private static YamlConfiguration getPath(String fileName, File filePath, boolean saveData) {
+        if (fileName.contains("config.yml")) {
             if (saveData) {
-                configYAML = YamlConfiguration.loadConfiguration(file);
+                configYAML = YamlConfiguration.loadConfiguration(filePath);
             }
             return configYAML;
+        } else if (fileName.contains("spigot.yml")) {
+            if (saveData) {
+                spigotYAML = YamlConfiguration.loadConfiguration(filePath);
+            }
+            return spigotYAML;
+        } else if (fileName.contains("playerdata.yml")) {
+            if (saveData) {
+                mycmdPlayerYAML = YamlConfiguration.loadConfiguration(filePath);
+            }
+            return mycmdPlayerYAML;
+        } else if (fileName.contains("othersdb.yml")) {
+            if (saveData) {
+                mycmdVarYAML = YamlConfiguration.loadConfiguration(filePath);
+            }
+            return mycmdPlayerYAML;
         }
         return null;
     }
 
-    private static void configFile() {
-        getConfigData("config.yml");
-        File File = new File(PlayerdataPlus.getInstance().getDataFolder(), "config.yml");
-        if (File.exists() && getConfig("config.yml").getInt("Config-Version") != 4) {
-            if (PlayerdataPlus.getInstance().getResource("config.yml") != null) {
+    private static void genConfigFile(String fileName) {
+        String[] fileNameSlit = fileName.split("\\.(?=[^\\.]+$)");
+        int configVersion = 0;
+        File filePath = PlayerdataPlus.getInstance().getDataFolder();
+        switch (fileName) {
+            case "config.yml":
+                configVersion = 4;
+                break;
+        }
+        getConfigData(filePath, fileName);
+        File File = new File(filePath, fileName);
+        if (File.exists() && getConfig(filePath, fileName).getInt("Config-Version") != configVersion) {
+            if (PlayerdataPlus.getInstance().getResource(fileName) != null) {
                 LocalDateTime currentDate = LocalDateTime.now();
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH-mm-ss");
                 String currentTime = currentDate.format(formatter);
-                String newGen = "config " + currentTime + ".yml";
-                File newFile = new File(PlayerdataPlus.getInstance().getDataFolder(), newGen);
+                String newGen = fileNameSlit[0] + " " + currentTime + "." + fileNameSlit[0];
+                File newFile = new File(filePath, newGen);
                 if (!newFile.exists()) {
                     File.renameTo(newFile);
-                    File configFile = new File(PlayerdataPlus.getInstance().getDataFolder(), "config.yml");
+                    File configFile = new File(filePath, fileName);
                     configFile.delete();
-                    getConfigData("config.yml");
-                    ServerHandler.sendConsoleMessage("&e*            *            *");
-                    ServerHandler.sendConsoleMessage("&e *            *            *");
-                    ServerHandler.sendConsoleMessage("&e  *            *            *");
-                    ServerHandler.sendConsoleMessage("&cYour config.yml is out of date, generating a new one!");
-                    ServerHandler.sendConsoleMessage("&e    *            *            *");
-                    ServerHandler.sendConsoleMessage("&e     *            *            *");
-                    ServerHandler.sendConsoleMessage("&e      *            *            *");
+                    getConfigData(filePath, fileName);
+                    ServerHandler.sendConsoleMessage("&4The file \"" + fileName + "\" is out of date, generating a new one!");
                 }
             }
         }
-        getConfig("config.yml").options().copyDefaults(false);
-    }
-
-    public static FileConfiguration getServerConfig(String path) {
-        File file = new File(Bukkit.getWorldContainer(), path);
-        if (spigotYAML == null) {
-            getServerConfigData(path);
-        }
-        return getServerPath(path, file, false);
-    }
-
-    private static FileConfiguration getServerConfigData(String path) {
-        File file = new File(Bukkit.getWorldContainer(), path);
-        return getServerPath(path, file, true);
-    }
-
-    private static YamlConfiguration getServerPath(String path, File file, boolean saveData) {
-        if (path.contains("spigot.yml")) {
-            if (saveData) {
-                spigotYAML = YamlConfiguration.loadConfiguration(file);
-            }
-            return spigotYAML;
-        }
-        return null;
+        getConfig(filePath, fileName).options().copyDefaults(false);
     }
 
     private static void sendUtilityDepends() {

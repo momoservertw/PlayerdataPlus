@@ -8,7 +8,6 @@ public class DependAPI {
     private boolean PlaceHolderAPI = false;
     private boolean MySQLPlayerDataBridge = false;
     private boolean SkinsRestorer = false;
-    private boolean ChatControlPro = false;
     private boolean DiscordSRV = false;
     private boolean LuckPerms = false;
     private boolean MyPet = false;
@@ -17,7 +16,7 @@ public class DependAPI {
     private boolean Essentials = false;
     private boolean MultiverseCore = false;
     private boolean PlayerPoints = false;
-    private boolean Bank = false;
+    private boolean MyCommand = false;
     private VaultAPI vault;
 
     public DependAPI() {
@@ -26,7 +25,6 @@ public class DependAPI {
         this.setPlaceHolderStatus(Bukkit.getServer().getPluginManager().getPlugin("PlaceHolderAPI") != null);
         this.setMySQLPlayerDataBridgeStatus(Bukkit.getServer().getPluginManager().getPlugin("MySQLPlayerDataBridge") != null);
         this.setSkinsRestorerStatus(Bukkit.getServer().getPluginManager().getPlugin("SkinsRestorer") != null);
-        this.setChatControlProStatus(Bukkit.getServer().getPluginManager().getPlugin("ChatControlPro") != null);
         this.setDiscordSRVStatus(Bukkit.getServer().getPluginManager().getPlugin("DiscordSRV") != null);
         this.setLuckPermsStatus(Bukkit.getServer().getPluginManager().getPlugin("LuckPerms") != null);
         this.setMyPetStatus(Bukkit.getServer().getPluginManager().getPlugin("MyPet") != null);
@@ -35,7 +33,7 @@ public class DependAPI {
         this.setEssentialsStatus(Bukkit.getServer().getPluginManager().getPlugin("Essentials") != null);
         this.setMultiverseCoreStatus(Bukkit.getServer().getPluginManager().getPlugin("MultiverseCore") != null);
         this.setPlayerPointsStatus(Bukkit.getServer().getPluginManager().getPlugin("PlayerPoints") != null);
-        this.setBankStatus(Bukkit.getServer().getPluginManager().getPlugin("Bank") != null);
+        this.setMyCommandStatus(Bukkit.getServer().getPluginManager().getPlugin("MyCommand") != null);
         this.setVault();
     }
 
@@ -58,10 +56,6 @@ public class DependAPI {
 
     public boolean SkinsRestorerEnabled() {
         return this.SkinsRestorer;
-    }
-
-    public boolean ChatControlProEnabled() {
-        return this.ChatControlPro;
     }
 
     public boolean DiscordSRVEnabled() {
@@ -96,8 +90,8 @@ public class DependAPI {
         return this.PlayerPoints;
     }
 
-    public boolean BankEnabled() {
-        return this.Bank;
+    public boolean MyCommandEnabled() {
+        return this.MyCommand;
     }
 
 
@@ -122,10 +116,6 @@ public class DependAPI {
         this.SkinsRestorer = bool;
     }
 
-    private void setChatControlProStatus(boolean bool) {
-        this.ChatControlPro = bool;
-    }
-
     private void setDiscordSRVStatus(boolean bool) {
         this.DiscordSRV = bool;
     }
@@ -148,7 +138,7 @@ public class DependAPI {
 
     private void setPlayerPointsStatus(boolean bool) { this.PlayerPoints = bool; }
 
-    private void setBankStatus(boolean bool) { this.Bank = bool; }
+    private void setMyCommandStatus(boolean bool) { this.MyCommand = bool; }
 
 
     public VaultAPI getVault() {

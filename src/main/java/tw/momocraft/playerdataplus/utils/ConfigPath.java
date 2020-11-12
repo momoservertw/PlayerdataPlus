@@ -21,27 +21,32 @@ public class ConfigPath {
     private boolean cleanAutoEnable;
     private long cleanAutoDelay;
     private boolean timeoutWarning;
+
+    //  ============================================== //
+    //         Clean Settings                          //
+    //  ============================================== //
+    private boolean backupEnable;
+    private String backupMode;
+    private boolean backupToZip;
+    private String backupFolderName;
+    private String backupCustomPath;
+    private List<String> backupList = new ArrayList<>();
     private ConfigurationSection cleanConfig;
     private List<String> cleanList = new ArrayList<>();
     private HashMap<String, Long> cleanExpireTimeMap = new HashMap<>();
-    private List<String> backupList = new ArrayList<>();
     private int cleanMaxDataSize;
     private long cleanExpiryDay;
     private boolean cleanLogEnable;
     private List<String> cleanRegionWorlds = new ArrayList<>();
     private List<String> cleanIgnoreRegions = new ArrayList<>();
     private boolean cleanRegionBypassRes;
-    private boolean backupEnable;
-    private String backupMode;
-    private boolean backupToZip;
-    private String backupFolderName;
-    private String backupCustomPath;
-
+    private List<String> cleanMycmdIgnore;
+    private List<String> cleanMycmdVars;
+    private List<String> cleanMycmdPlayers;
 
     //  ============================================== //
     //         PlayerStatus Settings                   //
     //  ============================================== //
-
     private boolean playerStatus;
     private Map<String, PlayerStatusMap> playerStatusProp = new HashMap<>();
 
@@ -65,8 +70,12 @@ public class ConfigPath {
     private boolean tfResidence;
     private boolean tfNameTagEdit;
 
-
     private boolean flyResEnable;
+
+    //  ============================================== //
+    //         MyCommand Settings                      //
+    //  ============================================== //
+
 
     public ConfigPath() {
         setUp();
@@ -75,10 +84,11 @@ public class ConfigPath {
     private void setUp() {
         locationUtils = new LocationUtils();
 
-        timeoutTime = ConfigHandler.getServerConfig("spigot.yml").getInt("settings.timeout-time");
+        timeoutTime = ConfigHandler.getConfig("spigot.yml").getInt("settings.timeout-time");
 
         setUpClean();
         setUpPlayerStatus();
+        setUpMycmd();
     }
 
     private void setUpClean() {
@@ -94,6 +104,9 @@ public class ConfigPath {
         cleanRegionWorlds = ConfigHandler.getConfig("config.yml").getStringList("Clean.Control.Regions.Worlds");
         cleanIgnoreRegions = ConfigHandler.getConfig("config.yml").getStringList("Clean.Control.Regions.Ignore-Regions");
         cleanRegionBypassRes = ConfigHandler.getConfig("config.yml").getBoolean("Clean.Control.Regions.Residence-Bypass");
+        cleanMycmdIgnore = ConfigHandler.getConfig("config.yml").getStringList("Clean.Control.MyCommand.Ignore-Values");
+        cleanMycmdPlayers = ConfigHandler.getConfig("config.yml").getStringList("Clean.Control.MyCommand.Playerdatas");
+        cleanMycmdVars = ConfigHandler.getConfig("config.yml").getStringList("Clean.Control.MyCommand.Variables");
         backupMode = ConfigHandler.getConfig("config.yml").getString("Clean.Settings.Backup.Mode");
         backupFolderName = ConfigHandler.getConfig("config.yml").getString("Clean.Settings.Backup.Folder-Name");
         backupCustomPath = ConfigHandler.getConfig("config.yml").getString("Clean.Settings.Backup.Custom-Path");
@@ -154,6 +167,10 @@ public class ConfigPath {
                 }
             }
         }
+    }
+
+    private void setUpMycmd() {
+
     }
 
     public static LocationUtils getLocationUtils() {
@@ -267,6 +284,18 @@ public class ConfigPath {
 
     public List<String> getBackupList() {
         return backupList;
+    }
+
+    public List<String> getCleanMycmdIgnore() {
+        return cleanMycmdIgnore;
+    }
+
+    public List<String> getCleanMycmdPlayers() {
+        return cleanMycmdPlayers;
+    }
+
+    public List<String> getCleanMycmdVars() {
+        return cleanMycmdVars;
     }
 }
 

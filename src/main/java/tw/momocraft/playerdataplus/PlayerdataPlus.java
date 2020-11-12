@@ -10,8 +10,6 @@ import java.sql.Connection;
 public class PlayerdataPlus extends JavaPlugin {
     private static PlayerdataPlus instance;
 
-    MySQLAPI mySQLAPI;
-
     static Connection connection; //This is the variable we will use to connect to database
 
     @Override
@@ -19,14 +17,13 @@ public class PlayerdataPlus extends JavaPlugin {
         instance = this;
         ConfigHandler.generateData(false);
         ConfigHandler.registerEvents();
-        mySQLAPI = new MySQLAPI();
         ServerHandler.sendConsoleMessage("&fhas been Enabled.");
     }
 
     @Override
     public void onDisable() {
-        mySQLAPI.disabledConnect();
         ServerHandler.sendConsoleMessage("&fhas been Disabled.");
+        ConfigHandler.getMySQLAPI().disabledConnect();
     }
 
     public static PlayerdataPlus getInstance() {

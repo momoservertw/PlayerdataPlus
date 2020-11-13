@@ -1,4 +1,4 @@
-package tw.momocraft.playerdataplus.handlers;
+package tw.momocraft.playerdataplus.utils.clean;
 
 import com.Zrips.CMI.CMI;
 import com.Zrips.CMI.Containers.CMIUser;
@@ -21,6 +21,10 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.Location;
 import org.bukkit.scheduler.BukkitRunnable;
 import tw.momocraft.playerdataplus.PlayerdataPlus;
+import tw.momocraft.playerdataplus.handlers.ConfigHandler;
+import tw.momocraft.playerdataplus.handlers.PermissionsHandler;
+import tw.momocraft.playerdataplus.handlers.PlayerHandler;
+import tw.momocraft.playerdataplus.handlers.ServerHandler;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -95,7 +99,6 @@ public class PurgeHandler {
     }
 
     public void start(CommandSender sender) {
-        run = true;
         ConfigurationSection cleanConfig = ConfigHandler.getConfigPath().getCleanConfig();
         if (cleanConfig != null) {
             this.backupPath = getBackupPath();
@@ -103,6 +106,7 @@ public class PurgeHandler {
                 @Override
                 public void run() {
                     ServerHandler.sendMessage(sender, "&6Starting to clean the expired data...");
+                    run = true;
                     restart = false;
                     cleanTable = HashBasedTable.create();
                     for (String title : ConfigHandler.getConfigPath().getCleanList()) {
@@ -161,6 +165,9 @@ public class PurgeHandler {
                 return;
             case "mypet":
                 cleanMyPet();
+                return;
+            case "mycommand":
+                cleanMyCommand();
                 return;
             default:
                 break;
@@ -494,6 +501,52 @@ public class PurgeHandler {
                 }
                 if (!expiredPetList.isEmpty()) {
                     cleanTable.put("MyPet", "users", expiredPetList);
+                }
+            }
+        }
+    }
+
+    private void cleanMyCommand() {
+        if (ConfigHandler.getDepends().MyCommandEnabled()) {
+            List<String> ignorePlayerdatas = ConfigHandler.getConfigPath().getCleanMycmdPlayers();
+            List<String> ignoreVars = ConfigHandler.getConfigPath().getCleanMycmdVars();
+            List<String> ignoreValues = ConfigHandler.getConfigPath().getCleanMycmdIgnore();
+            String value;
+            ConfigurationSection playerdatasConfig = ConfigHandler.getConfig("playerdata.yml").getConfigurationSection("");
+            ConfigurationSection playerConfig;
+            ConfigurationSection varConfig = ConfigHandler.getConfig("othersdb.yml").getConfigurationSection("");
+            boolean uuidSet;
+            if (playerdatasConfig != null) {
+                ConfigHandler.getLogger().createLog("", PlayerdataPlus.getInstance().getDataFolder().getPath() + "\\MyCommand", "playerdata.yml");
+                for (String uuid : playerdatasConfig.getKeys(false)) {
+                    playerConfig = ConfigHandler.getConfig("playerdata.yml").getConfigurationSection(uuid);
+                    if (playerConfig != null) {
+                        uuidSet = false;
+                        for (String key : playerConfig.getKeys(false)) {
+                            if (ignorePlayerdatas.contains(key)) {
+                                value = ConfigHandler.getConfig("playerdata.yml").getString(uuid + "." + key);
+                                if (ignoreValues.contains(value)) {
+                                    continue;
+                                }
+                                if (!uuidSet) {
+                                    ConfigHandler.getLogger().addLog("", uuid + ":", false);
+                                    uuidSet = true;
+                                }
+                                ConfigHandler.getLogger().addLog("", "  " + key + ":" + value, false);
+                            }
+                        }
+                    }
+                }
+                if (varConfig != null) {
+                    for (String key : varConfig.getKeys(false)) {
+                        if (ignoreVars.contains(key)) {
+                            value = ConfigHandler.getConfig("playerdata.yml").getString(key);
+                            if (ignoreValues.contains(value)) {
+                                continue;
+                            }
+                            ConfigHandler.getLogger().addLog("", key + ":" + ConfigHandler.getConfig("playerdata.yml").getString(key), false);
+                        }
+                    }
                 }
             }
         }
@@ -1000,7 +1053,7 @@ public class PurgeHandler {
     }
 
     private boolean saveLogs(File backupFile) {
-        ConfigHandler.getLogger().createLog();
+        ConfigHandler.getLogger().createLog("log", "", "");
         DateFormat dateFormat = new SimpleDateFormat("YYYY/MM/dd HH:mm");
         String date = dateFormat.format(new Date());
         long expiredDay = ConfigHandler.getConfigPath().getCleanExpiryDay();
@@ -1011,39 +1064,39 @@ public class PurgeHandler {
             sb.append(value);
         }
         String controlList = sb.toString();
-        ConfigHandler.getLogger().sendLog("---- PlayerdataPlus Clean Log ----", false);
-        ConfigHandler.getLogger().sendLog("", false);
-        ConfigHandler.getLogger().sendLog("Time: " + date, false);
+        ConfigHandler.getLogger().addLog("log", "---- PlayerdataPlus Clean Log ----", false);
+        ConfigHandler.getLogger().addLog("log", "", false);
+        ConfigHandler.getLogger().addLog("log", "Time: " + date, false);
         if (backupFile.exists()) {
             if (toZip) {
-                ConfigHandler.getLogger().sendLog("Backup: " + backupFile.getPath() + ".zip", false);
+                ConfigHandler.getLogger().addLog("log", "Backup: " + backupFile.getPath() + ".zip", false);
             } else {
-                ConfigHandler.getLogger().sendLog("Backup: " + backupFile.getPath(), false);
+                ConfigHandler.getLogger().addLog("log", "Backup: " + backupFile.getPath(), false);
             }
         } else {
-            ConfigHandler.getLogger().sendLog("Backup: false", false);
+            ConfigHandler.getLogger().addLog("log", "Backup: false", false);
         }
-        ConfigHandler.getLogger().sendLog("Control-List: " + controlList, false);
-        ConfigHandler.getLogger().sendLog("Expiry-Days: " + expiredDay, false);
-        ConfigHandler.getLogger().sendLog("Auto-Clean: " + autoClean, false);
-        ConfigHandler.getLogger().sendLog("", false);
-        ConfigHandler.getLogger().sendLog("---- Statistics ----", false);
+        ConfigHandler.getLogger().addLog("log", "Control-List: " + controlList, false);
+        ConfigHandler.getLogger().addLog("log", "Expiry-Days: " + expiredDay, false);
+        ConfigHandler.getLogger().addLog("log", "Auto-Clean: " + autoClean, false);
+        ConfigHandler.getLogger().addLog("log", "", false);
+        ConfigHandler.getLogger().addLog("log", "---- Statistics ----", false);
         for (String title : cleanTable.rowKeySet()) {
-            ConfigHandler.getLogger().sendLog(title + ":" + cleanCustomStatus(title), false);
+            ConfigHandler.getLogger().addLog("log", title + ":" + cleanCustomStatus(title), false);
             for (String subtitle : cleanTable.rowMap().get(title).keySet()) {
-                ConfigHandler.getLogger().sendLog("> " + subtitle + " - " + cleanTable.get(title, subtitle).size(), false);
+                ConfigHandler.getLogger().addLog("log", "> " + subtitle + " - " + cleanTable.get(title, subtitle).size(), false);
             }
-            ConfigHandler.getLogger().sendLog("", false);
+            ConfigHandler.getLogger().addLog("log", "", false);
         }
-        ConfigHandler.getLogger().sendLog("---- Details ----", false);
+        ConfigHandler.getLogger().addLog("log", "---- Details ----", false);
         for (String title : cleanTable.rowKeySet()) {
-            ConfigHandler.getLogger().sendLog(title + ":", false);
+            ConfigHandler.getLogger().addLog("log", title + ":", false);
             for (String subtitle : cleanTable.rowMap().get(title).keySet()) {
                 for (String value : cleanTable.get(title, subtitle)) {
-                    ConfigHandler.getLogger().sendLog(" - " + value, false);
+                    ConfigHandler.getLogger().addLog("log", " - " + value, false);
                 }
             }
-            ConfigHandler.getLogger().sendLog("", false);
+            ConfigHandler.getLogger().addLog("log", "", false);
         }
         /*
         if (!zipFiles(ConfigHandler.getLogger().getFile().getPath(), backupFile.getName())) {

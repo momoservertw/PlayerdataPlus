@@ -5,6 +5,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import tw.momocraft.playerdataplus.Commands;
 import tw.momocraft.playerdataplus.PlayerStatus.PlayerStatusControl;
@@ -12,6 +13,7 @@ import tw.momocraft.playerdataplus.PlayerStatus.listeners.PlayerChangedWorld;
 import tw.momocraft.playerdataplus.PlayerStatus.listeners.PlayerJoin;
 import tw.momocraft.playerdataplus.PlayerdataPlus;
 import tw.momocraft.playerdataplus.utils.*;
+import tw.momocraft.playerdataplus.utils.clean.PurgeHandler;
 
 import java.io.File;
 import java.time.LocalDateTime;
@@ -30,6 +32,7 @@ public class ConfigHandler {
     private static UpdateHandler updater;
     private static Logger logger;
     private static ColorCorrespond colors;
+    private static MySQLAPI mySQLAPI;
 
     public static void generateData(boolean reload) {
         genConfigFile("config.yml");
@@ -39,6 +42,7 @@ public class ConfigHandler {
         setUpdater(new UpdateHandler());
         setLogger(new Logger());
         setColorConvert(new ColorCorrespond());
+        mySQLAPI = new MySQLAPI();
 
         if (!reload && getConfigPath().isCleanAutoEnable()) {
             if (ConfigHandler.getConfigPath().isTimeoutWarning() && ConfigHandler.getConfigPath().getTimeoutTime() < 180) {
@@ -84,6 +88,7 @@ public class ConfigHandler {
     public static FileConfiguration getConfig(String fileName) {
         File filePath = PlayerdataPlus.getInstance().getDataFolder();
         File file;
+        Plugin mycmd = Bukkit.getPluginManager().getPlugin("MyCommand");
         switch (fileName) {
             case "config.yml":
                 filePath = Bukkit.getWorldContainer();
@@ -92,20 +97,33 @@ public class ConfigHandler {
                 }
                 break;
             case "spigot.yml":
+                filePath = Bukkit.getServer().getWorldContainer();
                 if (spigotYAML == null) {
                     getConfigData(filePath, fileName);
                 }
                 break;
             case "playerdata.yml":
-                filePath = Bukkit.getPluginManager().getPlugin("MyCommand").getDataFolder();
-                if (mycmdPlayerYAML == null) {
-                    getConfigData(filePath, fileName);
+                if (mycmd != null) {
+                    try {
+                        filePath = Bukkit.getPluginManager().getPlugin("MyCommand").getDataFolder();
+                    } catch (Exception ignored) {
+                        ServerHandler.sendConsoleMessage("&4The file \"" + fileName + "\" is out of date, generating a new one!");
+                    }
+                    if (mycmdPlayerYAML == null) {
+                        getConfigData(filePath, fileName);
+                    }
                 }
                 break;
             case "othersdb.yml":
-                filePath = Bukkit.getPluginManager().getPlugin("MyCommand").getDataFolder();
-                if (mycmdVarYAML == null) {
-                    getConfigData(filePath, fileName);
+                if (mycmd != null) {
+                    try {
+                        filePath = Bukkit.getPluginManager().getPlugin("MyCommand").getDataFolder();
+                    } catch (Exception ignored) {
+                        ServerHandler.sendConsoleMessage("&4The file \"" + fileName + "\" is out of date, generating a new one!");
+                    }
+                    if (mycmdVarYAML == null) {
+                        getConfigData(filePath, fileName);
+                    }
                 }
                 break;
             default:
@@ -164,7 +182,7 @@ public class ConfigHandler {
         }
         getConfigData(filePath, fileName);
         File File = new File(filePath, fileName);
-        if (File.exists() && getConfig(filePath, fileName).getInt("Config-Version") != configVersion) {
+        if (File.exists() && getConfig(fileName).getInt("Config-Version") != configVersion) {
             if (PlayerdataPlus.getInstance().getResource(fileName) != null) {
                 LocalDateTime currentDate = LocalDateTime.now();
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH-mm-ss");
@@ -180,7 +198,7 @@ public class ConfigHandler {
                 }
             }
         }
-        getConfig(filePath, fileName).options().copyDefaults(false);
+        getConfig(fileName).options().copyDefaults(false);
     }
 
     private static void sendUtilityDepends() {
@@ -191,7 +209,6 @@ public class ConfigHandler {
                 + (getDepends().PlaceHolderAPIEnabled() ? "PlaceHolderAPI, " : "")
                 + (getDepends().MySQLPlayerDataBridgeEnabled() ? "MySQLPlayerDataBridge, " : "")
                 + (getDepends().SkinsRestorerEnabled() ? "SkinsRestorer, " : "")
-                + (getDepends().ChatControlProEnabled() ? "ChatControlPro, " : "")
                 + (getDepends().DiscordSRVEnabled() ? "DiscordSRV, " : "")
                 + (getDepends().LuckPermsEnabled() ? "LuckPerms, " : "")
                 + (getDepends().MyPetEnabled() ? "MyPet, " : "")
@@ -199,7 +216,7 @@ public class ConfigHandler {
                 + (getDepends().EssentialsEnabled() ? "Essentials," : "")
                 + (getDepends().MultiverseCoreEnabled() ? "MultiverseCore," : "")
                 + (getDepends().PlayerPointsEnabled() ? "PlayerPoints," : "")
-                + (getDepends().BankEnabled() ? "Bank," : "")
+                + (getDepends().MyCommandEnabled() ? "MyCommand," : "")
         );
     }
 
@@ -247,6 +264,9 @@ public class ConfigHandler {
         return colors;
     }
 
+    public static MySQLAPI getMySQLAPI() {
+        return mySQLAPI;
+    }
 
     /**
      * Converts a serialized location to a Location. Returns null if string is empty

@@ -86,6 +86,12 @@ Clean:
       Enable: false
     DiscordSRV:
       Enable: false
+    # To clean the variables and playerdatas which not included.
+    MyCommand:
+      Enable: false
+      Variables: []
+      Playerdatas: []
+      # - points
 
 # Format players' nicks and make chat messages more tidy.
 # Commands: /playerdataplus nick [nick] [color] [bypass] [player]
@@ -261,10 +267,6 @@ User-Convertor:
     LuckPerms: true
 
 MyCommand:
-  # Clone a file which only has the following variables.
-  YAML-Cleaner:
-    Variables:
-      - points
   MySQL-Convertor:
     Enable: false
     Settings:

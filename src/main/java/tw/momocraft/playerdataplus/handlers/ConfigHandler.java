@@ -13,7 +13,7 @@ import tw.momocraft.playerdataplus.PlayerStatus.listeners.PlayerChangedWorld;
 import tw.momocraft.playerdataplus.PlayerStatus.listeners.PlayerJoin;
 import tw.momocraft.playerdataplus.PlayerdataPlus;
 import tw.momocraft.playerdataplus.utils.*;
-import tw.momocraft.playerdataplus.utils.clean.PurgeHandler;
+import tw.momocraft.playerdataplus.utils.Clean;
 
 import java.io.File;
 import java.time.LocalDateTime;
@@ -42,10 +42,12 @@ public class ConfigHandler {
         setUpdater(new UpdateHandler());
         setLogger(new Logger());
         setColorConvert(new ColorCorrespond());
-        mySQLAPI = new MySQLAPI();
+        if (getConfigPath().isMycmd()) {
+            mySQLAPI = new MySQLAPI();
+        }
 
         if (!reload && getConfigPath().isCleanAutoEnable()) {
-            if (ConfigHandler.getConfigPath().isTimeoutWarning() && ConfigHandler.getConfigPath().getTimeoutTime() < 180) {
+            if (getConfigPath().isTimeoutWarning() && getConfigPath().getTimeoutTime() < 180) {
                 ServerHandler.sendConsoleMessage("&cIf your \"timeout-time\" setting in spigot.yml is too low, it may cause the server to restart in the middle of cleaning.");
                 ServerHandler.sendConsoleMessage("&cPlease set a higher number of seconds based on the number of server players, especially for the first time.");
                 ServerHandler.sendConsoleMessage("&6Cleanup process has ended.");
@@ -54,14 +56,14 @@ public class ConfigHandler {
                     @Override
                     public void run() {
                         ServerHandler.sendConsoleMessage("&6Starting to clean the expired data...");
-                        PurgeHandler purgeHandler = new PurgeHandler();
+                        Clean purgeHandler = new Clean();
                         purgeHandler.start(Bukkit.getConsoleSender());
                     }
                 }.runTaskLater(PlayerdataPlus.getInstance(), getConfigPath().getCleanAutoDelay());
             }
         }
-        if (ConfigHandler.getConfigPath().isPlayerStatus()) {
-            if (ConfigHandler.getConfigPath().isPsSchdeule()) {
+        if (getConfigPath().isPlayerStatus()) {
+            if (getConfigPath().isPsSchdeule()) {
                 PlayerStatusControl.startSchedule();
             }
         }

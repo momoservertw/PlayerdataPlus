@@ -2,6 +2,7 @@ package tw.momocraft.playerdataplus.utils;
 
 import org.bukkit.entity.Player;
 import tw.momocraft.playerdataplus.handlers.ConfigHandler;
+import tw.momocraft.playerdataplus.handlers.ServerHandler;
 
 import java.sql.*;
 
@@ -32,6 +33,7 @@ public class MySQLAPI {
         }
         try { //Another try catch to get any SQL errors (for example connections errors)
             connection = DriverManager.getConnection(url, username, password);
+            ServerHandler.sendConsoleMessage("&fSucceed to connect the MySQL.");
             //with the method getConnection() from DriverManager, we're trying to set
             //the connection's url, username, password to the variables we made earlier and
             //trying to get a connection at the same time. JDBC allows us to do this.
@@ -46,6 +48,7 @@ public class MySQLAPI {
             if (connection != null && !connection.isClosed()) { //checking if connection isn't null to
                 //avoid receiving a nullpointer
                 connection.close(); //closing the connection field variable.
+                ServerHandler.sendConsoleMessage("&fSucceed to disconnect the MySQL.");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -76,18 +79,15 @@ public class MySQLAPI {
 
 
     public void addValue(String value1, String value2, String value3) throws SQLException {
-        PreparedStatement stat = connection.prepareStatement("INSERT INTO playerdata(PLAYER,VARIABLE,CONTENT) VALUES (?,?,?)");
-        stat.setString(1, value1);
-        stat.setString(2, value2);
-        stat.setString(3, value3);
-        stat.executeQuery();
+        PreparedStatement stat = connection.prepareStatement("INSERT INTO playerdata(PLAYER,VARIABLE,CONTENT) VALUES (\"" + value1 + "\",\"" + value2 +"\",\"" + value3 + "\");");
+        stat.executeUpdate();
     }
 
     public void setScore(Player player, int score) throws SQLException {
         PreparedStatement stat = connection.prepareStatement("UPDATE PlayerScore SET Score = ? WHERE Player_Name = ?");
         stat.setString(2, player.getName());
         stat.setInt(1, score);
-        stat.executeQuery();
+        stat.executeUpdate();
     }
 
     public int getScore(Player player) throws SQLException {

@@ -25,6 +25,7 @@ General:
 # Clean the old data and improve the server's performance.
 # Player bypass permission: playerdataplus.bypass.clean
 Clean:
+  Enable: false
   Settings:
     Offline-Player:
       # The sequence of getting offline player data.
@@ -87,8 +88,11 @@ Clean:
     DiscordSRV:
       Enable: false
     # To clean the variables and playerdatas which not included.
+    # It will create a new file in the PlayerdataPlus folder.
     MyCommand:
       Enable: false
+      Ignore-Values: []
+      # - "0"
       Variables: []
       Playerdatas: []
       # - points
@@ -98,6 +102,7 @@ Clean:
 # Commands: /playerdataplus nick off
 # More information: https://github.com/momoservertw/PlayerdataPlus/wiki/Commands
 Nick:
+  Enable: false
   # The rule of nicks.
   Limits:
     # The input custom nick length. It does not include the regular formats in the configuration.
@@ -267,8 +272,8 @@ User-Convertor:
     LuckPerms: true
 
 MyCommand:
+  Enable: false
   MySQL-Convertor:
-    Enable: false
     Settings:
       MySQL:
         username: root

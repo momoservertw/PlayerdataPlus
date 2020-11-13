@@ -25,6 +25,7 @@ public class ConfigPath {
     //  ============================================== //
     //         Clean Settings                          //
     //  ============================================== //
+    private boolean clean;
     private boolean backupEnable;
     private String backupMode;
     private boolean backupToZip;
@@ -45,6 +46,31 @@ public class ConfigPath {
     private List<String> cleanMycmdPlayers;
 
     //  ============================================== //
+    //         Nick Settings                          //
+    //  ============================================== //
+    private boolean nick;
+    private int nickLimit;
+    private boolean nickPure;
+    private List<String> nickBlackList;
+    private boolean nickCMI;
+    private boolean nickCMIUpdate;
+    private String nickCMIOn;
+    private String nickCMIOff;
+    private boolean nickNameTagEdit;
+    private String nickNTEOnPrefix;
+    private String nickNTEOnSuffix;
+    private String nickNTEOffPrefix;
+    private String nickNTEOffSuffix;
+    private boolean nickEssentials;
+    private String nickEssOn;
+    private String nickEssOff;
+    private List<String> nickCommandOn;
+    private List<String> nickCommandOff;
+
+    private String nickGroupsDefault;
+    private Map<Integer, String> nickGroupsMap;
+    private Map<String, String> nickColorsMap;
+    //  ============================================== //
     //         PlayerStatus Settings                   //
     //  ============================================== //
     private boolean playerStatus;
@@ -58,6 +84,7 @@ public class ConfigPath {
     //  ============================================== //
     //         User-Convertor Settings                   //
     //  ============================================== //
+    /*
     private boolean transferUser;
     private boolean tfPlayerdata;
     private boolean tfStats;
@@ -71,10 +98,12 @@ public class ConfigPath {
     private boolean tfNameTagEdit;
 
     private boolean flyResEnable;
+     */
 
     //  ============================================== //
     //         MyCommand Settings                      //
     //  ============================================== //
+    private boolean mycmd;
 
 
     public ConfigPath() {
@@ -87,11 +116,13 @@ public class ConfigPath {
         timeoutTime = ConfigHandler.getConfig("spigot.yml").getInt("settings.timeout-time");
 
         setUpClean();
+        setUpNick();
         setUpPlayerStatus();
         setUpMycmd();
     }
 
     private void setUpClean() {
+        clean = ConfigHandler.getConfig("config.yml").getBoolean("Clean.Enable");
         cleanPriority = ConfigHandler.getConfig("config.yml").getStringList("Clean.Settings.Offline-Player.Priority-Order");
         cleanAutoEnable = ConfigHandler.getConfig("config.yml").getBoolean("Clean.Settings.Auto-Clean.Enable");
         cleanAutoDelay = ConfigHandler.getConfig("config.yml").getLong("Clean.Settings.Auto-Clean.Delay") * 20;
@@ -124,6 +155,40 @@ public class ConfigPath {
                 if (ConfigHandler.getConfig("config.yml").getBoolean("Clean.Control." + title + ".Backup")) {
                     backupList.add(title);
                 }
+            }
+        }
+    }
+
+    private void setUpNick() {
+        nick = ConfigHandler.getConfig("config.yml").getBoolean("Nick.Enable");
+        nickLimit = ConfigHandler.getConfig("config.yml").getInt("Nick.Limits.Length");
+        nickPure = ConfigHandler.getConfig("config.yml").getBoolean("Nick.Limits.Pure-Color");
+        nickBlackList = ConfigHandler.getConfig("config.yml").getStringList("Nick.Limits.Black-List");
+        nickCMI = ConfigHandler.getConfig("config.yml").getBoolean("Nick.Formats.CMI.Enable");
+        nickCMIUpdate = ConfigHandler.getConfig("config.yml").getBoolean("Nick.Formats.CMI.Tablist-Update");
+        nickCMIOn = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.CMI.On");
+        nickCMIOff = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.CMI.Off");
+        nickNameTagEdit = ConfigHandler.getConfig("config.yml").getBoolean("Nick.Formats.NameTagEdit.Enable");
+        nickNTEOnPrefix = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.NameTagEdit.On.Prefix");
+        nickNTEOnSuffix = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.NameTagEdit.On.Suffix");
+        nickNTEOffPrefix = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.NameTagEdit.Off.Prefix");
+        nickNTEOffSuffix = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.NameTagEdit.Off.Suffix");
+        nickCommandOn = ConfigHandler.getConfig("config.yml").getStringList("Nick.Formats.Commands");
+        nickCommandOff = ConfigHandler.getConfig("config.yml").getStringList("Nick.Formats.Commands-Off");
+        nickGroupsDefault = ConfigHandler.getConfig("config.yml").getString("Nick.Groups.Default");
+
+        nickGroupsMap = new HashMap<>();
+        ConfigurationSection nickGroups = ConfigHandler.getConfig("config.yml").getConfigurationSection("Nick.Groups.Custom");
+        if (nickGroups != null) {
+            for (String group : nickGroups.getKeys(false)) {
+                nickGroupsMap.put(Integer.parseInt(group), ConfigHandler.getConfig("config.yml").getString("Nick.Groups.Custom." + group));
+            }
+        }
+        nickColorsMap = new HashMap<>();
+        ConfigurationSection nickColors = ConfigHandler.getConfig("config.yml").getConfigurationSection("Nick.Colors.Correspond");
+        if (nickColors != null) {
+            for (String group : nickColors.getKeys(false)) {
+                nickColorsMap.put(group, ConfigHandler.getConfig("config.yml").getString("Nick.Colors.Correspond." + group));
             }
         }
     }
@@ -170,11 +235,95 @@ public class ConfigPath {
     }
 
     private void setUpMycmd() {
-
+        mycmd = ConfigHandler.getConfig("config.yml").getBoolean("MyCommand.Enable");
     }
 
     public static LocationUtils getLocationUtils() {
         return locationUtils;
+    }
+
+    public boolean isNick() {
+        return nick;
+    }
+
+    public boolean isNickPure() {
+        return nickPure;
+    }
+
+    public int getNickLimit() {
+        return nickLimit;
+    }
+
+    public boolean isNickCMI() {
+        return nickCMI;
+    }
+
+    public List<String> getNickBlackList() {
+        return nickBlackList;
+    }
+
+    public boolean isNickCMIUpdate() {
+        return nickCMIUpdate;
+    }
+
+    public boolean isNickEssentials() {
+        return nickEssentials;
+    }
+
+    public boolean isNickNameTagEdit() {
+        return nickNameTagEdit;
+    }
+
+    public Map<Integer, String> getNickGroupsMap() {
+        return nickGroupsMap;
+    }
+
+    public Map<String, String> getNickColorsMap() {
+        return nickColorsMap;
+    }
+
+    public List<String> getNickCommandOff() {
+        return nickCommandOff;
+    }
+
+    public List<String> getNickCommandOn() {
+        return nickCommandOn;
+    }
+
+    public String getNickCMIOff() {
+        return nickCMIOff;
+    }
+
+    public String getNickCMIOn() {
+        return nickCMIOn;
+    }
+
+    public String getNickEssOff() {
+        return nickEssOff;
+    }
+
+    public String getNickEssOn() {
+        return nickEssOn;
+    }
+
+    public String getNickGroupsDefault() {
+        return nickGroupsDefault;
+    }
+
+    public String getNickNTEOffPrefix() {
+        return nickNTEOffPrefix;
+    }
+
+    public String getNickNTEOffSuffix() {
+        return nickNTEOffSuffix;
+    }
+
+    public String getNickNTEOnPrefix() {
+        return nickNTEOnPrefix;
+    }
+
+    public String getNickNTEOnSuffix() {
+        return nickNTEOnSuffix;
     }
 
     public Map<String, PlayerStatusMap> getPlayerStatusProp() {
@@ -201,6 +350,10 @@ public class ConfigPath {
         return psSchdeuleInterval;
     }
 
+
+    public boolean isClean() {
+        return clean;
+    }
 
     public List<String> getCleanPriority() {
         return cleanPriority;
@@ -296,6 +449,10 @@ public class ConfigPath {
 
     public List<String> getCleanMycmdVars() {
         return cleanMycmdVars;
+    }
+
+    public boolean isMycmd() {
+        return mycmd;
     }
 }
 

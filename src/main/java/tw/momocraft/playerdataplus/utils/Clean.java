@@ -1,4 +1,4 @@
-package tw.momocraft.playerdataplus.utils.clean;
+package tw.momocraft.playerdataplus.utils;
 
 import com.Zrips.CMI.CMI;
 import com.Zrips.CMI.Containers.CMIUser;
@@ -43,7 +43,7 @@ import java.util.zip.ZipOutputStream;
 
 import static org.bukkit.Bukkit.getServer;
 
-public class PurgeHandler {
+public class Clean {
     private boolean restart = false;
     private boolean run = false;
     private String backupPath;
@@ -544,7 +544,7 @@ public class PurgeHandler {
                             if (ignoreValues.contains(value)) {
                                 continue;
                             }
-                            ConfigHandler.getLogger().addLog("", key + ":" + ConfigHandler.getConfig("playerdata.yml").getString(key), false);
+                            ConfigHandler.getLogger().addLog("", key + ": " + ConfigHandler.getConfig("playerdata.yml").getString(key), false);
                         }
                     }
                 }

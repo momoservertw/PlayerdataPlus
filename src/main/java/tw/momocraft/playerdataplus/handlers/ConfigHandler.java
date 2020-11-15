@@ -141,34 +141,35 @@ public class ConfigHandler {
             try {
                 PlayerdataPlus.getInstance().saveResource(fileName, false);
             } catch (Exception e) {
-                PlayerdataPlus.getInstance().getLogger().warning("Cannot save " + fileName + " to disk!");
+                ServerHandler.sendErrorMessage("&cCannot save " + fileName + " to disk!");
                 return null;
             }
         }
         return getPath(fileName, file, true);
     }
 
-    private static YamlConfiguration getPath(String fileName, File filePath, boolean saveData) {
-        if (fileName.contains("config.yml")) {
-            if (saveData) {
-                configYAML = YamlConfiguration.loadConfiguration(filePath);
-            }
-            return configYAML;
-        } else if (fileName.contains("spigot.yml")) {
-            if (saveData) {
-                spigotYAML = YamlConfiguration.loadConfiguration(filePath);
-            }
-            return spigotYAML;
-        } else if (fileName.contains("playerdata.yml")) {
-            if (saveData) {
-                mycmdPlayerYAML = YamlConfiguration.loadConfiguration(filePath);
-            }
-            return mycmdPlayerYAML;
-        } else if (fileName.contains("othersdb.yml")) {
-            if (saveData) {
-                mycmdVarYAML = YamlConfiguration.loadConfiguration(filePath);
-            }
-            return mycmdPlayerYAML;
+    private static YamlConfiguration getPath(String fileName, File file, boolean saveData) {
+        switch (fileName) {
+            case "config.yml":
+                if (saveData) {
+                    configYAML = YamlConfiguration.loadConfiguration(file);
+                }
+                return configYAML;
+            case "spigot.yml":
+                if (saveData) {
+                    spigotYAML = YamlConfiguration.loadConfiguration(file);
+                }
+                return spigotYAML;
+            case "playerdata.yml":
+                if (saveData) {
+                    mycmdPlayerYAML = YamlConfiguration.loadConfiguration(file);
+                }
+                return mycmdPlayerYAML;
+            case "othersdb.yml":
+                if (saveData) {
+                    mycmdVarYAML = YamlConfiguration.loadConfiguration(file);
+                }
+                return mycmdPlayerYAML;
         }
         return null;
     }

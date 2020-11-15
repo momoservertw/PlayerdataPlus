@@ -23,7 +23,9 @@ public class PlayerdataPlus extends JavaPlugin {
     @Override
     public void onDisable() {
         ServerHandler.sendConsoleMessage("&fhas been Disabled.");
-        ConfigHandler.getMySQLAPI().disabledConnect();
+        if (ConfigHandler.getConfigPath().isMycmd()) {
+            ConfigHandler.getMySQLAPI().disabledConnect();
+        }
     }
 
     public static PlayerdataPlus getInstance() {

@@ -118,6 +118,11 @@ Nick:
       - bitch
   # Formatting the nicks and adding player id in their nicks.
   Formats:
+    # Require: MyCommand, PlaceHolderAPI
+    MyCommand:
+      Enable: false
+      Auto-Update: true
+      "On": '&%color%%nick%(%player%)'
     CMI:
       Enable: false
       # Updates the player names in the tablist.

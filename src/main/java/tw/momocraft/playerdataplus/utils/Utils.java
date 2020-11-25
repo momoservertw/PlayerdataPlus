@@ -109,7 +109,7 @@ public class Utils {
             try { name = name.replace("%player_interact%", getNearbyPlayer(player, 3)); } catch (Exception e) { ServerHandler.sendDebugTrace(e); } }
         if (player == null) { try { name = name.replace("%player%", "CONSOLE"); } catch (Exception e) { ServerHandler.sendDebugTrace(e); } }
 
-        name = ChatColor.translateAlternateColorCodes('&', name).toString();
+        name = ChatColor.translateAlternateColorCodes('&', name);
         if (ConfigHandler.getDepends().PlaceHolderAPIEnabled()) {
             try { try { return PlaceholderAPI.setPlaceholders(player, name); }
             catch (NoSuchFieldError e) { ServerHandler.sendDebugMessage("Error has occured when setting the PlaceHolder " + e.getMessage() + ", if this issue persits contact the developer of PlaceholderAPI."); return name; }

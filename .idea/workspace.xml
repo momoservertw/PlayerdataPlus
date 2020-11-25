@@ -69,7 +69,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/utils" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -93,7 +93,7 @@
       <recent name="C:\Users\Sayuri\IdeaProjects\PlayerdataPlus\src\main\java\tw\momocraft\playerdataplus\PlayerStatus" />
     </key>
   </component>
-  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="false" />
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -123,30 +123,30 @@
       <screen x="0" y="0" width="1707" height="920" />
     </state>
     <state x="584" y="207" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/2560.10.1707.920/0.0.1707.920@0.0.1707.920" timestamp="1605031386987" />
-    <state width="1663" height="248" key="GridCell.Tab.0.bottom" timestamp="1605477106013">
+    <state width="618" height="248" key="GridCell.Tab.0.bottom" timestamp="1605912862712">
       <screen x="0" y="0" width="1707" height="920" />
     </state>
     <state width="1237" height="193" key="GridCell.Tab.0.bottom/0.0.1280.689@0.0.1280.689" timestamp="1605123804943" />
-    <state width="1663" height="248" key="GridCell.Tab.0.bottom/2560.10.1707.920/0.0.1707.920@0.0.1707.920" timestamp="1605477106013" />
-    <state width="1663" height="248" key="GridCell.Tab.0.center" timestamp="1605477106012">
+    <state width="618" height="248" key="GridCell.Tab.0.bottom/2560.10.1707.920/0.0.1707.920@0.0.1707.920" timestamp="1605912862712" />
+    <state width="618" height="248" key="GridCell.Tab.0.center" timestamp="1605912862712">
       <screen x="0" y="0" width="1707" height="920" />
     </state>
     <state width="1237" height="193" key="GridCell.Tab.0.center/0.0.1280.689@0.0.1280.689" timestamp="1605123804943" />
-    <state width="1663" height="248" key="GridCell.Tab.0.center/2560.10.1707.920/0.0.1707.920@0.0.1707.920" timestamp="1605477106012" />
-    <state width="1663" height="248" key="GridCell.Tab.0.left" timestamp="1605477106012">
+    <state width="618" height="248" key="GridCell.Tab.0.center/2560.10.1707.920/0.0.1707.920@0.0.1707.920" timestamp="1605912862712" />
+    <state width="618" height="248" key="GridCell.Tab.0.left" timestamp="1605912862712">
       <screen x="0" y="0" width="1707" height="920" />
     </state>
     <state width="1237" height="193" key="GridCell.Tab.0.left/0.0.1280.689@0.0.1280.689" timestamp="1605123804943" />
-    <state width="1663" height="248" key="GridCell.Tab.0.left/2560.10.1707.920/0.0.1707.920@0.0.1707.920" timestamp="1605477106012" />
-    <state width="1663" height="248" key="GridCell.Tab.0.right" timestamp="1605477106012">
+    <state width="618" height="248" key="GridCell.Tab.0.left/2560.10.1707.920/0.0.1707.920@0.0.1707.920" timestamp="1605912862712" />
+    <state width="618" height="248" key="GridCell.Tab.0.right" timestamp="1605912862712">
       <screen x="0" y="0" width="1707" height="920" />
     </state>
     <state width="1237" height="193" key="GridCell.Tab.0.right/0.0.1280.689@0.0.1280.689" timestamp="1605123804943" />
-    <state width="1663" height="248" key="GridCell.Tab.0.right/2560.10.1707.920/0.0.1707.920@0.0.1707.920" timestamp="1605477106012" />
-    <state x="556" y="163" width="594" height="594" key="find.popup" timestamp="1605015310241">
+    <state width="618" height="248" key="GridCell.Tab.0.right/2560.10.1707.920/0.0.1707.920@0.0.1707.920" timestamp="1605912862712" />
+    <state x="556" y="163" width="594" height="594" key="find.popup" timestamp="1605967200070">
       <screen x="0" y="0" width="1707" height="920" />
     </state>
-    <state x="556" y="163" width="594" height="594" key="find.popup/2560.10.1707.920/0.0.1707.920@0.0.1707.920" timestamp="1605015310241" />
+    <state x="556" y="163" width="594" height="594" key="find.popup/2560.10.1707.920/0.0.1707.920@0.0.1707.920" timestamp="1605967200070" />
   </component>
   <component name="antWorkspaceConfiguration">
     <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />

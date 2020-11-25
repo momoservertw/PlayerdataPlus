@@ -199,6 +199,14 @@
             <systemPath>${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/PlayerPoints.jar</systemPath>
             <version>LEGACY</version>
         </dependency>
+        <!--MyCommand API-->
+        <dependency>
+            <groupId>me.MyCommand</groupId>
+            <artifactId>MyCommand</artifactId>
+            <scope>system</scope>
+            <systemPath>${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/MyCommand.jar</systemPath>
+            <version>LEGACY</version>
+        </dependency>
     </dependencies>
 
 </project>

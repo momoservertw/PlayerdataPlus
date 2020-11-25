@@ -10,7 +10,7 @@ import java.sql.Connection;
 public class PlayerdataPlus extends JavaPlugin {
     private static PlayerdataPlus instance;
 
-    static Connection connection; //This is the variable we will use to connect to database
+    //static Connection connection; //This is the variable we will use to connect to database
 
     @Override
     public void onEnable() {

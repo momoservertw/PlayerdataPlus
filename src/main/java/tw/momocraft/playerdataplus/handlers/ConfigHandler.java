@@ -7,10 +7,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import tw.momocraft.playerdataplus.Commands;
 import tw.momocraft.playerdataplus.PlayerStatus.PlayerStatusControl;
-import tw.momocraft.playerdataplus.PlayerStatus.listeners.PlayerChangedWorld;
-import tw.momocraft.playerdataplus.PlayerStatus.listeners.PlayerJoin;
 import tw.momocraft.playerdataplus.PlayerdataPlus;
 import tw.momocraft.playerdataplus.utils.*;
 import tw.momocraft.playerdataplus.utils.Clean;
@@ -37,7 +34,6 @@ public class ConfigHandler {
     public static void generateData(boolean reload) {
         genConfigFile("config.yml");
         setDepends(new DependAPI());
-        sendUtilityDepends();
         setConfigPath(new ConfigPath());
         setUpdater(new UpdateHandler());
         setLogger(new Logger());
@@ -65,24 +61,6 @@ public class ConfigHandler {
         if (getConfigPath().isPlayerStatus()) {
             if (getConfigPath().isPsSchdeule()) {
                 PlayerStatusControl.startSchedule();
-            }
-        }
-    }
-
-    public static void registerEvents() {
-        PlayerdataPlus.getInstance().getCommand("playerdataplus").setExecutor(new Commands());
-        PlayerdataPlus.getInstance().getCommand("playerdataplus").setTabCompleter(new TabComplete());
-
-        if (ConfigHandler.getConfigPath().isPlayerStatus()) {
-            if (ConfigHandler.getConfigPath().isPsLogin()) {
-                PlayerdataPlus.getInstance().getServer().getPluginManager().registerEvents(new PlayerJoin(), PlayerdataPlus.getInstance());
-                ServerHandler.sendFeatureMessage("Register-Event", "Player-Status", "FlyPlayerJoin", "continue",
-                        new Throwable().getStackTrace()[0]);
-            }
-            if (ConfigHandler.getConfigPath().isPsWorldChange()) {
-                PlayerdataPlus.getInstance().getServer().getPluginManager().registerEvents(new PlayerChangedWorld(), PlayerdataPlus.getInstance());
-                ServerHandler.sendFeatureMessage("Register-Event", "Player-Status", "FlyPlayerJoin", "continue",
-                        new Throwable().getStackTrace()[0]);
             }
         }
     }
@@ -202,25 +180,6 @@ public class ConfigHandler {
             }
         }
         getConfig(fileName).options().copyDefaults(false);
-    }
-
-    private static void sendUtilityDepends() {
-        ServerHandler.sendConsoleMessage("&fHooked: "
-                + (getDepends().getVault().vaultEnabled() ? "Vault, " : "")
-                + (getDepends().CMIEnabled() ? "CMI, " : "")
-                + (getDepends().ResidenceEnabled() ? "Residence, " : "")
-                + (getDepends().PlaceHolderAPIEnabled() ? "PlaceHolderAPI, " : "")
-                + (getDepends().MySQLPlayerDataBridgeEnabled() ? "MySQLPlayerDataBridge, " : "")
-                + (getDepends().SkinsRestorerEnabled() ? "SkinsRestorer, " : "")
-                + (getDepends().DiscordSRVEnabled() ? "DiscordSRV, " : "")
-                + (getDepends().LuckPermsEnabled() ? "LuckPerms, " : "")
-                + (getDepends().MyPetEnabled() ? "MyPet, " : "")
-                + (getDepends().AuthMeEnabled() ? "Authme, " : "")
-                + (getDepends().EssentialsEnabled() ? "Essentials," : "")
-                + (getDepends().MultiverseCoreEnabled() ? "MultiverseCore," : "")
-                + (getDepends().PlayerPointsEnabled() ? "PlayerPoints," : "")
-                + (getDepends().MyCommandEnabled() ? "MyCommand," : "")
-        );
     }
 
     public static DependAPI getDepends() {

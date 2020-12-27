@@ -1,8 +1,12 @@
 package tw.momocraft.playerdataplus.utils;
 
 import org.bukkit.Bukkit;
+import tw.momocraft.playerdataplus.handlers.ConfigHandler;
+import tw.momocraft.playerdataplus.handlers.ServerHandler;
 
 public class DependAPI {
+    private VaultAPI vaultApi;
+    private boolean Vault = false;
     private boolean CMI = false;
     private boolean Residence = false;
     private boolean PlaceHolderAPI = false;
@@ -17,26 +21,82 @@ public class DependAPI {
     private boolean MultiverseCore = false;
     private boolean PlayerPoints = false;
     private boolean MyCommand = false;
-    private VaultAPI vault;
 
     public DependAPI() {
-        this.setCMIStatus(Bukkit.getServer().getPluginManager().getPlugin("CMI") != null);
-        this.setResidenceStatus(Bukkit.getServer().getPluginManager().getPlugin("Residence") != null);
-        this.setPlaceHolderStatus(Bukkit.getServer().getPluginManager().getPlugin("PlaceHolderAPI") != null);
-        this.setMySQLPlayerDataBridgeStatus(Bukkit.getServer().getPluginManager().getPlugin("MySQLPlayerDataBridge") != null);
-        this.setSkinsRestorerStatus(Bukkit.getServer().getPluginManager().getPlugin("SkinsRestorer") != null);
-        this.setDiscordSRVStatus(Bukkit.getServer().getPluginManager().getPlugin("DiscordSRV") != null);
-        this.setLuckPermsStatus(Bukkit.getServer().getPluginManager().getPlugin("LuckPerms") != null);
-        this.setMyPetStatus(Bukkit.getServer().getPluginManager().getPlugin("MyPet") != null);
-        this.setAuthMeStatus(Bukkit.getServer().getPluginManager().getPlugin("AuthMe") != null);
-        this.setNameTagEditStatus(Bukkit.getServer().getPluginManager().getPlugin("NameTagEdit") != null);
-        this.setEssentialsStatus(Bukkit.getServer().getPluginManager().getPlugin("Essentials") != null);
-        this.setMultiverseCoreStatus(Bukkit.getServer().getPluginManager().getPlugin("MultiverseCore") != null);
-        this.setPlayerPointsStatus(Bukkit.getServer().getPluginManager().getPlugin("PlayerPoints") != null);
-        this.setMyCommandStatus(Bukkit.getServer().getPluginManager().getPlugin("MyCommand") != null);
-        this.setVault();
+        if (ConfigHandler.getConfig("config.yml").getBoolean("General.Settings.Features.Hook.Vault")) {
+            this.setVaultStatus(Bukkit.getServer().getPluginManager().getPlugin("Vault") != null);
+            if (Vault) {
+                setVaultApi();
+            }
+        }
+        if (ConfigHandler.getConfig("config.yml").getBoolean("General.Settings.Features.Hook.PlaceHolderAPI")) {
+            this.setPlaceHolderStatus(Bukkit.getServer().getPluginManager().getPlugin("PlaceHolderAPI") != null);
+        }
+        if (ConfigHandler.getConfig("config.yml").getBoolean("General.Settings.Features.Hook.Residence")) {
+            this.setResidenceStatus(Bukkit.getServer().getPluginManager().getPlugin("Residence") != null);
+        }
+        if (ConfigHandler.getConfig("config.yml").getBoolean("General.Settings.Features.Hook.CMI")) {
+            this.setCMIStatus(Bukkit.getServer().getPluginManager().getPlugin("CMI") != null);
+        }
+        if (ConfigHandler.getConfig("config.yml").getBoolean("General.Settings.Features.Hook.MySQLPlayerDataBridge")) {
+            this.setMySQLPlayerDataBridgeStatus(Bukkit.getServer().getPluginManager().getPlugin("MySQLPlayerDataBridge") != null);
+        }
+        if (ConfigHandler.getConfig("config.yml").getBoolean("General.Settings.Features.Hook.SkinsRestorer")) {
+            this.setSkinsRestorerStatus(Bukkit.getServer().getPluginManager().getPlugin("SkinsRestorer") != null);
+        }
+        if (ConfigHandler.getConfig("config.yml").getBoolean("General.Settings.Features.Hook.DiscordSRV")) {
+            this.setDiscordSRVStatus(Bukkit.getServer().getPluginManager().getPlugin("DiscordSRV") != null);
+        }
+        if (ConfigHandler.getConfig("config.yml").getBoolean("General.Settings.Features.Hook.LuckPerms")) {
+            this.setLuckPermsStatus(Bukkit.getServer().getPluginManager().getPlugin("LuckPerms") != null);
+        }
+        if (ConfigHandler.getConfig("config.yml").getBoolean("General.Settings.Features.Hook.MyPet")) {
+            this.setMyPetStatus(Bukkit.getServer().getPluginManager().getPlugin("MyPet") != null);
+        }
+        if (ConfigHandler.getConfig("config.yml").getBoolean("General.Settings.Features.Hook.AuthMe")) {
+            this.setAuthMeStatus(Bukkit.getServer().getPluginManager().getPlugin("AuthMe") != null);
+        }
+        if (ConfigHandler.getConfig("config.yml").getBoolean("General.Settings.Features.Hook.NameTagEdit")) {
+            this.setNameTagEditStatus(Bukkit.getServer().getPluginManager().getPlugin("NameTagEdit") != null);
+        }
+        if (ConfigHandler.getConfig("config.yml").getBoolean("General.Settings.Features.Hook.Essentials")) {
+            this.setEssentialsStatus(Bukkit.getServer().getPluginManager().getPlugin("Essentials") != null);
+        }
+        if (ConfigHandler.getConfig("config.yml").getBoolean("General.Settings.Features.Hook.MultiverseCore")) {
+            this.setMultiverseCoreStatus(Bukkit.getServer().getPluginManager().getPlugin("MultiverseCore") != null);
+        }
+        if (ConfigHandler.getConfig("config.yml").getBoolean("General.Settings.Features.Hook.PlayerPoints")) {
+            this.setPlayerPointsStatus(Bukkit.getServer().getPluginManager().getPlugin("PlayerPoints") != null);
+        }
+        if (ConfigHandler.getConfig("config.yml").getBoolean("General.Settings.Features.Hook.MyCommand")) {
+            this.setMyCommandStatus(Bukkit.getServer().getPluginManager().getPlugin("MyCommand") != null);
+        }
+
+        sendUtilityDepends();
     }
 
+    private void sendUtilityDepends() {
+        ServerHandler.sendConsoleMessage("&fHooked: "
+                + (VaultEnabled() ? "Vault, " : "")
+                + (CMIEnabled() ? "CMI, " : "")
+                + (ResidenceEnabled() ? "Residence, " : "")
+                + (PlaceHolderAPIEnabled() ? "PlaceHolderAPI, " : "")
+                + (MySQLPlayerDataBridgeEnabled() ? "MySQLPlayerDataBridge, " : "")
+                + (SkinsRestorerEnabled() ? "SkinsRestorer, " : "")
+                + (DiscordSRVEnabled() ? "DiscordSRV, " : "")
+                + (LuckPermsEnabled() ? "LuckPerms, " : "")
+                + (MyPetEnabled() ? "MyPet, " : "")
+                + (AuthMeEnabled() ? "Authme, " : "")
+                + (EssentialsEnabled() ? "Essentials," : "")
+                + (MultiverseCoreEnabled() ? "MultiverseCore," : "")
+                + (PlayerPointsEnabled() ? "PlayerPoints," : "")
+                + (MyCommandEnabled() ? "MyCommand," : "")
+        );
+    }
+
+    public boolean VaultEnabled() {
+        return this.Vault;
+    }
 
     public boolean CMIEnabled() {
         return this.CMI;
@@ -95,6 +155,9 @@ public class DependAPI {
     }
 
 
+    public void setVaultStatus(boolean bool) {
+        this.Vault = bool;
+    }
 
     private void setCMIStatus(boolean bool) {
         this.CMI = bool;
@@ -140,12 +203,11 @@ public class DependAPI {
 
     private void setMyCommandStatus(boolean bool) { this.MyCommand = bool; }
 
-
-    public VaultAPI getVault() {
-        return this.vault;
+    public VaultAPI getVaultApi() {
+        return this.vaultApi;
     }
 
-    private void setVault() {
-        this.vault = new VaultAPI();
+    private void setVaultApi() {
+        vaultApi = new VaultAPI();
     }
 }

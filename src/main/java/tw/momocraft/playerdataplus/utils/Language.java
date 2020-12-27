@@ -63,42 +63,23 @@ public class Language {
             }
         }
     }
-
     public static void sendLangMessage(String nodeLocation, CommandSender sender, boolean hasPrefix, String... placeHolder) {
+        Player player = null;
+        if (sender instanceof Player) {
+            player = (Player) sender;
+        }
+        String prefix = "";
         if (hasPrefix) {
-            Player player = null;
-            if (sender instanceof Player) {
-                player = (Player) sender;
-            }
-            String langMessage = ConfigHandler.getConfig(langType.nodeLocation()).getString(nodeLocation);
-            String prefix = Utils.translateLayout(ConfigHandler.getConfig(langType.nodeLocation()).getString("Message.prefix"), player);
-            if (prefix == null) {
-                prefix = "";
-            } else {
-                prefix += "";
-            }
-            if (langMessage != null && !langMessage.isEmpty()) {
-                langMessage = translateLangHolders(langMessage, initializeRows(placeHolder));
-                langMessage = Utils.translateLayout(langMessage, player);
-                String[] langLines = langMessage.split(" /n ");
-                for (String langLine : langLines) {
-                    String langStrip = prefix + langLine;
-                        sender.sendMessage(langStrip);
-                }
-            }
-        } else {
-            Player player = null;
-            if (sender instanceof Player) {
-                player = (Player) sender;
-            }
-            String langMessage = ConfigHandler.getConfig(langType.nodeLocation()).getString(nodeLocation);
-            if (langMessage != null && !langMessage.isEmpty()) {
-                langMessage = translateLangHolders(langMessage, initializeRows(placeHolder));
-                langMessage = Utils.translateLayout(langMessage, player);
-                String[] langLines = langMessage.split(" /n ");
-                for (String langLine : langLines) {
-                    sender.sendMessage(langLine);
-                }
+            prefix = Utils.translateLayout(ConfigHandler.getConfig("config.yml").getString("Message.prefix"), player);
+        }
+        String langMessage = ConfigHandler.getConfig("config.yml").getString(nodeLocation);
+        if (langMessage != null && !langMessage.isEmpty()) {
+            langMessage = translateLangHolders(langMessage, initializeRows(placeHolder));
+            langMessage = Utils.translateLayout(langMessage, player);
+            String[] langLines = langMessage.split(" /n ");
+            for (String langLine : langLines) {
+                String langStrip = prefix + langLine;
+                sender.sendMessage(langStrip);
             }
         }
     }

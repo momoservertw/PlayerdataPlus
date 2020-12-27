@@ -2,6 +2,7 @@ package tw.momocraft.playerdataplus;
 
 import org.bukkit.plugin.java.JavaPlugin;
 import tw.momocraft.playerdataplus.handlers.ConfigHandler;
+import tw.momocraft.playerdataplus.handlers.RegisterHandler;
 import tw.momocraft.playerdataplus.handlers.ServerHandler;
 import tw.momocraft.playerdataplus.utils.MySQLAPI;
 
@@ -16,7 +17,7 @@ public class PlayerdataPlus extends JavaPlugin {
     public void onEnable() {
         instance = this;
         ConfigHandler.generateData(false);
-        ConfigHandler.registerEvents();
+        RegisterHandler.registerEvents();
         ServerHandler.sendConsoleMessage("&fhas been Enabled.");
     }
 

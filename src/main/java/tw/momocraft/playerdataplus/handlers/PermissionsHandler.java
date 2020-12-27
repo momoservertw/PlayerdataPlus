@@ -24,6 +24,6 @@ public class PermissionsHandler {
         if (player != null) {
             return player.hasPermission(permission) || player.hasPermission("playerdataplus.*") || player.isOp() || (player instanceof ConsoleCommandSender);
         }
-        return ConfigHandler.getDepends().getVault().getPermissions().playerHas(Bukkit.getWorlds().get(0).getName(), offlinePlayer, permission) || offlinePlayer.isOp() || (offlinePlayer instanceof ConsoleCommandSender);
+        return ConfigHandler.getDepends().getVaultApi().getPermissions().playerHas(Bukkit.getWorlds().get(0).getName(), offlinePlayer, permission) || offlinePlayer.isOp() || (offlinePlayer instanceof ConsoleCommandSender);
     }
 }

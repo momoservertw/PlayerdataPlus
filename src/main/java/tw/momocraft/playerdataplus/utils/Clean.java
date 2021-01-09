@@ -6,7 +6,7 @@ import com.bekvon.bukkit.residence.Residence;
 import com.bekvon.bukkit.residence.protection.ClaimedResidence;
 import com.bekvon.bukkit.residence.protection.CuboidArea;
 import com.bekvon.bukkit.residence.protection.ResidencePermissions;
-import com.earth2me.essentials.*;
+import com.earth2me.essentials.Essentials;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import de.Keyle.MyPet.MyPetApi;
@@ -14,11 +14,11 @@ import de.Keyle.MyPet.api.entity.MyPet;
 import fr.xephi.authme.api.v3.AuthMeApi;
 import github.scarsz.discordsrv.DiscordSRV;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.Location;
 import org.bukkit.scheduler.BukkitRunnable;
 import tw.momocraft.playerdataplus.PlayerdataPlus;
 import tw.momocraft.playerdataplus.handlers.ConfigHandler;
@@ -26,7 +26,10 @@ import tw.momocraft.playerdataplus.handlers.PermissionsHandler;
 import tw.momocraft.playerdataplus.handlers.PlayerHandler;
 import tw.momocraft.playerdataplus.handlers.ServerHandler;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -35,7 +38,17 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
@@ -171,33 +184,6 @@ public class Clean {
                 return;
             default:
                 break;
-                /*
-            case "LuckPerms":
-                if (ConfigHandler.getDepends().getVault().vaultEnabled()) {
-                    if (ConfigHandler.getDepends().SkinsRestorerEnabled()) {
-                        Set<UUID> userList;
-                        try {
-                            userList = LuckPermsProvider.get().getUserManager().getUniqueUsers().get();
-                        } catch (InterruptedException | ExecutionException e) {
-                            ServerHandler.sendDebugTrace(e);
-                            break;
-                        }
-                        List<String> uuidList = new ArrayList<>();
-                        for (UUID uuid : userList) {
-                            uuidList.add(uuid.toString());
-                        }
-                        expiredList = getExpiredUUIDList(title, uuidList);
-                        if (!expiredList.isEmpty()) {
-                            cleanTable.put(title, "users", expiredList);
-                            for (String uuid : expiredList) {
-                                Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "authme unregister " + user);
-                                LuckPermsProvider.get().getUserManager().getUser(UUID.fromString(uuid));
-                            }
-                        }
-                    }
-                }
-                break;
-                 */
         }
     }
 

@@ -6,7 +6,11 @@ import tw.momocraft.playerdataplus.handlers.ConfigHandler;
 import tw.momocraft.playerdataplus.utils.locationutils.LocationMap;
 import tw.momocraft.playerdataplus.utils.locationutils.LocationUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 public class ConfigPath {
@@ -31,10 +35,10 @@ public class ConfigPath {
     private boolean backupToZip;
     private String backupFolderName;
     private String backupCustomPath;
-    private List<String> backupList = new ArrayList<>();
+    private final List<String> backupList = new ArrayList<>();
     private ConfigurationSection cleanConfig;
-    private List<String> cleanList = new ArrayList<>();
-    private HashMap<String, Long> cleanExpireTimeMap = new HashMap<>();
+    private final List<String> cleanList = new ArrayList<>();
+    private final HashMap<String, Long> cleanExpireTimeMap = new HashMap<>();
     private int cleanMaxDataSize;
     private long cleanExpiryDay;
     private boolean cleanLogEnable;
@@ -61,9 +65,6 @@ public class ConfigPath {
     private String nickNTEOnSuffix;
     private String nickNTEOffPrefix;
     private String nickNTEOffSuffix;
-    private boolean nickEssentials;
-    private String nickEssOn;
-    private String nickEssOff;
     private List<String> nickCommandOn;
     private List<String> nickCommandOff;
 
@@ -74,7 +75,7 @@ public class ConfigPath {
     //         PlayerStatus Settings                   //
     //  ============================================== //
     private boolean playerStatus;
-    private Map<String, PlayerStatusMap> playerStatusProp = new HashMap<>();
+    private final Map<String, PlayerStatusMap> playerStatusProp = new HashMap<>();
 
     private boolean psLogin;
     private boolean psWorldChange;

@@ -1,12 +1,11 @@
 package tw.momocraft.playerdataplus;
 
+import org.bukkit.Bukkit;
+import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 import tw.momocraft.playerdataplus.handlers.ConfigHandler;
 import tw.momocraft.playerdataplus.handlers.RegisterHandler;
 import tw.momocraft.playerdataplus.handlers.ServerHandler;
-import tw.momocraft.playerdataplus.utils.MySQLAPI;
-
-import java.sql.Connection;
 
 public class PlayerdataPlus extends JavaPlugin {
     private static PlayerdataPlus instance;
@@ -27,11 +26,13 @@ public class PlayerdataPlus extends JavaPlugin {
         if (ConfigHandler.getConfigPath().isMycmd()) {
             ConfigHandler.getMySQLAPI().disabledConnect();
         }
+
+        instance = null;
+        HandlerList.unregisterAll(this);
+        Bukkit.getScheduler().cancelTasks(this);
     }
 
     public static PlayerdataPlus getInstance() {
         return instance;
     }
-
-
 }

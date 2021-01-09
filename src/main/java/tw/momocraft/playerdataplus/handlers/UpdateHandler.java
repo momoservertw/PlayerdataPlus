@@ -14,14 +14,13 @@ import java.net.URLConnection;
  */
 public class UpdateHandler {
 
-	private final int PROJECTID = 76878;
+	private static final int PROJECTID = 76878;
+	private static final String HOST = "https://api.spigotmc.org/legacy/update.php?resource=" + PROJECTID;
 
-	private final String HOST = "https://api.spigotmc.org/legacy/update.php?resource=" + this.PROJECTID;
-	private String versionExact = PlayerdataPlus.getInstance().getDescription().getVersion();
-	private String localeVersion = this.versionExact.split("-")[0];
+	private final String versionExact = PlayerdataPlus.getInstance().getDescription().getVersion();
+	private final String localeVersion = this.versionExact.split("-")[0];
+	private final boolean updatesAllowed = ConfigHandler.getConfig("config.yml").getBoolean("Check-Updates");
 	private String latestVersion;
-
-	private boolean updatesAllowed = ConfigHandler.getConfig("config.yml").getBoolean("Check-Updates");
 
 	/**
 	 * Initializes the UpdateHandler and Checks for Updates upon initialization.
@@ -33,7 +32,7 @@ public class UpdateHandler {
 	/**
 	 * Checks to see if an update is required, notifying the console window and online op players.
 	 *
-	 * @param sender  - The executor of the update checking.
+	 * @param sender - The executor of the update checking.
 	 */
 	public void checkUpdates(final CommandSender sender) {
 		if (this.updateNeeded(sender) && this.updatesAllowed) {

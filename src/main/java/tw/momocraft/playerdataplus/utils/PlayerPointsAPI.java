@@ -14,7 +14,7 @@ public class PlayerPointsAPI {
     public PlayerPointsAPI() {
         Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("PlayerPoints");
         if (plugin != null) {
-            pp = (PlayerPoints.class.cast(plugin));
+            pp = ((PlayerPoints) plugin);
         }
     }
 

@@ -3,12 +3,16 @@ package tw.momocraft.playerdataplus.utils;
 import tw.momocraft.playerdataplus.handlers.ConfigHandler;
 import tw.momocraft.playerdataplus.handlers.ServerHandler;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 public class ColorCorrespond {
     private Map<String, String> colorMap = new HashMap<>();
-    private List<String> colorList = new ArrayList<>();
+    private final List<String> colorList = new ArrayList<>();
 
     public ColorCorrespond() {
         setUp();

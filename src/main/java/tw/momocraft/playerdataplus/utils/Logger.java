@@ -111,7 +111,7 @@ public class Logger {
     public void addLog(String type, String message, boolean time) {
         message = message + "\n";
         if (time) {
-            DateFormat dateFormat = new SimpleDateFormat("YYYY/MM/dd HH:mm:ss");
+            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
             String date = dateFormat.format(new Date());
             message = "[" + date + "]: " + message;
         }

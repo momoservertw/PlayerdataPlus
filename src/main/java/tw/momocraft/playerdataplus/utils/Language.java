@@ -4,8 +4,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import tw.momocraft.playerdataplus.handlers.ConfigHandler;
 
+import java.util.Arrays;
+
 public class Language {
-    private static Lang langType = Lang.ENGLISH;
+    private static final Lang langType = Lang.ENGLISH;
 
     public static void dispatchMessage(CommandSender sender, String langMessage, boolean hasPrefix) {
         if (hasPrefix) {
@@ -87,18 +89,15 @@ public class Language {
     private static String[] initializeRows(String... placeHolder) {
         if (placeHolder == null || placeHolder.length != newString().length) {
             String[] langHolder = Language.newString();
-            for (int i = 0; i < langHolder.length; i++) {
-                langHolder[i] = "null";
-            }
+            Arrays.fill(langHolder, "null");
             return langHolder;
         } else {
-            String[] langHolder = placeHolder;
-            for (int i = 0; i < langHolder.length; i++) {
-                if (langHolder[i] == null) {
-                    langHolder[i] = "null";
+            for (int i = 0; i < placeHolder.length; i++) {
+                if (placeHolder[i] == null) {
+                    placeHolder[i] = "null";
                 }
             }
-            return langHolder;
+            return placeHolder;
         }
     }
 

@@ -3,7 +3,6 @@ package tw.momocraft.playerdataplus.utils;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.Statistic;
 import org.bukkit.block.Block;
 import org.bukkit.command.ConsoleCommandSender;
@@ -14,18 +13,11 @@ import tw.momocraft.playerdataplus.handlers.ServerHandler;
 
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.Set;
-import java.util.*;
-
-import static tw.momocraft.playerdataplus.handlers.ConfigHandler.getColors;
 
 public class Utils {
 
     public static boolean containsIgnoreCase(String string1, String string2) {
-        if (string1 != null && string2 != null && string1.toLowerCase().contains(string2.toLowerCase())) {
-            return true;
-        }
-        return false;
+        return string1 != null && string2 != null && string1.toLowerCase().contains(string2.toLowerCase());
     }
 
     public static boolean isInt(String s) {
@@ -49,15 +41,15 @@ public class Utils {
             char[] characters = text.toCharArray();
             Integer value = null;
             boolean isPrevDigit = false;
-            for (int i = 0; i < characters.length; i++) {
-                if (isPrevDigit == false) {
-                    if (Character.isDigit(characters[i])) {
+            for (char character : characters) {
+                if (!isPrevDigit) {
+                    if (Character.isDigit(character)) {
                         isPrevDigit = true;
-                        value = Character.getNumericValue(characters[i]);
+                        value = Character.getNumericValue(character);
                     }
                 } else {
-                    if (Character.isDigit(characters[i])) {
-                        value = (value * 10) + Character.getNumericValue(characters[i]);
+                    if (Character.isDigit(character)) {
+                        value = (value * 10) + Character.getNumericValue(character);
                     } else {
                         break;
                     }
@@ -70,17 +62,16 @@ public class Utils {
     private static String getNearbyPlayer(Player player, int range) {
         try {
             ArrayList<Entity> entities = (ArrayList<Entity>) player.getNearbyEntities(range, range, range);
-            ArrayList<Block> sightBlock = (ArrayList<Block>) player.getLineOfSight((Set<Material>) null, range);
-            ArrayList<Location> sight = new ArrayList<Location>();
-            for (int i = 0; i < sightBlock.size(); i++)
-                sight.add(sightBlock.get(i).getLocation());
-            for (int i = 0; i < sight.size(); i++) {
-                for (int k = 0; k < entities.size(); k++) {
-                    if (Math.abs(entities.get(k).getLocation().getX() - sight.get(i).getX()) < 1.3) {
-                        if (Math.abs(entities.get(k).getLocation().getY() - sight.get(i).getY()) < 1.5) {
-                            if (Math.abs(entities.get(k).getLocation().getZ() - sight.get(i).getZ()) < 1.3) {
-                                if (entities.get(k) instanceof Player) {
-                                    return entities.get(k).getName();
+            ArrayList<Block> sightBlock = (ArrayList<Block>) player.getLineOfSight(null, range);
+            ArrayList<Location> sight = new ArrayList<>();
+            for (Block block : sightBlock) sight.add(block.getLocation());
+            for (Location location : sight) {
+                for (Entity entity : entities) {
+                    if (Math.abs(entity.getLocation().getX() - location.getX()) < 1.3) {
+                        if (Math.abs(entity.getLocation().getY() - location.getY()) < 1.5) {
+                            if (Math.abs(entity.getLocation().getZ() - location.getZ()) < 1.3) {
+                                if (entity instanceof Player) {
+                                    return entity.getName();
                                 }
                             }
                         }

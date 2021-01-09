@@ -9,8 +9,12 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import tw.momocraft.playerdataplus.PlayerStatus.PlayerStatusControl;
 import tw.momocraft.playerdataplus.PlayerdataPlus;
-import tw.momocraft.playerdataplus.utils.*;
 import tw.momocraft.playerdataplus.utils.Clean;
+import tw.momocraft.playerdataplus.utils.ColorCorrespond;
+import tw.momocraft.playerdataplus.utils.ConfigPath;
+import tw.momocraft.playerdataplus.utils.DependAPI;
+import tw.momocraft.playerdataplus.utils.Logger;
+import tw.momocraft.playerdataplus.utils.MySQLAPI;
 
 import java.io.File;
 import java.time.LocalDateTime;
@@ -156,10 +160,8 @@ public class ConfigHandler {
         String[] fileNameSlit = fileName.split("\\.(?=[^\\.]+$)");
         int configVersion = 0;
         File filePath = PlayerdataPlus.getInstance().getDataFolder();
-        switch (fileName) {
-            case "config.yml":
-                configVersion = 4;
-                break;
+        if ("config.yml".equals(fileName)) {
+            configVersion = 4;
         }
         getConfigData(filePath, fileName);
         File File = new File(filePath, fileName);

@@ -24,24 +24,26 @@ public class LocationUtils {
     private void setUp() {
         locMaps = new HashMap<>();
         ConfigurationSection locConfig = ConfigHandler.getConfig("config.yml").getConfigurationSection("General.Location");
-        if (locConfig != null) {
-            ConfigurationSection groupConfig;
-            LocationMap locMap;
-            ConfigurationSection areaConfig;
-            for (String group : locConfig.getKeys(false)) {
-                groupConfig = ConfigHandler.getConfig("config.yml").getConfigurationSection("General.Location." + group);
-                if (groupConfig != null) {
-                    locMap = new LocationMap();
-                    areaConfig = ConfigHandler.getConfig("config.yml").getConfigurationSection("General.Location." + group + ".Area");
-                    locMap.setWorlds(ConfigHandler.getConfig("config.yml").getStringList("General.Location." + group + ".Worlds"));
-                    if (areaConfig != null) {
-                        for (String area : areaConfig.getKeys(false)) {
-                            locMap.addCord(area, ConfigHandler.getConfig("config.yml").getString("General.Location." + group + ".Area." + area));
-                        }
-                    }
-                    locMaps.put(group, locMap);
+        if (locConfig == null) return;
+
+        ConfigurationSection groupConfig;
+        LocationMap locMap;
+        ConfigurationSection areaConfig;
+
+        for (String group : locConfig.getKeys(false)) {
+            groupConfig = ConfigHandler.getConfig("config.yml").getConfigurationSection("General.Location." + group);
+
+            if (groupConfig == null) continue;
+
+            locMap = new LocationMap();
+            areaConfig = ConfigHandler.getConfig("config.yml").getConfigurationSection("General.Location." + group + ".Area");
+            locMap.setWorlds(ConfigHandler.getConfig("config.yml").getStringList("General.Location." + group + ".Worlds"));
+            if (areaConfig != null) {
+                for (String area : areaConfig.getKeys(false)) {
+                    locMap.addCord(area, ConfigHandler.getConfig("config.yml").getString("General.Location." + group + ".Area." + area));
                 }
             }
+            locMaps.put(group, locMap);
         }
     }
 

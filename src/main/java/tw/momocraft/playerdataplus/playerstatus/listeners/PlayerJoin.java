@@ -1,4 +1,4 @@
-package tw.momocraft.playerdataplus.PlayerStatus.listeners;
+package tw.momocraft.playerdataplus.playerstatus.listeners;
 
 import com.Zrips.CMI.CMI;
 import com.Zrips.CMI.Containers.CMIUser;
@@ -9,10 +9,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import tw.momocraft.playerdataplus.PlayerStatus.PlayerStatusControl;
-import tw.momocraft.playerdataplus.PlayerStatus.PlayerStatusMap;
+import tw.momocraft.playerdataplus.playerstatus.PlayerStatusControl;
+import tw.momocraft.playerdataplus.playerstatus.PlayerStatusMap;
 import tw.momocraft.playerdataplus.handlers.ConfigHandler;
-import tw.momocraft.playerdataplus.handlers.ServerHandler;
 import tw.momocraft.playerdataplus.utils.ConfigPath;
 
 import java.util.List;

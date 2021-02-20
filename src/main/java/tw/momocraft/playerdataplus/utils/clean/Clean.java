@@ -1,4 +1,4 @@
-package tw.momocraft.playerdataplus.utils;
+package tw.momocraft.playerdataplus.utils.clean;
 
 import com.Zrips.CMI.CMI;
 import com.Zrips.CMI.Containers.CMIUser;
@@ -6,25 +6,31 @@ import com.bekvon.bukkit.residence.Residence;
 import com.bekvon.bukkit.residence.protection.ClaimedResidence;
 import com.bekvon.bukkit.residence.protection.CuboidArea;
 import com.bekvon.bukkit.residence.protection.ResidencePermissions;
-import com.earth2me.essentials.*;
+import com.earth2me.essentials.Essentials;
 import com.google.common.collect.HashBasedTable;
-import com.google.common.collect.Table;
 import de.Keyle.MyPet.MyPetApi;
 import de.Keyle.MyPet.api.entity.MyPet;
+import fr.xephi.authme.AuthMe;
 import fr.xephi.authme.api.v3.AuthMeApi;
 import github.scarsz.discordsrv.DiscordSRV;
+import github.scarsz.discordsrv.util.DiscordUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.Location;
 import org.bukkit.scheduler.BukkitRunnable;
+import tw.momocraft.coreplus.CorePlus;
+import tw.momocraft.coreplus.api.CorePlusAPI;
 import tw.momocraft.playerdataplus.PlayerdataPlus;
 import tw.momocraft.playerdataplus.handlers.ConfigHandler;
 import tw.momocraft.playerdataplus.handlers.PlayerHandler;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -42,18 +48,11 @@ import java.util.zip.ZipOutputStream;
 import static org.bukkit.Bukkit.getServer;
 
 public class Clean {
-    private boolean restart = false;
+    // Type, List
+    private Map<String, List<String>> cleanMap;
+    Map<String, Long> lastLoginMap;
     private boolean run = false;
-    private String backupPath;
-    private File backupFile;
-    private String backupName;
-    private Table<String, String, List<String>> cleanTable;
 
-    /**
-     * Set the
-     *
-     * @param run the status of Cleanup process.
-     */
     public void setRun(boolean run) {
         this.run = run;
     }
@@ -66,69 +65,124 @@ public class Clean {
         run = true;
         ConfigurationSection cleanConfig = ConfigHandler.getConfigPath().getCleanConfig();
         if (cleanConfig != null) {
-            backupPath = getBackupPath();
-            backupFile = new File(backupPath);
-            backupName = backupFile.getName();
+            lastLoginMap = CorePlusAPI.getPlayerManager().getLastLoginMap();
+            setCleanMap(cleanConfig);
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    ServerHandler.sendMessage(sender, "&6Starting to clean the expired data...");
-                    restart = false;
-                    cleanTable = HashBasedTable.create();
+
+                }
+            }.runTaskLater(CorePlus.getInstance(), 3);
+
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    boolean restart = false;
+                    CorePlusAPI.getLangManager().sendMsg(ConfigHandler.getPrefix(), sender,
+                            "&6Starting to clean the expired data...");
+                    cleanMap = HashBasedTable.create();
                     cleanManager(title);
-                    if (!cleanTable.isEmpty()) {
+                    if (!cleanMap.isEmpty()) {
                         backupManager();
                     } else {
-                        ServerHandler.sendMessage(sender, "&6There has no any expired data!");
+                        CorePlusAPI.getLangManager().sendMsg(ConfigHandler.getPrefix(), sender,
+                                "&6There has no any expired data!");
                         cancel();
                     }
                     if (restart) {
-                        ServerHandler.sendMessage(sender, "&eCleanup process has not finished yet! &8- &6" + title);
-                        ServerHandler.sendMessage(sender, "");
+                        CorePlusAPI.getLangManager().sendMsg(ConfigHandler.getPrefix(), sender,
+                                "&eCleanup process has not finished yet! &8- &6" + title);
+                        CorePlusAPI.getLangManager().sendMsg(ConfigHandler.getPrefix(), sender, "");
                     } else {
                         cancel();
                     }
                 }
             }.runTaskTimer(PlayerdataPlus.getInstance(), 0, 60L);
-            ServerHandler.sendMessage(sender, "&6Cleanup process has ended.");
+            CorePlusAPI.getLangManager().sendMsg(ConfigHandler.getPrefix(), sender,
+                    "&6Cleanup process has ended.");
             return;
         }
-        ServerHandler.sendMessage(sender, "&6There has no any expired data!");
+        CorePlusAPI.getLangManager().sendMsg(ConfigHandler.getPrefix(), sender,
+                "&6There has no any expired data!");
     }
 
-    public void start(CommandSender sender) {
-        ConfigurationSection cleanConfig = ConfigHandler.getConfigPath().getCleanConfig();
-        if (cleanConfig != null) {
-            this.backupPath = getBackupPath();
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    ServerHandler.sendMessage(sender, "&6Starting to clean the expired data...");
-                    run = true;
-                    restart = false;
-                    cleanTable = HashBasedTable.create();
-                    for (String title : ConfigHandler.getConfigPath().getCleanList()) {
-                        cleanManager(title);
-                        if (!cleanTable.isEmpty()) {
-                            backupManager();
-                        } else {
-                            ServerHandler.sendMessage(sender, "&6There has no any expired data!");
-                            cancel();
-                        }
-                        if (restart) {
-                            ServerHandler.sendMessage(sender, "&eCleanup process has not finished yet! &8- &6" + title);
-                            ServerHandler.sendMessage(sender, "&fIt will restart after 10 seconds. &8(Stop process: /pp clean stop)");
-                            ServerHandler.sendMessage(sender, "");
-                        } else {
-                            cancel();
-                        }
-                    }
-                }
-            }.runTaskTimer(PlayerdataPlus.getInstance(), 0, 100L);
-            ServerHandler.sendMessage(sender, "&6Cleanup process has ended.");
-            return;
+    private void setCleanMap(ConfigurationSection config) {
+        for (String group : config.getKeys(false)) {
+            switch (group) {
+                case "logs":
+                    cleanMap.put(group, getLogList());
+                    break;
+                case "playerdata":
+                    cleanMap.put(group, getPlayerdataList());
+                    break;
+                case "advancements":
+                    cleanMap.put(group, getAdvancementList());
+                    break;
+                case "stats":
+                    cleanMap.put(group, getStatsList());
+                    break;
+                case "regions":
+                    cleanMap.put(group, getRegionList());
+                    break;
+                case "authme":
+                    cleanMap.put(group, getAuthMeList());
+                    break;
+                case "cmi":
+                    cleanMap.put(group, getCMIExpiredList());
+                    break;
+                case "discordsrv":
+                    cleanMap.put(group, getDiscordSRVList());
+                    break;
+                case "mypet":
+                    cleanMap.put(group, getMyPetList());
+                    break;
+                case "mycommand":
+                    cleanMap.put(group, getMyCommandList());
+                    break;
+            }
         }
-        ServerHandler.sendMessage(sender, "&6There has no any expired data!");
+    }
+
+    private List<String> getLogList() {
+    }
+
+    private List<String> getAuthMeExpiredList() {
+        int expiration = ConfigHandler.getConfigPath().getCleanProp().get("AuthMe").getExpiration();
+        List<String> list = new ArrayList<>();
+        Map<UUID, CMIUser> userMap = AuthMeApi.getInstance().getPlayerInfo("").get().getLastLoginDate();
+        Map<String, Long> lastLoginMap = CorePlusAPI.getPlayerManager().getLastLoginMap();
+        for (UUID uuid : userMap.keySet()) {
+            if (lastLoginMap.get(uuid.toString()) > expiration) {
+                list.add(uuid.toString());
+            }
+        }
+        return list;
+    }
+
+    private List<String> getDiscordSRVList() {
+        int expiration = ConfigHandler.getConfigPath().getCleanProp().get("DiscordSRV").getExpiration();
+        List<String> list = new ArrayList<>();
+        Map<UUID, CMIUser> userMap = DiscordUtil.get.getInstance().getPlayerManager().getAllUsers();
+        Map<String, Long> lastLoginMap = CorePlusAPI.getPlayerManager().getLastLoginMap();
+        for (UUID uuid : userMap.keySet()) {
+            if (lastLoginMap.get(uuid.toString()) > expiration) {
+                list.add(uuid.toString());
+            }
+        }
+        return list;
+    }
+
+    private List<String> getCMIExpiredList() {
+        int expiration = ConfigHandler.getConfigPath().getCleanProp().get("CMI").getExpiration();
+        List<String> list = new ArrayList<>();
+        Map<UUID, CMIUser> userMap = CMI.getInstance().getPlayerManager().getAllUsers();
+        Map<String, Long> lastLoginMap = CorePlusAPI.getPlayerManager().getLastLoginMap();
+        for (UUID uuid : userMap.keySet()) {
+            if (lastLoginMap.get(uuid.toString()) > expiration) {
+                list.add(uuid.toString());
+            }
+        }
+        return list;
     }
 
     private void cleanManager(String title) {
@@ -203,10 +257,10 @@ public class Clean {
         ServerHandler.sendConsoleMessage("&fData successfully cleaned  &a✔");
         ServerHandler.sendConsoleMessage("");
         ServerHandler.sendConsoleMessage("&f---- Statistics ----");
-        for (String title : cleanTable.rowKeySet()) {
+        for (String title : cleanMap.rowKeySet()) {
             ServerHandler.sendConsoleMessage(title + ":" + cleanCustomStatus(title));
-            for (String subtitle : cleanTable.rowMap().get(title).keySet()) {
-                ServerHandler.sendConsoleMessage("> " + subtitle + " - " + cleanTable.get(title, subtitle).size());
+            for (String subtitle : cleanMap.rowMap().get(title).keySet()) {
+                ServerHandler.sendConsoleMessage("> " + subtitle + " - " + cleanMap.get(title, subtitle).size());
             }
             ServerHandler.sendConsoleMessage("");
         }
@@ -267,7 +321,7 @@ public class Clean {
         }
         List<String> cleanedList = deleteFiles("Logs", null, dataPath, expiredList);
         if (!cleanedList.isEmpty()) {
-            cleanTable.put("Logs", "logs", cleanedList);
+            cleanMap.put("Logs", "logs", cleanedList);
         }
     }
 
@@ -303,7 +357,7 @@ public class Clean {
             }
             List<String> cleanedList = deleteFiles(title, null, dataPath, expiredList);
             if (!cleanedList.isEmpty()) {
-                cleanTable.put(title, folderTitle, cleanedList);
+                cleanMap.put(title, folderTitle, cleanedList);
             }
         } else {
             ServerHandler.sendConsoleMessage("&cYou need Vault to check the offline player's permission");
@@ -350,7 +404,7 @@ public class Clean {
             }
             cleanedList = deleteFiles("Regions", worldName, dataPath, unignoredList);
             if (!cleanedList.isEmpty()) {
-                cleanTable.put("Regions", worldName, cleanedList);
+                cleanMap.put("Regions", worldName, cleanedList);
             }
         }
     }
@@ -372,7 +426,7 @@ public class Clean {
                 }
                 List<String> expiredList = getExpiredUUIDList("CMI", uuidList);
                 if (!expiredList.isEmpty()) {
-                    cleanTable.put("CMI", "users", expiredList);
+                    cleanMap.put("CMI", "users", expiredList);
                     for (String uuid : expiredList) {
                         try {
                             CMI.getInstance().getPlayerManager().removeUser(userMap.get(UUID.fromString(uuid)));
@@ -406,7 +460,7 @@ public class Clean {
                 }
                 List<String> expiredList = getExpiredUUIDList("Essentials", userList);
                 if (!expiredList.isEmpty()) {
-                    cleanTable.put("Essentials", "users", expiredList);
+                    cleanMap.put("Essentials", "users", expiredList);
                     for (String uuidString : expiredList) {
                         try {
                             // Unsure!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -432,7 +486,7 @@ public class Clean {
                 }
                 List<String> expiredList = getExpiredPlayerList("AuthMe", dataList);
                 if (!expiredList.isEmpty()) {
-                    cleanTable.put("AuthMe", "users", expiredList);
+                    cleanMap.put("AuthMe", "users", expiredList);
                     for (String user : expiredList) {
                         getServer().dispatchCommand(Bukkit.getConsoleSender(), "authme unregister " + user);
                     }
@@ -458,7 +512,7 @@ public class Clean {
                 }
                 List<String> expiredList = getExpiredUUIDList("DiscordSRV", uuidList);
                 if (!expiredList.isEmpty()) {
-                    cleanTable.put("DiscordSRV", "users", expiredList);
+                    cleanMap.put("DiscordSRV", "users", expiredList);
                     for (String uuid : expiredList) {
                         try {
                             DiscordSRV.getPlugin().getAccountLinkManager().unlink(UUID.fromString(uuid));
@@ -498,7 +552,7 @@ public class Clean {
                     }
                 }
                 if (!expiredPetList.isEmpty()) {
-                    cleanTable.put("MyPet", "users", expiredPetList);
+                    cleanMap.put("MyPet", "users", expiredPetList);
                 }
             }
         }
@@ -754,7 +808,7 @@ public class Clean {
                         try {
                             lastTime = Date.from(AuthMeApi.getInstance().getLastLoginTime(offlinePlayer.getName())).getTime();
                         } catch (Exception e) {
-                            lastTime = new Date(offlinePlayer.getLastPlayed()).getTime();
+                            lastTime = new Date(offlinePlayer.getLastLogin().getLastPlayed()).getTime();
                         }
                     } else {
                         lastTime = new Date(offlinePlayer.getLastPlayed()).getTime();
@@ -1058,7 +1112,7 @@ public class Clean {
         boolean autoClean = ConfigHandler.getConfigPath().isCleanAutoEnable();
         boolean toZip = ConfigHandler.getConfigPath().isBackupToZip();
         StringBuilder sb = new StringBuilder();
-        for (String value : cleanTable.rowKeySet()) {
+        for (String value : cleanMap.rowKeySet()) {
             sb.append(value);
         }
         String controlList = sb.toString();
@@ -1079,18 +1133,18 @@ public class Clean {
         ConfigHandler.getLogger().addLog("log", "Auto-Clean: " + autoClean, false);
         ConfigHandler.getLogger().addLog("log", "", false);
         ConfigHandler.getLogger().addLog("log", "---- Statistics ----", false);
-        for (String title : cleanTable.rowKeySet()) {
+        for (String title : cleanMap.rowKeySet()) {
             ConfigHandler.getLogger().addLog("log", title + ":" + cleanCustomStatus(title), false);
-            for (String subtitle : cleanTable.rowMap().get(title).keySet()) {
-                ConfigHandler.getLogger().addLog("log", "> " + subtitle + " - " + cleanTable.get(title, subtitle).size(), false);
+            for (String subtitle : cleanMap.rowMap().get(title).keySet()) {
+                ConfigHandler.getLogger().addLog("log", "> " + subtitle + " - " + cleanMap.get(title, subtitle).size(), false);
             }
             ConfigHandler.getLogger().addLog("log", "", false);
         }
         ConfigHandler.getLogger().addLog("log", "---- Details ----", false);
-        for (String title : cleanTable.rowKeySet()) {
+        for (String title : cleanMap.rowKeySet()) {
             ConfigHandler.getLogger().addLog("log", title + ":", false);
-            for (String subtitle : cleanTable.rowMap().get(title).keySet()) {
-                for (String value : cleanTable.get(title, subtitle)) {
+            for (String subtitle : cleanMap.rowMap().get(title).keySet()) {
+                for (String value : cleanMap.get(title, subtitle)) {
                     ConfigHandler.getLogger().addLog("log", " - " + value, false);
                 }
             }

@@ -1,4 +1,4 @@
-package tw.momocraft.playerdataplus.PlayerStatus;
+package tw.momocraft.playerdataplus.playerstatus;
 
 import com.Zrips.CMI.CMI;
 import com.Zrips.CMI.Containers.CMIUser;
@@ -12,8 +12,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import tw.momocraft.playerdataplus.PlayerdataPlus;
 import tw.momocraft.playerdataplus.handlers.ConfigHandler;
-import tw.momocraft.playerdataplus.handlers.PermissionsHandler;
-import tw.momocraft.playerdataplus.handlers.ServerHandler;
 import tw.momocraft.playerdataplus.utils.ConfigPath;
 
 import java.util.List;

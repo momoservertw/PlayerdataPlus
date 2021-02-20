@@ -1,4 +1,4 @@
-package tw.momocraft.playerdataplus.PlayerStatus;
+package tw.momocraft.playerdataplus.playerstatus;
 
 import tw.momocraft.playerdataplus.utils.locationutils.LocationMap;
 

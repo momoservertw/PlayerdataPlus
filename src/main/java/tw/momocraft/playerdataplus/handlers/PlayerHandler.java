@@ -45,7 +45,7 @@ public class PlayerHandler {
             switch (check) {
                 case "LuckPerms":
                     if (ConfigHandler.getDepends().LuckPermsEnabled()) {
-                        User luckUser = LuckPermsProvider.get().getUserManager().getUser(playerName);
+                        User luckUser = LuckPermsProvider.get().getUserManager().getUser(playerName).;
                         if (luckUser != null) {
                             UUID playerUUID = luckUser.getUniqueId();
                             return Bukkit.getOfflinePlayer(playerUUID);

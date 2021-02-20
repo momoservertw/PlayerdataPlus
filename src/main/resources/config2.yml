@@ -1,10 +1,10 @@
-# --{ =-=-=-=-=-=-=-=-=-= PlayerdataPlus's Configuration Settings, by Momocraft =-=-=-=-=-=-=-=-=-= }--
+# --{ =-=-=-=-=-=-=-=-=-= PlayerdataPlus"s Configuration Settings, by Momocraft =-=-=-=-=-=-=-=-=-= }--
 Config-Version: 4
 # If you want to see if the player data is out of date or bypassed, you can turn on the Debug mode.
 Debugging: false
 Check-Updates: true
 
-# Clean the old data and improve the server's performance.
+# Clean the old data and improve the server"s performance.
 # Player bypass permission: playerdataplus.bypass.clean
 Clean:
   Settings:
@@ -30,10 +30,10 @@ Clean:
     Backup:
       Enable: true
       # The backup folder: plugin, custom
-      Mode: 'plugin'
-      Folder-Name: 'Backup'
+      Mode: "plugin"
+      Folder-Name: "Backup"
       # Custom the backup path like "C:\Server". You need to set the Backup Mode to "custom".
-      Custom-Path: 'C:\Server'
+      Custom-Path: "C:\Server"
       To-Zip: true
   Control:
     Logs:
@@ -59,7 +59,7 @@ Clean:
         - world_nether
         - world_the_end
       Ignore-Regions: []
-      #  - 'world 8.8'
+      #  - "world 8.8"
     AuthMe:
       Enable: false
     CMI:
@@ -93,7 +93,7 @@ Clean:
         ChatControlPro:
           Enable: false
 
-# Format players' nicks and make chat messages more tidy.
+# Format players" nicks and make chat messages more tidy.
 # Commands: /playerdataplus nick [nick] [color] [bypass] [player]
 # Commands: /playerdataplus nick off
 # More information: https://github.com/momoservertw/PlayerdataPlus/wiki/Commands
@@ -118,59 +118,59 @@ Nick:
       # Updates the player names in the tablist.
       Tablist-Update: true
       # The format of nick when players changed their nicks.
-      "On": '&%color%%nick%(%player%)'
+      "On": "&%color%%nick%(%player%)"
       # The format of nick when players canceled their nicks.
-      "Off": '&%color%%player%'
+      "Off": "&%color%%player%"
     NameTagEdit:
       Enable: false
       "On":
-        Prefix: '&%color%%nick% &f'
-        Suffix: ''
+        Prefix: "&%color%%nick% &f"
+        Suffix: ""
       "Off":
-        Prefix: '&%color%'
-        Suffix: ''
+        Prefix: "&%color%"
+        Suffix: ""
     Essentials:
       Enable: false
       # The format of nick when players changed their nicks.
-      "On": '&%color%%nick%(%player%)'
+      "On": "&%color%%nick%(%player%)"
       # The format of nick when players canceled their nicks.
-      "Off": '&%color%%player%'
+      "Off": "&%color%%player%"
     # Executed custom commands when players changed their nicks.
     # More information: https://github.com/momoservertw/PlayerdataPlus/wiki/Custom-Commands
     Commands: []
     Commands-Off: []
-  # Define the player's default nick color.
+  # Define the player"s default nick color.
   # Permission: playerdataplus.nick.group.GROUP
   Groups:
-    # The default nick color if player doesn't have any permission.
-    Default: 'a'
+    # The default nick color if player doesn"t have any permission.
+    Default: "a"
     # The default nick color for a player who has color permission. The highest number of group name will be chosen.
     Custom:
-      0: 'a'
-      1: 'b'
-      2: 'd'
-      3: 'e'
-  # The input words of colors when players are using commands to custom their nicks' color.
+      0: "a"
+      1: "b"
+      2: "d"
+      3: "e"
+  # The input words of colors when players are using commands to custom their nicks" color.
   # For example, /playerdataplus nick green
   # Permission: playerdataplus.nick.color.COLOR
   Colors:
     Correspond:
-      a: 'green'
-      b: 'aqua'
-      c: 'red'
-      d: 'light_purple'
-      e: 'yellow'
-      f: 'white'
-      0: 'black'
-      1: 'dark_blue'
-      2: 'dark_green'
-      3: 'dark_aqua'
-      4: 'dark_red'
-      5: 'dark_purple'
-      6: 'gold'
-      7: 'gray'
-      8: 'dark_gray'
-      9: 'blue'
+      a: "green"
+      b: "aqua"
+      c: "red"
+      d: "light_purple"
+      e: "yellow"
+      f: "white"
+      0: "black"
+      1: "dark_blue"
+      2: "dark_green"
+      3: "dark_aqua"
+      4: "dark_red"
+      5: "dark_purple"
+      6: "gold"
+      7: "gray"
+      8: "dark_gray"
+      9: "blue"
 
 Player-Status-Check:
   Fly:
@@ -208,34 +208,34 @@ Player-Status-Check:
       World-Change: false
 
 Message:
-  prefix: '&7[&dPlayerdataPlus&7]&r '
-  noPermission: '&cYou do not have permission to use that command!'
-  configReload: '&aConfiguration(s) Reloaded!'
-  unknownCommand: '&cUnknown command, See &e/playerdataplus help &cfor a list of commands.'
-  targetNotOnline: '&cPlayer &e%targetplayer% &cdoesn''t online!'
+  prefix: "&7[&dPlayerdataPlus&7]&r "
+  noPermission: "&cYou do not have permission to use that command!"
+  configReload: "&aConfiguration(s) Reloaded!"
+  unknownCommand: "&cUnknown command, See &e/playerdataplus help &cfor a list of commands."
+  targetNotOnline: "&cPlayer &e%targetplayer% &cdoesn""t online!"
   PlayerdataPlus:
     Commands:
-      title: '&8▩▩▩▩▩▩▩▩▩▩▩▩▩ &d&lPlayerdataPlus &8▩▩▩▩▩▩▩▩▩▩▩▩▩'
-      help: '&f/pp help &8- &7This help menu.'
-      reload: '&f/pp reload &8- &7Reload config file.'
-      version: '&f/pp version &8- &7Checks the plugin version and updates.'
-      clean: '&f/pp clean &8- &7Clean the expired data.'
-      nick: '&f/pp nick <nick> [color] &8- &7Change your nick name. /n &fColor: &aa&8, &bb &7(VIP)&8, &dd &7(MVP)&8, &ee &7(GOD)'
-      nickOff: '&f/pp nick off &8- &7Clear your nick name.'
-      nickOther: '&f/pp nick <nick> [color] [bypass] [player] &8- &7Change other players'' nick name. /n &fColor: &aa&8, &bb &7(VIP)&8, &dd &7(MVP)&8, &ee &7(GOD) /n &fBypass: true'
-      nickOffOther: '&f/pp nick off [player] &8- &7Clear other players'' nick name.'
+      title: "&8▩▩▩▩▩▩▩▩▩▩▩▩▩ &d&lPlayerdataPlus &8▩▩▩▩▩▩▩▩▩▩▩▩▩"
+      help: "&f/pp help &8- &7This help menu."
+      reload: "&f/pp reload &8- &7Reload config file."
+      version: "&f/pp version &8- &7Checks the plugin version and updates."
+      clean: "&f/pp clean &8- &7Clean the expired data."
+      nick: "&f/pp nick <nick> [color] &8- &7Change your nick name. /n &fColor: &aa&8, &bb &7(VIP)&8, &dd &7(MVP)&8, &ee &7(GOD)"
+      nickOff: "&f/pp nick off &8- &7Clear your nick name."
+      nickOther: "&f/pp nick <nick> [color] [bypass] [player] &8- &7Change other players"" nick name. /n &fColor: &aa&8, &bb &7(VIP)&8, &dd &7(MVP)&8, &ee &7(GOD) /n &fBypass: true"
+      nickOffOther: "&f/pp nick off [player] &8- &7Clear other players"" nick name."
     Nick:
-      invalidLength: '&cNick is too long. Max &6%nick_length% &esymbols.'
-      targetInvalidLength: '&c%targetplayer% nick is too long. Max &6%nick_length% &csymbols.'
-      invalidNick: '&cYou can''t use this nick name.'
-      targetInvalidNick: '&c%targetplayer% can''t use this nick name.'
-      invalidColor: '&cYou don''t have permission to set this color.'
-      targetInvalidColor: '&c%targetplayer% don''t have permission to set this color.'
-      invalidColorInside: '&cYou can''t set this color inside the nick.'
-      targetInvalidColorInside: '&c%targetplayer% can''t set this color inside the nick.'
-      successOn: '&fYour new nick &8- &%nick_color%%nick%(%player%)'
-      targetSuccessOn: '&fSet %targetplayer%''s nick &8- &%nick_color%%nick%(%player%)'
-      successOff: '&fYour new nick &8- &%nick_color%%player%'
-      targetSuccessOff: '&fDisabled %targetplayer%''s nick &8- &%color%%player%'
-      successColor: '&fYour new nick color &8- &%nick_color%❤'
-      targetSuccessColor: '&fChanged %targetplayer%''s nick color &8- &%nick_color%❤'
+      invalidLength: "&cNick is too long. Max &6%nick_length% &esymbols."
+      targetInvalidLength: "&c%targetplayer% nick is too long. Max &6%nick_length% &csymbols."
+      invalidNick: "&cYou can""t use this nick name."
+      targetInvalidNick: "&c%targetplayer% can""t use this nick name."
+      invalidColor: "&cYou don""t have permission to set this color."
+      targetInvalidColor: "&c%targetplayer% don""t have permission to set this color."
+      invalidColorInside: "&cYou can""t set this color inside the nick."
+      targetInvalidColorInside: "&c%targetplayer% can""t set this color inside the nick."
+      successOn: "&fYour new nick &8- &%nick_color%%nick%(%player%)"
+      targetSuccessOn: "&fSet %targetplayer%""s nick &8- &%nick_color%%nick%(%player%)"
+      successOff: "&fYour new nick &8- &%nick_color%%player%'
+      targetSuccessOff: "&fDisabled %targetplayer%''s nick &8- &%color%%player%'
+      successColor: "&fYour new nick color &8- &%nick_color%❤'
+      targetSuccessColor: "&fChanged %targetplayer%''s nick color &8- &%nick_color%❤'

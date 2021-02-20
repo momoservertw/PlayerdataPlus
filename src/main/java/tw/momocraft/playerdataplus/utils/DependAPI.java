@@ -2,7 +2,6 @@ package tw.momocraft.playerdataplus.utils;
 
 import org.bukkit.Bukkit;
 import tw.momocraft.playerdataplus.handlers.ConfigHandler;
-import tw.momocraft.playerdataplus.handlers.ServerHandler;
 
 public class DependAPI {
     private VaultAPI vaultApi;

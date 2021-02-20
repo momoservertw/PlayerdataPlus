@@ -1,10 +1,10 @@
 package tw.momocraft.playerdataplus.handlers;
 
 import tw.momocraft.playerdataplus.Commands;
-import tw.momocraft.playerdataplus.PlayerStatus.listeners.PlayerChangedWorld;
-import tw.momocraft.playerdataplus.PlayerStatus.listeners.PlayerJoin;
+import tw.momocraft.playerdataplus.playerstatus.listeners.PlayerChangedWorld;
+import tw.momocraft.playerdataplus.playerstatus.listeners.PlayerJoin;
 import tw.momocraft.playerdataplus.PlayerdataPlus;
-import tw.momocraft.playerdataplus.utils.TabComplete;
+import tw.momocraft.playerdataplus.TabComplete;
 
 public class RegisterHandler {
 

@@ -5,14 +5,11 @@ import com.Zrips.CMI.Containers.CMIUser;
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
 import com.nametagedit.plugin.NametagEdit;
-import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import tw.momocraft.playerdataplus.handlers.ConfigHandler;
-import tw.momocraft.playerdataplus.handlers.PermissionsHandler;
-import tw.momocraft.playerdataplus.handlers.ServerHandler;
 
 import java.util.*;
 
@@ -20,16 +17,7 @@ import static org.bukkit.Bukkit.getServer;
 
 public class Nick {
 
-    /**
-     * Changing player's nick.
-     * Using command: /nickplus nick <nickName> [color]
-     *
-     * @param sender    the sender of this method.
-     * @param bypass    bypass the nick limits.
-     * @param nickName  the new nick name.
-     * @param nickColor the new nick color.
-     */
-    public static void setNick(CommandSender sender, boolean bypass, String nickName, String nickColor) {
+    public static void setNick(CommandSender sender, String nickName, String nickColor) {
         if (sender instanceof ConsoleCommandSender) {
             Language.sendLangMessage("Message.PlayerdataPlus.Commands.nickOther", sender);
             Language.sendLangMessage("Message.PlayerdataPlus.Commands.nickOffOther", sender);
@@ -293,7 +281,7 @@ public class Nick {
                 format = ConfigHandler.getConfigPath().getNickCMIOff();
             }
             if (format != null) {
-                format = getCmdReplace(format, playerName, nickName, nickColor, player);
+                format = translate(format, playerName, nickName, nickColor, player);
             } else {
                 if (toggle) {
                     format = "§" + nickColor + nickName + "(" + playerName + ")";
@@ -324,7 +312,7 @@ public class Nick {
                 format = ConfigHandler.getConfigPath().getNickEssOff();
             }
             if (format != null) {
-                format = getCmdReplace(format, playerName, nickName, nickColor, player);
+                format = translate(format, playerName, nickName, nickColor, player);
             } else {
                 if (toggle) {
                     format = "§" + nickColor + nickName + "(" + playerName + ")";
@@ -350,7 +338,7 @@ public class Nick {
                 formatSuffix = ConfigHandler.getConfigPath().getNickNTEOffSuffix();
             }
             if (formatPrefix != null) {
-                formatPrefix = getCmdReplace(formatPrefix, playerName, nickName, nickColor, player);
+                formatPrefix = translate(formatPrefix, playerName, nickName, nickColor, player);
             } else {
                 if (toggle) {
                     formatPrefix = "§" + nickColor + nickName + " &f";
@@ -359,7 +347,7 @@ public class Nick {
                 }
             }
             if (formatSuffix != null) {
-                formatSuffix = getCmdReplace(formatSuffix, playerName, nickName, nickColor, player);
+                formatSuffix = translate(formatSuffix, playerName, nickName, nickColor, player);
             } else {
                 formatSuffix = "";
             }
@@ -383,7 +371,7 @@ public class Nick {
             cmdList = ConfigHandler.getConfigPath().getNickCommandOff();
         }
         for (String command : cmdList) {
-            command = getCmdReplace(command, playerName, nickName, nickColor, player);
+            command = translate(command, playerName, nickName, nickColor, player);
             ServerHandler.executeCommands(player, command);
             ServerHandler.sendFeatureMessage("Nick-On", playerName, "commands", "set", command,
                     new Throwable().getStackTrace()[0]);
@@ -455,12 +443,10 @@ public class Nick {
                 || getDefaultColor(player).equals(nickColor);
     }
 
-    private static String getCmdReplace(String command, String playerName, String nickName, String nickColor, Player player) {
+    private static String translate(String command, String playerName, String nickName, String nickColor, Player player) {
         command = command.replace("%player%", playerName);
         command = command.replace("%nick%", nickName);
         command = command.replace("%color%", nickColor);
-        command = command.replace("&", "§");
-        command = PlaceholderAPI.setPlaceholders(player, command);
         return command;
     }
 }

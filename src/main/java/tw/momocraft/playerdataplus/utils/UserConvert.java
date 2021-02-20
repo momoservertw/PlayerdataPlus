@@ -9,7 +9,6 @@ import com.bekvon.bukkit.residence.protection.ClaimedResidence;
 import org.bukkit.Bukkit;
 import tw.momocraft.playerdataplus.handlers.ConfigHandler;
 import tw.momocraft.playerdataplus.handlers.PlayerHandler;
-import tw.momocraft.playerdataplus.handlers.ServerHandler;
 
 import java.util.UUID;
 

@@ -1,52 +1,68 @@
 package tw.momocraft.playerdataplus.utils;
 
 import org.bukkit.configuration.ConfigurationSection;
-import tw.momocraft.playerdataplus.PlayerStatus.PlayerStatusMap;
 import tw.momocraft.playerdataplus.handlers.ConfigHandler;
-import tw.momocraft.playerdataplus.utils.locationutils.LocationMap;
-import tw.momocraft.playerdataplus.utils.locationutils.LocationUtils;
+import tw.momocraft.playerdataplus.playerstatus.PlayerStatusMap;
+import tw.momocraft.playerdataplus.utils.clean.CleanMap;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 public class ConfigPath {
 
-    //  ============================================== //
-    //         General Settings                        //
-    //  ============================================== //
-    private static LocationUtils locationUtils;
+    public ConfigPath() {
+        setUp();
+    }
 
-    private int timeoutTime;
-    private List<String> cleanPriority;
-    private boolean cleanAutoEnable;
-    private long cleanAutoDelay;
-    private boolean timeoutWarning;
+    private void setUp() {
+        setMsg();
+        setClean();
+        setNick();
+        setPlayerStatus();
+    }
 
     //  ============================================== //
-    //         Clean Settings                          //
+    //         Message Variables                       //
+    //  ============================================== //
+    private String msgTitle;
+    private String msgHelp;
+    private String msgReload;
+    private String msgVersion;
+    private String msgCmdClean;
+    private String msgCmdNick;
+    private String msgCmdNickOther;
+
+    private String msgNickInvalidLength;
+    private String msgNickInvalidLengthTarget;
+    private String msgNickInvalidNick;
+    private String msgNickInvalidNickTarget;
+    private String msgNickInvalidColor;
+    private String msgNickInvalidColorTarget;
+    private String msgNickInvalidColorInside;
+    private String msgNickInvalidColorInsideTarget;
+    private String msgNickChange;
+    private String msgNickChangeTarget;
+    private String msgNickClear;
+    private String msgNickClearTarget;
+    private String msgNickChangeColor;
+    private String msgNickChangeColorTarget;
+
+    //  ============================================== //
+    //         Clean Variables                         //
     //  ============================================== //
     private boolean clean;
-    private boolean backupEnable;
-    private String backupMode;
-    private boolean backupToZip;
-    private String backupFolderName;
-    private String backupCustomPath;
-    private List<String> backupList = new ArrayList<>();
+    private boolean cleanAuto;
+    private boolean cleanLog;
+    private boolean cleanBackup;
+    private boolean cleanBackupZip;
+    private String cleanBackupPath;
     private ConfigurationSection cleanConfig;
-    private List<String> cleanList = new ArrayList<>();
-    private HashMap<String, Long> cleanExpireTimeMap = new HashMap<>();
-    private int cleanMaxDataSize;
-    private long cleanExpiryDay;
-    private boolean cleanLogEnable;
-    private List<String> cleanRegionWorlds = new ArrayList<>();
-    private List<String> cleanIgnoreRegions = new ArrayList<>();
-    private boolean cleanRegionBypassRes;
-    private List<String> cleanMycmdIgnore;
-    private List<String> cleanMycmdVars;
-    private List<String> cleanMycmdPlayers;
+    private HashMap<String, CleanMap> cleanProp = new HashMap<>();
 
     //  ============================================== //
-    //         Nick Settings                          //
+    //         Nick Variables                          //
     //  ============================================== //
     private boolean nick;
     private int nickLimit;
@@ -61,105 +77,94 @@ public class ConfigPath {
     private String nickNTEOnSuffix;
     private String nickNTEOffPrefix;
     private String nickNTEOffSuffix;
-    private boolean nickEssentials;
-    private String nickEssOn;
-    private String nickEssOff;
     private List<String> nickCommandOn;
     private List<String> nickCommandOff;
 
     private String nickGroupsDefault;
     private Map<Integer, String> nickGroupsMap;
     private Map<String, String> nickColorsMap;
+
     //  ============================================== //
-    //         PlayerStatus Settings                   //
+    //         Player Status Variables                 //
     //  ============================================== //
     private boolean playerStatus;
     private Map<String, PlayerStatusMap> playerStatusProp = new HashMap<>();
 
-    private boolean psLogin;
-    private boolean psWorldChange;
-    private boolean psSchdeule;
-    private int psSchdeuleInterval;
 
     //  ============================================== //
-    //         User-Convertor Settings                   //
+    //         Data Convertor Variables                //
     //  ============================================== //
-    /*
-    private boolean transferUser;
-    private boolean tfPlayerdata;
-    private boolean tfStats;
-    private boolean tfAdvancements;
-    private boolean tfEconomy;
-    private boolean tfPlayerPoints;
-    private boolean tfLuckPerms;
-    private boolean tfAuthMe;
-    private boolean tfCMINick;
-    private boolean tfResidence;
-    private boolean tfNameTagEdit;
-
-    private boolean flyResEnable;
-     */
 
     //  ============================================== //
-    //         MyCommand Settings                      //
+    //         Message Setter                          //
     //  ============================================== //
-    private boolean mycmd;
+    private void setMsg() {
+        msgTitle = ConfigHandler.getConfig("config.yml").getString("Message.Commands.title");
+        msgHelp = ConfigHandler.getConfig("config.yml").getString("Message.Commands.help");
+        msgReload = ConfigHandler.getConfig("config.yml").getString("Message.Commands.reload");
+        msgVersion = ConfigHandler.getConfig("config.yml").getString("Message.Commands.version");
+        msgCmdClean = ConfigHandler.getConfig("config.yml").getString("Message.Commands.clean");
+        msgCmdNick = ConfigHandler.getConfig("config.yml").getString("Message.Commands.nick");
+        msgCmdNickOther = ConfigHandler.getConfig("config.yml").getString("Message.Commands.nickOther");
 
-
-    public ConfigPath() {
-        setUp();
+        msgNickInvalidLength = ConfigHandler.getConfig("config.yml").getString("Message.Commands.Nick.invalidLength");
+        msgNickInvalidLengthTarget = ConfigHandler.getConfig("config.yml").getString("Message.Commands.Nick.invalidLengthTarget");
+        msgNickInvalidNick = ConfigHandler.getConfig("config.yml").getString("Message.Commands.Nick.invalidNick");
+        msgNickInvalidNickTarget = ConfigHandler.getConfig("config.yml").getString("Message.Commands.Nick.invalidNickTarget");
+        msgNickInvalidColor = ConfigHandler.getConfig("config.yml").getString("Message.Commands.Nick.invalidColor");
+        msgNickInvalidColorTarget = ConfigHandler.getConfig("config.yml").getString("Message.Commands.Nick.invalidColorTarget");
+        msgNickInvalidColorInside = ConfigHandler.getConfig("config.yml").getString("Message.Commands.Nick.invalidColorInside");
+        msgNickInvalidColorInsideTarget = ConfigHandler.getConfig("config.yml").getString("Message.Commands.Nick.invalidColorInsideTarget");
+        msgNickChange = ConfigHandler.getConfig("config.yml").getString("Message.Commands.Nick.change");
+        msgNickChangeTarget = ConfigHandler.getConfig("config.yml").getString("Message.Commands.Nick.changeTarget");
+        msgNickClear = ConfigHandler.getConfig("config.yml").getString("Message.Commands.Nick.clear");
+        msgNickClearTarget = ConfigHandler.getConfig("config.yml").getString("Message.Commands.Nick.clearTarget");
+        msgNickChangeColor = ConfigHandler.getConfig("config.yml").getString("Message.Commands.Nick.changeColor");
+        msgNickChangeColorTarget = ConfigHandler.getConfig("config.yml").getString("Message.Commands.Nick.changeColorTarget");
     }
 
-    private void setUp() {
-        locationUtils = new LocationUtils();
-
-        timeoutTime = ConfigHandler.getConfig("spigot.yml").getInt("settings.timeout-time");
-
-        setUpClean();
-        setUpNick();
-        setUpPlayerStatus();
-        setUpMycmd();
-    }
-
-    private void setUpClean() {
+    //  ============================================== //
+    //         Clean Setter                            //
+    //  ============================================== //
+    private void setClean() {
         clean = ConfigHandler.getConfig("config.yml").getBoolean("Clean.Enable");
-        cleanPriority = ConfigHandler.getConfig("config.yml").getStringList("Clean.Settings.Offline-Player.Priority-Order");
-        cleanAutoEnable = ConfigHandler.getConfig("config.yml").getBoolean("Clean.Settings.Auto-Clean.Enable");
-        cleanAutoDelay = ConfigHandler.getConfig("config.yml").getLong("Clean.Settings.Auto-Clean.Delay") * 20;
-        timeoutWarning = ConfigHandler.getConfig("config.yml").getBoolean("Clean.Settings.Timeout-Warning");
-        cleanConfig = ConfigHandler.getConfig("config.yml").getConfigurationSection("Clean.Control");
-        cleanMaxDataSize = ConfigHandler.getConfig("config.yml").getInt("Clean.Settings.Max-Clean-Per-Data");
-        cleanExpiryDay = ConfigHandler.getConfig("config.yml").getLong("Clean.Settings.Expiry-Days");
-        backupToZip = ConfigHandler.getConfig("config.yml").getBoolean("Clean.Settings.Backup.To-Zip");
-        cleanLogEnable = ConfigHandler.getConfig("config.yml").getBoolean("Clean.Settings.Log");
-        cleanRegionWorlds = ConfigHandler.getConfig("config.yml").getStringList("Clean.Control.Regions.Worlds");
-        cleanIgnoreRegions = ConfigHandler.getConfig("config.yml").getStringList("Clean.Control.Regions.Ignore-Regions");
-        cleanRegionBypassRes = ConfigHandler.getConfig("config.yml").getBoolean("Clean.Control.Regions.Residence-Bypass");
-        cleanMycmdIgnore = ConfigHandler.getConfig("config.yml").getStringList("Clean.Control.MyCommand.Ignore-Values");
-        cleanMycmdPlayers = ConfigHandler.getConfig("config.yml").getStringList("Clean.Control.MyCommand.Playerdatas");
-        cleanMycmdVars = ConfigHandler.getConfig("config.yml").getStringList("Clean.Control.MyCommand.Variables");
-        backupMode = ConfigHandler.getConfig("config.yml").getString("Clean.Settings.Backup.Mode");
-        backupFolderName = ConfigHandler.getConfig("config.yml").getString("Clean.Settings.Backup.Folder-Name");
-        backupCustomPath = ConfigHandler.getConfig("config.yml").getString("Clean.Settings.Backup.Custom-Path");
-        backupEnable = ConfigHandler.getConfig("config.yml").getBoolean("Clean.Settings.Backup.Enable");
-        for (String title : cleanConfig.getKeys(false)) {
-            if (ConfigHandler.getConfig("config.yml").getBoolean("Clean.Control." + title + ".Enable")) {
-                cleanList.add(title);
+        cleanAuto = ConfigHandler.getConfig("config.yml").getBoolean("Clean.Settings.Auto-Clean.Enable");
+        cleanConfig = ConfigHandler.getConfig("config.yml").getConfigurationSection("Clean.Groups");
+        cleanLog = ConfigHandler.getConfig("config.yml").getBoolean("Clean.Settings.Log");
+        cleanBackup = ConfigHandler.getConfig("config.yml").getBoolean("Clean.Settings.Backup.Enable");
+        cleanBackupPath = ConfigHandler.getConfig("config.yml").getString("Clean.Settings.Backup.Path");
+        cleanBackupZip = ConfigHandler.getConfig("config.yml").getBoolean("Clean.Settings.Backup.Zip");
+        CleanMap cleanMap;
+        for (String group : cleanConfig.getKeys(false)) {
+            if (!ConfigHandler.getConfig("config.yml").getBoolean("Clean.Groups." + group + ".Enable"))
+                continue;
+            cleanMap = new CleanMap();
+            cleanMap.setGroupName(group);
+            cleanMap.setExpiration(ConfigHandler.getConfig("config.yml").getInt("Clean.Groups." + group + ".Expiration"));
+            cleanMap.setBackup(ConfigHandler.getConfig("config.yml").getBoolean("Clean.Groups." + group + ".Backup"));
+            if (group.equals("Region")) {
+                cleanMap.setResidenceBypass(ConfigHandler.getConfig("config.yml").getBoolean("Clean.Groups." + group + ".Residence-Bypass"));
             }
-        }
-        for (String title : cleanList) {
-            cleanExpireTimeMap.put(title, ConfigHandler.getConfig("config.yml").getLong("Clean.Control." + title + ".Expiry-Days"));
-        }
-        for (String title : cleanList) {
-            if (!Arrays.asList("Logs", "Playerdata", "Advancements", "Stats", "Regions").contains(title)) {
-                if (ConfigHandler.getConfig("config.yml").getBoolean("Clean.Control." + title + ".Backup")) {
-                    backupList.add(title);
-                }
+            switch (group.toLowerCase()) {
+                case "region":
+                    cleanMap.setList(ConfigHandler.getConfig("config.yml").getStringList("Clean.Groups." + group + ".Worlds"));
+                    cleanMap.setIgnoreList(ConfigHandler.getConfig("config.yml").getStringList("Clean.Groups." + group + ".Ignore-Regions"));
+                    break;
+                case "mycommand":
+                    cleanMap.setList(ConfigHandler.getConfig("config.yml").getStringList("Clean.Groups." + group + ".Variable"));
+                    cleanMap.setIgnoreList(ConfigHandler.getConfig("config.yml").getStringList("Clean.Groups." + group + ".Ignore-Variable"));
+                    cleanMap.setList2(ConfigHandler.getConfig("config.yml").getStringList("Clean.Groups." + group + ".Playerdata"));
+                    cleanMap.setIgnoreList2(ConfigHandler.getConfig("config.yml").getStringList("Clean.Groups." + group + ".Ignore-Playerdata"));
+                    break;
             }
+            cleanProp.put(group, cleanMap);
         }
     }
 
-    private void setUpNick() {
+    //  ============================================== //
+    //         Nick Setter                             //
+    //  ============================================== //
+    private void setNick() {
         nick = ConfigHandler.getConfig("config.yml").getBoolean("Nick.Enable");
         nickLimit = ConfigHandler.getConfig("config.yml").getInt("Nick.Limits.Length");
         nickPure = ConfigHandler.getConfig("config.yml").getBoolean("Nick.Limits.Pure-Color");
@@ -193,7 +198,10 @@ public class ConfigPath {
         }
     }
 
-    private void setUpPlayerStatus() {
+    //  ============================================== //
+    //         Player Status Setter                    //
+    //  ============================================== //
+    private void setPlayerStatus() {
         playerStatus = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.Enable");
         if (!playerStatus) {
             return;
@@ -233,227 +241,144 @@ public class ConfigPath {
             }
         }
     }
+    //  ============================================== //
+    //         Data Convertor Setter                   //
+    //  ============================================== //
 
-    private void setUpMycmd() {
-        mycmd = ConfigHandler.getConfig("config.yml").getBoolean("MyCommand.Enable");
+    //  ============================================== //
+    //         Message Getter                          //
+    //  ============================================== //
+    public String getMsgTitle() {
+        return msgTitle;
     }
 
-    public static LocationUtils getLocationUtils() {
-        return locationUtils;
+    public String getMsgHelp() {
+        return msgHelp;
     }
 
-    public boolean isNick() {
-        return nick;
+    public String getMsgReload() {
+        return msgReload;
     }
 
-    public boolean isNickPure() {
-        return nickPure;
+    public String getMsgVersion() {
+        return msgVersion;
     }
 
-    public int getNickLimit() {
-        return nickLimit;
+    public String getMsgCmdClean() {
+        return msgCmdClean;
     }
 
-    public boolean isNickCMI() {
-        return nickCMI;
+    public String getMsgCmdNick() {
+        return msgCmdNick;
     }
 
-    public List<String> getNickBlackList() {
-        return nickBlackList;
+    public String getMsgCmdNickOther() {
+        return msgCmdNickOther;
     }
 
-    public boolean isNickCMIUpdate() {
-        return nickCMIUpdate;
+    public String getMsgNickInvalidLength() {
+        return msgNickInvalidLength;
     }
 
-    public boolean isNickEssentials() {
-        return nickEssentials;
+    public String getMsgNickInvalidLengthTarget() {
+        return msgNickInvalidLengthTarget;
     }
 
-    public boolean isNickNameTagEdit() {
-        return nickNameTagEdit;
+    public String getMsgNickInvalidNick() {
+        return msgNickInvalidNick;
     }
 
-    public Map<Integer, String> getNickGroupsMap() {
-        return nickGroupsMap;
+    public String getMsgNickInvalidNickTarget() {
+        return msgNickInvalidNickTarget;
     }
 
-    public Map<String, String> getNickColorsMap() {
-        return nickColorsMap;
+    public String getMsgNickInvalidColor() {
+        return msgNickInvalidColor;
     }
 
-    public List<String> getNickCommandOff() {
-        return nickCommandOff;
+    public String getMsgNickInvalidColorTarget() {
+        return msgNickInvalidColorTarget;
     }
 
-    public List<String> getNickCommandOn() {
-        return nickCommandOn;
+    public String getMsgNickInvalidColorInside() {
+        return msgNickInvalidColorInside;
     }
 
-    public String getNickCMIOff() {
-        return nickCMIOff;
+    public String getMsgNickInvalidColorInsideTarget() {
+        return msgNickInvalidColorInsideTarget;
     }
 
-    public String getNickCMIOn() {
-        return nickCMIOn;
+    public String getMsgNickChange() {
+        return msgNickChange;
     }
 
-    public String getNickEssOff() {
-        return nickEssOff;
+    public String getMsgNickChangeTarget() {
+        return msgNickChangeTarget;
     }
 
-    public String getNickEssOn() {
-        return nickEssOn;
+    public String getMsgNickClear() {
+        return msgNickClear;
     }
 
-    public String getNickGroupsDefault() {
-        return nickGroupsDefault;
+    public String getMsgNickClearTarget() {
+        return msgNickClearTarget;
     }
 
-    public String getNickNTEOffPrefix() {
-        return nickNTEOffPrefix;
+    public String getMsgNickChangeColor() {
+        return msgNickChangeColor;
     }
 
-    public String getNickNTEOffSuffix() {
-        return nickNTEOffSuffix;
+    public String getMsgNickChangeColorTarget() {
+        return msgNickChangeColorTarget;
     }
 
-    public String getNickNTEOnPrefix() {
-        return nickNTEOnPrefix;
-    }
-
-    public String getNickNTEOnSuffix() {
-        return nickNTEOnSuffix;
-    }
-
-    public Map<String, PlayerStatusMap> getPlayerStatusProp() {
-        return playerStatusProp;
-    }
-
-    public boolean isPlayerStatus() {
-        return playerStatus;
-    }
-
-    public boolean isPsLogin() {
-        return psLogin;
-    }
-
-    public boolean isPsWorldChange() {
-        return psWorldChange;
-    }
-
-    public boolean isPsSchdeule() {
-        return psSchdeule;
-    }
-
-    public int getPsSchdeuleInterval() {
-        return psSchdeuleInterval;
-    }
-
-
+    //  ============================================== //
+    //         Clean Getter                            //
+    //  ============================================== //
     public boolean isClean() {
         return clean;
     }
 
-    public List<String> getCleanPriority() {
-        return cleanPriority;
+    public boolean isCleanAuto() {
+        return cleanAuto;
     }
 
-    public int getCleanMaxDataSize() {
-        return cleanMaxDataSize;
+    public boolean isCleanLog() {
+        return cleanLog;
     }
 
-    public long getCleanExpiryDay() {
-        return cleanExpiryDay;
+    public boolean isCleanBackup() {
+        return cleanBackup;
+    }
+
+    public boolean isCleanBackupZip() {
+        return cleanBackupZip;
+    }
+
+    public String getCleanBackupPath() {
+        return cleanBackupPath;
     }
 
     public ConfigurationSection getCleanConfig() {
         return cleanConfig;
     }
 
-    public int getTimeoutTime() {
-        return timeoutTime;
+    public HashMap<String, CleanMap> getCleanProp() {
+        return cleanProp;
     }
 
-    public boolean isBackupEnable(String title) {
-        return backupList.contains(title);
-    }
 
-    public long getCleanAutoDelay() {
-        return cleanAutoDelay;
-    }
+    //  ============================================== //
+    //         Nick Getter                             //
+    //  ============================================== //
 
-    public boolean isTimeoutWarning() {
-        return timeoutWarning;
-    }
+    //  ============================================== //
+    //         Player Status Getter                    //
+    //  ============================================== //
 
-    public List<String> getCleanList() {
-        return cleanList;
-    }
-
-    public boolean isBackupToZip() {
-        return backupToZip;
-    }
-
-    public boolean isCleanLogEnable() {
-        return cleanLogEnable;
-    }
-
-    public List<String> getCleanRegionWorlds() {
-        return cleanRegionWorlds;
-    }
-
-    public List<String> getCleanIgnoreRegions() {
-        return cleanIgnoreRegions;
-    }
-
-    public boolean isCleanRegionBypassRes() {
-        return cleanRegionBypassRes;
-    }
-
-    public String getBackupCustomPath() {
-        return backupCustomPath;
-    }
-
-    public String getBackupFolderName() {
-        return backupFolderName;
-    }
-
-    public String getBackupMode() {
-        return backupMode;
-    }
-
-    public boolean isBackupEnable() {
-        return backupEnable;
-    }
-
-    public boolean isCleanAutoEnable() {
-        return cleanAutoEnable;
-    }
-
-    public HashMap<String, Long> getCleanExpireTimeMap() {
-        return cleanExpireTimeMap;
-    }
-
-    public List<String> getBackupList() {
-        return backupList;
-    }
-
-    public List<String> getCleanMycmdIgnore() {
-        return cleanMycmdIgnore;
-    }
-
-    public List<String> getCleanMycmdPlayers() {
-        return cleanMycmdPlayers;
-    }
-
-    public List<String> getCleanMycmdVars() {
-        return cleanMycmdVars;
-    }
-
-    public boolean isMycmd() {
-        return mycmd;
-    }
+    //  ============================================== //
+    //         Data Convertor Getter                   //
+    //  ============================================== //
 }
 
 

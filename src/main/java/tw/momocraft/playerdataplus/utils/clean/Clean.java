@@ -22,9 +22,7 @@ import org.bukkit.Location;
 import org.bukkit.scheduler.BukkitRunnable;
 import tw.momocraft.playerdataplus.PlayerdataPlus;
 import tw.momocraft.playerdataplus.handlers.ConfigHandler;
-import tw.momocraft.playerdataplus.handlers.PermissionsHandler;
 import tw.momocraft.playerdataplus.handlers.PlayerHandler;
-import tw.momocraft.playerdataplus.handlers.ServerHandler;
 
 import java.io.*;
 import java.nio.file.Files;

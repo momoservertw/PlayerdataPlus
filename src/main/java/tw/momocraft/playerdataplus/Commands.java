@@ -1,319 +1,136 @@
 package tw.momocraft.playerdataplus;
 
-import it.emmerrei.mycommand.MyCommand;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.entity.Player;
-import tw.momocraft.playerdataplus.PlayerStatus.PlayerStatusControl;
-import tw.momocraft.playerdataplus.handlers.*;
-import tw.momocraft.playerdataplus.utils.Language;
-import tw.momocraft.playerdataplus.utils.Nick;
-import tw.momocraft.playerdataplus.utils.Clean;
-
-import java.sql.SQLException;
+import tw.momocraft.coreplus.api.CorePlusAPI;
+import tw.momocraft.playerdataplus.handlers.ConfigHandler;
 
 public class Commands implements CommandExecutor {
 
     public boolean onCommand(final CommandSender sender, Command c, String l, String[] args) {
-        if (args.length == 0) {
-            if (PermissionsHandler.hasPermission(sender, "playerdataplus.use")) {
-                Language.dispatchMessage(sender, "");
-                Language.sendLangMessage("Message.PlayerdataPlus.Commands.title", sender, false);
-                if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.version")) {
-                    Language.dispatchMessage(sender, "&d&lPlayerdataPlus &e&lv" + PlayerdataPlus.getInstance().getDescription().getVersion() + "&8 - &fby Momocraft");
-                }
-                Language.sendLangMessage("Message.PlayerdataPlus.Commands.help", sender, false);
-                Language.dispatchMessage(sender, "");
+        int length = args.length;
+        if (length == 0) {
+            if (CorePlusAPI.getPlayerManager().hasPerm(sender, "playerdataplus.use")) {
+                CorePlusAPI.getLangManager().sendMsg(ConfigHandler.getPrefix(), sender,
+                        "");
+                CorePlusAPI.getLangManager().sendLangMsg(ConfigHandler.getPluginName(), ConfigHandler.getPrefix(),
+                        ConfigHandler.getConfigPath().getMsgTitle(), sender);
+                CorePlusAPI.getLangManager().sendMsg(ConfigHandler.getPrefix(), sender,
+                        "&f " + PlayerdataPlus.getInstance().getDescription().getName()
+                                + " &ev" + PlayerdataPlus.getInstance().getDescription().getVersion() + "  &8by Momocraft");
+                CorePlusAPI.getLangManager().sendLangMsg(ConfigHandler.getPluginName(), ConfigHandler.getPrefix(),
+                        ConfigHandler.getConfigPath().getMsgHelp(), sender);
+                CorePlusAPI.getLangManager().sendMsg(ConfigHandler.getPrefix(), sender, "");
             } else {
-                Language.sendLangMessage("Message.noPermission", sender);
+                CorePlusAPI.getLangManager().sendLangMsg(ConfigHandler.getPluginName(),
+                        ConfigHandler.getPrefix(), "Message.noPermission", sender);
             }
-            return true;
-        } else if (args.length == 1 && args[0].equalsIgnoreCase("help")) {
-            if (PermissionsHandler.hasPermission(sender, "playerdataplus.use")) {
-                Language.dispatchMessage(sender, "");
-                Language.sendLangMessage("Message.PlayerdataPlus.Commands.title", sender, false);
-                if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.version")) {
-                    Language.dispatchMessage(sender, "&d&lPlayerdataPlus &e&lv" + PlayerdataPlus.getInstance().getDescription().getVersion() + "&8 - &fby Momocraft");
-                }
-                if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.version")) {
-                    Language.sendLangMessage("Message.PlayerdataPlus.Commands.version", sender, false);
-                }
-                Language.sendLangMessage("Message.PlayerdataPlus.Commands.help", sender, false);
-                if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.reload")) {
-                    Language.sendLangMessage("Message.PlayerdataPlus.Commands.reload", sender, false);
-                }
-                if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.clean")) {
-                    Language.sendLangMessage("Message.PlayerdataPlus.Commands.clean", sender, false);
-                }
-                if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.nick")) {
-                    Language.sendLangMessage("Message.PlayerdataPlus.Commands.nick", sender, false);
-                    Language.sendLangMessage("Message.PlayerdataPlus.Commands.nickOff", sender, false);
-                }
-                if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.nick.other")) {
-                    Language.sendLangMessage("Message.PlayerdataPlus.Commands.nickOther", sender, false);
-                    Language.sendLangMessage("Message.PlayerdataPlus.Commands.nickOffOther", sender, false);
-                }
-                Language.dispatchMessage(sender, "");
-            } else {
-                Language.sendLangMessage("Message.noPermission", sender);
-            }
-            return true;
-        } else if (args.length == 1 && args[0].equalsIgnoreCase("reload")) {
-            if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.reload")) {
-                // working: close purge.Auto-Clean schedule
-                ConfigHandler.generateData(true);
-                Language.sendLangMessage("Message.configReload", sender);
-            } else {
-                Language.sendLangMessage("Message.noPermission", sender);
-            }
-            return true;
-        } else if (args.length == 1 && args[0].equalsIgnoreCase("version")) {
-            if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.version")) {
-                Language.dispatchMessage(sender, "&d&lPlayerdataPlus &e&lv" + PlayerdataPlus.getInstance().getDescription().getVersion() + "&8 - &fby Momocraft");
-                ConfigHandler.getUpdater().checkUpdates(sender);
-            } else {
-                Language.sendLangMessage("Message.noPermission", sender);
-            }
-            return true;
-        } else if (args.length == 2 && args[0].equalsIgnoreCase("playerstatus")) {
-            if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.playerstatus")) {
-                if (args[1].equalsIgnoreCase("start")) {
-                    if (PlayerStatusControl.isSchedule()) {
-                        ServerHandler.sendConsoleMessage("&cThe process of Fly-Status is still running!");
-                    } else {
-                        PlayerStatusControl.startSchedule();
-                    }
-                } else if (args[1].equalsIgnoreCase("stop")) {
-                    if (PlayerStatusControl.isSchedule()) {
-                        PlayerStatusControl.setSchedule(false);
-                        ServerHandler.sendConsoleMessage("&6The Fly-Status process after finished this checking.");
-                    } else {
-                        ServerHandler.sendConsoleMessage("&cThe process of Fly-Status isn't running now.");
-                    }
-                } else {
-                    Language.sendLangMessage("Message.unknownCommand", sender);
-                }
-            } else {
-                Language.sendLangMessage("Message.noPermission", sender);
-            }
-            return true;
-        } else if (args.length == 1 && args[0].equalsIgnoreCase("mycmdconvert")) {
-            if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.mycmdconvert")) {
-                if (ConfigHandler.getConfigPath().isMycmd()) {
-                    ServerHandler.sendConsoleMessage("&6Start converting MyCommand playerdata...");
-                    ConfigurationSection playerdatasConfig = ConfigHandler.getConfig("playerdata.yml").getConfigurationSection("");
-                    ConfigurationSection playerConfig;
-                    String value;
-                    if (playerdatasConfig != null) {
-                        for (String uuid : playerdatasConfig.getKeys(false)) {
-                            playerConfig = ConfigHandler.getConfig("playerdata.yml").getConfigurationSection(uuid);
-                            if (playerConfig != null) {
-                                for (String key : playerConfig.getKeys(false)) {
-                                    value = ConfigHandler.getConfig("playerdata.yml").getString(uuid + "." + key);
-                                    try {
-                                        ConfigHandler.getMySQLAPI().addValue(uuid, key, value);
-                                        ServerHandler.sendFeatureMessage("MyCommand MySQL-Convertor", uuid, "mysql", "continue", key + ": " + value,
-                                                new Throwable().getStackTrace()[0]);
-                                    } catch (SQLException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            } else {
-                                ServerHandler.sendConsoleMessage("&cCan not find \"playerdata.yml\" - " + uuid);
-                            }
-                        }
-                        ServerHandler.sendConsoleMessage("&6MyCommand convert process has ended.");
-                    } else {
-                        ServerHandler.sendConsoleMessage("&cCan not find \"playerdata.yml\".");
-                    }
-                } else {
-                    ServerHandler.sendConsoleMessage("&cFeatures for MyCommand is disabled. You need the enable it and restart the server");
-                }
-            } else {
-                Language.sendLangMessage("Message.noPermission", sender);
-            }
-            return true;
-        } else if (args.length == 1 && args[0].equalsIgnoreCase("clean")) {
-            if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.clean")) {
-                if (ConfigHandler.getConfigPath().isTimeoutWarning() && ConfigHandler.getConfigPath().getTimeoutTime() < 180) {
-                    ServerHandler.sendConsoleMessage("&cIf your \"timeout-time\" setting in spigot.yml is too low, it may cause the server to restart in the middle of cleaning.");
-                    ServerHandler.sendConsoleMessage("&cPlease set a higher number of seconds based on the number of server players, especially for the first time.");
-                    ServerHandler.sendConsoleMessage("&6Cleanup process has ended.");
-                    return true;
-                }
-                Clean purgeHandler = new Clean();
-                if (purgeHandler.getRun()) {
-                    ServerHandler.sendConsoleMessage("&cThe Cleanup process is still running! &8(Stop process: /pp clean stop)");
-                    return true;
-                }
-                purgeHandler.start(sender);
-                return true;
-            } else {
-                Language.sendLangMessage("Message.noPermission", sender);
-            }
-            return true;
-        } else if (args.length == 2 && args[0].equalsIgnoreCase("clean")) {
-            if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.clean")) {
-                if (ConfigHandler.getConfigPath().isTimeoutWarning() && ConfigHandler.getConfigPath().getTimeoutTime() < 180) {
-                    ServerHandler.sendConsoleMessage("&cIf your \"timeout-time\" setting in spigot.yml is too low, it may cause the server to restart in the middle of cleaning.");
-                    ServerHandler.sendConsoleMessage("&cPlease set a higher number of seconds based on the number of server players, especially for the first time.");
-                    ServerHandler.sendConsoleMessage("&6Cleanup process has ended.");
-                    return true;
-                }
-                Clean purgeHandler = new Clean();
-                if (purgeHandler.getRun()) {
-                    ServerHandler.sendConsoleMessage("&cThe Cleanup process is still running! &8(Stop process: /pp clean stop)");
-                    return true;
-                }
-                purgeHandler.start(sender, args[1]);
-            } else {
-                Language.sendLangMessage("Message.noPermission", sender);
-            }
-            return true;
-        } else if (args.length == 2 && args[0].equalsIgnoreCase("clean") && args[1].equalsIgnoreCase("stop")) {
-            if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.clean")) {
-
-                if (ConfigHandler.getConfigPath().isTimeoutWarning() && ConfigHandler.getConfigPath().getTimeoutTime() < 180) {
-                    ServerHandler.sendConsoleMessage("&cIf your \"timeout-time\" setting in spigot.yml is too low, it may cause the server to restart in the middle of cleaning.");
-                    ServerHandler.sendConsoleMessage("&cPlease set a higher number of seconds based on the number of server players, especially for the first time.");
-                    ServerHandler.sendConsoleMessage("&6Cleanup process has ended.");
-                    return true;
-                }
-                Clean purgeHandler = new Clean();
-                if (!purgeHandler.getRun()) {
-                    ServerHandler.sendConsoleMessage("&cThe Cleanup process isn't running now.");
-                    return true;
-                }
-                purgeHandler.setRun(false);
-            } else {
-                Language.sendLangMessage("Message.noPermission", sender);
-            }
-            return true;
-        } else if (args.length == 1 && args[0].equalsIgnoreCase("nick")) {
-            if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.nick.other")) {
-                Language.sendLangMessage("Message.PlayerdataPlus.Commands.nickOther", sender, false);
-                Language.sendLangMessage("Message.PlayerdataPlus.Commands.nickOffOther", sender, false);
-                return true;
-            } else if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.nick")) {
-                Language.sendLangMessage("Message.PlayerdataPlus.Commands.nick", sender, false);
-                Language.sendLangMessage("Message.PlayerdataPlus.Commands.nickOff", sender, false);
-                return true;
-            } else {
-                Language.sendLangMessage("Message.noPermission", sender);
-            }
-            return true;
-        } else if (args.length > 1 && args[0].equalsIgnoreCase("nick")) {
-            if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.nick")) {
-                if (ConfigHandler.getConfigPath().isNick()) {
-                    boolean bypass = false;
-                    boolean off = false;
-                    Player player = null;
-                    String nickColor = "";
-                    String nickName = "";
-                    String arg;
-                    for (int i = 1; i < args.length; i++) {
-                        arg = args[i];
-                        if (arg.equals("true") && !bypass) {
-                            if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.nick.bypass")) {
-                                bypass = true;
-                                continue;
-                            }
-                            Language.sendLangMessage("Message.noPermission", sender);
-                            return true;
-                        }
-                        if (arg.equals("off") && !off) {
-                            off = true;
-                            continue;
-                        }
-                        if (nickColor.equals("")) {
-                            nickColor = ConfigHandler.getColors().getColorCode(arg);
-                            if (!nickColor.equals("")) {
-                                if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.nick.color")) {
-                                    continue;
-                                }
-                                Language.sendLangMessage("Message.noPermission", sender);
-                                return true;
-                            }
-                        }
-                        if (player == null) {
-                            player = PlayerHandler.getPlayerString(arg);
-                            if (player != null) {
-                                if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.nick.bypass")) {
-                                    continue;
-                                }
-                                Language.sendLangMessage("Message.noPermission", sender);
-                                return true;
-                            }
-                        }
-                        if (nickName.equals("")) {
-                            nickName = arg;
-                            continue;
-                        }
-                        Language.sendLangMessage("Message.targetNotOnline", sender);
-                        return true;
-                    }
-                    if (!off) {
-                        if (!nickName.equals("")) {
-                            if (player != null) {
-                                if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.nick.other")) {
-                                    // <nick> [player]
-                                    if (nickColor.equals("")) {
-                                        nickColor = Nick.getDefaultColor(player);
-                                    }
-                                    Nick.setNick(sender, player, bypass, nickName, nickColor);
-                                    return true;
-                                }
-                            } else {
-                                // <nick>
-                                if (nickColor.equals("")) {
-                                    nickColor = Nick.getDefaultColor(sender);
-                                }
-                                Nick.setNick(sender, bypass, nickName, nickColor);
-                                return true;
-                            }
-                        } else {
-                            // <color> [player]
-                            if (player != null) {
-                                if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.nick.other")) {
-                                    if (nickColor.equals("")) {
-                                        nickColor = Nick.getDefaultColor(player);
-                                    }
-                                    Nick.setColor(sender, player, bypass, nickColor);
-                                    return true;
-                                }
-                            } else {
-                                // <color>
-                                if (nickColor.equals("")) {
-                                    Language.sendLangMessage("Message.PlayerdataPlus.Commands.nick", sender);
-                                    return true;
-                                }
-                                Nick.setColor(sender, bypass, nickColor);
-                                return true;
-                            }
-                        }
-                    } else {
-                        if (player != null) {
-                            // <off> [player]
-                            if (PermissionsHandler.hasPermission(sender, "playerdataplus.command.nick.other")) {
-                                Nick.setNickOff(sender, player);
-                                return true;
-                            }
-                        } else {
-                            // <off>
-                            Nick.setNickOff(sender);
-                            return true;
-                        }
-                    }
-                }
-            } else {
-                Language.sendLangMessage("Message.noPermission", sender);
-            }
-            return true;
-        } else {
-            Language.sendLangMessage("Message.unknownCommand", sender);
             return true;
         }
+        switch (args[0].toLowerCase()) {
+            case "help":
+                if (CorePlusAPI.getPlayerManager().hasPerm(sender, "playerdataplus.use")) {
+                    CorePlusAPI.getLangManager().sendMsg(ConfigHandler.getPrefix(), sender, "");
+                    CorePlusAPI.getLangManager().sendLangMsg(ConfigHandler.getPluginName(), ConfigHandler.getPrefix(),
+                            ConfigHandler.getConfigPath().getMsgTitle(), sender);
+                    CorePlusAPI.getLangManager().sendMsg(ConfigHandler.getPrefix(), sender,
+                            "&f " + PlayerdataPlus.getInstance().getDescription().getName()
+                                    + " &ev" + PlayerdataPlus.getInstance().getDescription().getVersion() + "  &8by Momocraft");
+                    CorePlusAPI.getLangManager().sendLangMsg(ConfigHandler.getPluginName(), ConfigHandler.getPrefix(),
+                            ConfigHandler.getConfigPath().getMsgHelp(), sender);
+                    if (CorePlusAPI.getPlayerManager().hasPerm(sender, "playerdataplus.command.reload")) {
+                        CorePlusAPI.getLangManager().sendLangMsg(ConfigHandler.getPluginName(), ConfigHandler.getPrefix(),
+                                ConfigHandler.getConfigPath().getMsgReload(), sender);
+                    }
+                    if (CorePlusAPI.getPlayerManager().hasPerm(sender, "playerdataplus.command.version")) {
+                        CorePlusAPI.getLangManager().sendLangMsg(ConfigHandler.getPluginName(), ConfigHandler.getPrefix(),
+                                ConfigHandler.getConfigPath().getMsgVersion(), sender);
+                    }
+                    CorePlusAPI.getLangManager().sendMsg(ConfigHandler.getPrefix(), sender, "");
+                } else {
+                    CorePlusAPI.getLangManager().sendLangMsg(ConfigHandler.getPluginName(), ConfigHandler.getPrefix(),
+                            "Message.noPermission", sender);
+                }
+                return true;
+            case "reload":
+                if (CorePlusAPI.getPlayerManager().hasPerm(sender, "playerdataplus.command.reload")) {
+                    ConfigHandler.generateData(true);
+                    CorePlusAPI.getLangManager().sendLangMsg(ConfigHandler.getPluginName(), ConfigHandler.getPrefix(),
+                            "Message.configReload", sender);
+                } else {
+                    CorePlusAPI.getLangManager().sendLangMsg(ConfigHandler.getPluginName(), ConfigHandler.getPrefix(),
+                            "Message.noPermission", sender);
+                }
+                return true;
+            case "version":
+                if (CorePlusAPI.getPlayerManager().hasPerm(sender, "playerdataplus.command.version")) {
+                    CorePlusAPI.getLangManager().sendMsg(ConfigHandler.getPrefix(), sender,
+                            "&f " + PlayerdataPlus.getInstance().getDescription().getName()
+                                    + " &ev" + PlayerdataPlus.getInstance().getDescription().getVersion() + "  &8by Momocraft");
+                    CorePlusAPI.getUpdateManager().check(ConfigHandler.getPluginName(), ConfigHandler.getPrefix(), sender,
+                            PlayerdataPlus.getInstance().getName(), PlayerdataPlus.getInstance().getDescription().getVersion(), true);
+                } else {
+                    CorePlusAPI.getLangManager().sendLangMsg(ConfigHandler.getPluginName(), ConfigHandler.getPrefix(),
+                            "Message.noPermission", sender);
+                }
+                return true;
+            case "clean":
+                if (CorePlusAPI.getPlayerManager().hasPerm(sender, "playerdataplus.command.clean")) {
+                    if (length == 2) {
+
+                    }
+                } else {
+                    CorePlusAPI.getLangManager().sendLangMsg(ConfigHandler.getPluginName(), ConfigHandler.getPrefix(),
+                            "Message.noPermission", sender);
+                }
+                return true;
+            case "nick":
+                if (CorePlusAPI.getPlayerManager().hasPerm(sender, "playerdataplus.command.nick")) {
+                    if (length == 3) {
+                        if (CorePlusAPI.getPlayerManager().hasPerm(sender, "playerdataplus.command.nick.other")) {
+                            //Nick.change()
+                        } else {
+                            CorePlusAPI.getLangManager().sendLangMsg(ConfigHandler.getPluginName(), ConfigHandler.getPrefix(),
+                                    "Message.noPermission", sender);
+                        }
+                    }
+                    CorePlusAPI.getLangManager().sendLangMsg(ConfigHandler.getPluginName(), ConfigHandler.getPrefix(),
+                            "Message.PlayerdataPlus.Commands.nick", sender);
+                    CorePlusAPI.getLangManager().sendLangMsg(ConfigHandler.getPluginName(), ConfigHandler.getPrefix(),
+                            "Message.PlayerdataPlus.Commands.nickOff", sender);
+                } else {
+                    CorePlusAPI.getLangManager().sendLangMsg(ConfigHandler.getPluginName(), ConfigHandler.getPrefix(),
+                            "Message.noPermission", sender);
+                }
+                return true;
+            case "playerstatus":
+                if (CorePlusAPI.getPlayerManager().hasPerm(sender, "playerdataplus.command.playerstatus")) {
+                    if (length == 3) {
+                        if (args[1].equals("start")) {
+
+                        } else if (args[1].equals("stop")) {
+
+                        }
+                    }
+                    CorePlusAPI.getLangManager().sendLangMsg(ConfigHandler.getPluginName(), ConfigHandler.getPrefix(),
+                            "Message.PlayerdataPlus.Commands.nickOff", sender);
+                } else {
+                    CorePlusAPI.getLangManager().sendLangMsg(ConfigHandler.getPluginName(), ConfigHandler.getPrefix(),
+                            "Message.noPermission", sender);
+                }
+                return true;
+            case "dataconvert":
+                if (CorePlusAPI.getPlayerManager().hasPerm(sender, "playerdataplus.command.dataconvert")) {
+
+                } else {
+                    CorePlusAPI.getLangManager().sendLangMsg(ConfigHandler.getPluginName(), ConfigHandler.getPrefix(),
+                            "Message.noPermission", sender);
+                }
+                return true;
+        }
+        CorePlusAPI.getLangManager().sendLangMsg(ConfigHandler.getPluginName(), ConfigHandler.getPrefix(),
+                "Message.unknownCommand", sender);
+        return true;
     }
 }

@@ -1,4 +1,4 @@
-package tw.momocraft.playerdataplus.utils;
+package tw.momocraft.playerdataplus;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -11,7 +11,6 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 import tw.momocraft.playerdataplus.handlers.ConfigHandler;
-import tw.momocraft.playerdataplus.handlers.PermissionsHandler;
 
 public class TabComplete implements TabCompleter {
 

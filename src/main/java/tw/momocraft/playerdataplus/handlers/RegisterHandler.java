@@ -14,13 +14,13 @@ public class RegisterHandler {
 
         if (ConfigHandler.getConfigPath().isPlayerStatus()) {
             if (ConfigHandler.getConfigPath().isPsLogin()) {
-                PlayerdataPlus.getInstance().getServer().getPluginManager().registerEvents(new PlayerJoin(), PlayerdataPlus.getInstance());
-                ServerHandler.sendFeatureMessage("Register-Event", "Player-Status", "FlyPlayerJoin", "continue",
+                PlayerdataPlus.getInstance().getServer().getPlugin().registerEvents(new PlayerJoin(), PlayerdataPlus.getInstance());
+                CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Register-Event", "Player-Status", "FlyPlayerJoin", "continue",
                         new Throwable().getStackTrace()[0]);
             }
             if (ConfigHandler.getConfigPath().isPsWorldChange()) {
-                PlayerdataPlus.getInstance().getServer().getPluginManager().registerEvents(new PlayerChangedWorld(), PlayerdataPlus.getInstance());
-                ServerHandler.sendFeatureMessage("Register-Event", "Player-Status", "FlyPlayerJoin", "continue",
+                PlayerdataPlus.getInstance().getServer().getPlugin().registerEvents(new PlayerChangedWorld(), PlayerdataPlus.getInstance());
+                CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Register-Event", "Player-Status", "FlyPlayerJoin", "continue",
                         new Throwable().getStackTrace()[0]);
             }
         }

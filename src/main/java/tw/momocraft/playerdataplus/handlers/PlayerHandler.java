@@ -45,7 +45,7 @@ public class PlayerHandler {
             switch (check) {
                 case "LuckPerms":
                     if (ConfigHandler.getDepends().LuckPermsEnabled()) {
-                        User luckUser = LuckPermsProvider.get().getUserManager().getUser(playerName).;
+                        User luckUser = LuckPermsProvider.get().getUser().getUser(playerName).;
                         if (luckUser != null) {
                             UUID playerUUID = luckUser.getUniqueId();
                             return Bukkit.getOfflinePlayer(playerUUID);
@@ -54,7 +54,7 @@ public class PlayerHandler {
                     break;
                 case "CMI":
                     if (ConfigHandler.getDepends().CMIEnabled()) {
-                        CMIUser cmiUser = CMI.getInstance().getPlayerManager().getUser(playerName);
+                        CMIUser cmiUser = CMI.getInstance().getPlayer().getUser(playerName);
                         if (cmiUser != null) {
                             UUID playerUUID = cmiUser.getUniqueId();
                             return Bukkit.getOfflinePlayer(playerUUID);
@@ -118,7 +118,7 @@ public class PlayerHandler {
             switch (check) {
                 case "LuckPerms":
                     if (ConfigHandler.getDepends().LuckPermsEnabled()) {
-                        User luckUser = LuckPermsProvider.get().getUserManager().getUser(playerName);
+                        User luckUser = LuckPermsProvider.get().getUser().getUser(playerName);
                         if (luckUser != null) {
                             return luckUser.getUniqueId();
                         }
@@ -126,7 +126,7 @@ public class PlayerHandler {
                     break;
                 case "CMI":
                     if (ConfigHandler.getDepends().CMIEnabled()) {
-                        CMIUser cmiUser = CMI.getInstance().getPlayerManager().getUser(playerName);
+                        CMIUser cmiUser = CMI.getInstance().getPlayer().getUser(playerName);
                         if (cmiUser != null) {
                             return cmiUser.getUniqueId();
                         }

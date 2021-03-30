@@ -45,7 +45,7 @@ public class PlayerJoin implements Listener {
                         }
                         // Checking Location.
                         if (!ConfigPath.getLocationUtils().checkLocation(loc, playerStatusMap.getLocMaps())) {
-                            ServerHandler.sendFeatureMessage("Player-Status." + groupName, "world-change", "Location", "continue", groupName,
+                            CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Player-Status." + groupName, "world-change", "Location", "continue", groupName,
                                     new Throwable().getStackTrace()[0]);
                             continue;
                         }
@@ -53,7 +53,7 @@ public class PlayerJoin implements Listener {
                         ignorePerms = playerStatusMap.getIgnorePerms();
                         if (!ignorePerms.isEmpty()) {
                             if (PlayerStatusControl.isPerms(player, ignorePerms)) {
-                                ServerHandler.sendFeatureMessage("Player-Status." + groupName, playerName, "World-Change", "bypass", "Permissions",
+                                CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Player-Status." + groupName, playerName, "World-Change", "bypass", "Permissions",
                                         new Throwable().getStackTrace()[0]);
                                 continue back;
                             }
@@ -61,7 +61,7 @@ public class PlayerJoin implements Listener {
                         // Checking Residence flag "Fly".
                         if (playerStatusMap.isFlyRes()) {
                             if (PlayerStatusControl.isFlyRes(player)) {
-                                ServerHandler.sendFeatureMessage("Player-Status." + groupName, playerName, "World-Change", "bypass", "Residence",
+                                CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Player-Status." + groupName, playerName, "World-Change", "bypass", "Residence",
                                         new Throwable().getStackTrace()[0]);
                                 continue back;
                             }
@@ -70,26 +70,26 @@ public class PlayerJoin implements Listener {
                         if (playerStatusMap.isFlyCMIC() || playerStatusMap.isFlyCMIT()) {
                             CMIUser user;
                             try {
-                                user = CMI.getInstance().getPlayerManager().getUser(player);
+                                user = CMI.getInstance().getPlayer().getUser(player);
                             } catch (Exception ex) {
                                 continue back;
                             }
                             if (PlayerStatusControl.isFlyCMI(user, playerStatusMap.isFlyCMIC(), playerStatusMap.isFlyCMIT())) {
-                                ServerHandler.sendFeatureMessage("Player-Status." + groupName, playerName, "World-Change", "bypass", "CMIFlyC",
+                                CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Player-Status." + groupName, playerName, "World-Change", "bypass", "CMIFlyC",
                                         new Throwable().getStackTrace()[0]);
                                 continue back;
                             }
                         }
                         // Cancel
                         player.setFlying(false);
-                        ServerHandler.sendFeatureMessage("Player-Status." + groupName, playerName, "World-Change", "cancel", "final",
+                        CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Player-Status." + groupName, playerName, "World-Change", "cancel", "final",
                                 new Throwable().getStackTrace()[0]);
                         continue back;
                     case "god":
                         // Getting the CMi user.
                         CMIUser user;
                         try {
-                            user = CMI.getInstance().getPlayerManager().getUser(player);
+                            user = CMI.getInstance().getPlayer().getUser(player);
                         } catch (Exception ex) {
                             continue back;
                         }
@@ -99,7 +99,7 @@ public class PlayerJoin implements Listener {
                         }
                         // Checking Location.
                         if (!ConfigPath.getLocationUtils().checkLocation(loc, playerStatusMap.getLocMaps())) {
-                            ServerHandler.sendFeatureMessage("Player-Status." + groupName, "world-change", "Location", "continue", groupName,
+                            CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Player-Status." + groupName, "world-change", "Location", "continue", groupName,
                                     new Throwable().getStackTrace()[0]);
                             continue;
                         }
@@ -107,7 +107,7 @@ public class PlayerJoin implements Listener {
                         ignorePerms = playerStatusMap.getIgnorePerms();
                         if (!ignorePerms.isEmpty()) {
                             if (PlayerStatusControl.isPerms(player, ignorePerms)) {
-                                ServerHandler.sendFeatureMessage("Player-Status." + groupName, playerName, "World-Change", "bypass", "Permissions",
+                                CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Player-Status." + groupName, playerName, "World-Change", "bypass", "Permissions",
                                         new Throwable().getStackTrace()[0]);
                                 continue back;
                             }
@@ -115,14 +115,14 @@ public class PlayerJoin implements Listener {
                         // Checking cmi "tgod".
                         if (playerStatusMap.isGodCMIT()) {
                             if (PlayerStatusControl.isGodCMI(user)) {
-                                ServerHandler.sendFeatureMessage("Player-Status." + groupName, playerName, "World-Change", "bypass", "CMIGodT",
+                                CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Player-Status." + groupName, playerName, "World-Change", "bypass", "CMIGodT",
                                         new Throwable().getStackTrace()[0]);
                                 continue back;
                             }
                         }
                         // Cancel
                         user.setGod(false);
-                        ServerHandler.sendFeatureMessage("Player-Status." + groupName, playerName, "World-Change", "cancel", "final",
+                        CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Player-Status." + groupName, playerName, "World-Change", "cancel", "final",
                                 new Throwable().getStackTrace()[0]);
                         return;
                     case "op":
@@ -132,7 +132,7 @@ public class PlayerJoin implements Listener {
                         }
                         // Checking Location.
                         if (!ConfigPath.getLocationUtils().checkLocation(loc, playerStatusMap.getLocMaps())) {
-                            ServerHandler.sendFeatureMessage("Player-Status." + groupName, "world-change", "Location", "continue", groupName,
+                            CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Player-Status." + groupName, "world-change", "Location", "continue", groupName,
                                     new Throwable().getStackTrace()[0]);
                             continue;
                         }
@@ -140,14 +140,14 @@ public class PlayerJoin implements Listener {
                         ignorePerms = playerStatusMap.getIgnorePerms();
                         if (!ignorePerms.isEmpty()) {
                             if (PlayerStatusControl.isPerms(player, ignorePerms)) {
-                                ServerHandler.sendFeatureMessage("Player-Status." + groupName, playerName, "World-Change", "bypass", "Permissions",
+                                CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Player-Status." + groupName, playerName, "World-Change", "bypass", "Permissions",
                                         new Throwable().getStackTrace()[0]);
                                 continue back;
                             }
                         }
                         // Cancel
                         player.setOp(false);
-                        ServerHandler.sendFeatureMessage("Player-Status." + groupName, playerName, "World-Change", "cancel", "final",
+                        CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Player-Status." + groupName, playerName, "World-Change", "cancel", "final",
                                 new Throwable().getStackTrace()[0]);
                         continue back;
                     case "gamemode-survival":
@@ -160,7 +160,7 @@ public class PlayerJoin implements Listener {
                         }
                         // Checking Location.
                         if (!ConfigPath.getLocationUtils().checkLocation(loc, playerStatusMap.getLocMaps())) {
-                            ServerHandler.sendFeatureMessage("Player-Status." + groupName, "world-change", "Location", "continue", groupName,
+                            CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Player-Status." + groupName, "world-change", "Location", "continue", groupName,
                                     new Throwable().getStackTrace()[0]);
                             continue;
                         }
@@ -168,14 +168,14 @@ public class PlayerJoin implements Listener {
                         ignorePerms = playerStatusMap.getIgnorePerms();
                         if (!ignorePerms.isEmpty()) {
                             if (PlayerStatusControl.isPerms(player, ignorePerms)) {
-                                ServerHandler.sendFeatureMessage("Player-Status." + groupName, playerName, "World-Change", "bypass", "Permissions",
+                                CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Player-Status." + groupName, playerName, "World-Change", "bypass", "Permissions",
                                         new Throwable().getStackTrace()[0]);
                                 continue back;
                             }
                         }
                         // Cancel
                         player.setGameMode(GameMode.valueOf(playerStatusMap.getGmDefault().toUpperCase()));
-                        ServerHandler.sendFeatureMessage("Player-Status." + groupName, playerName, "World-Change", "cancel", "final",
+                        CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Player-Status." + groupName, playerName, "World-Change", "cancel", "final",
                                 new Throwable().getStackTrace()[0]);
                         continue back;
                     default:

@@ -23,52 +23,52 @@ public class DependAPI {
 
     public DependAPI() {
         if (ConfigHandler.getConfig("config.yml").getBoolean("General.Settings.Features.Hook.Vault")) {
-            this.setVaultStatus(Bukkit.getServer().getPluginManager().getPlugin("Vault") != null);
+            this.setVaultStatus(Bukkit.getServer().getPlugin().getPlugin("Vault") != null);
             if (Vault) {
                 setVaultApi();
             }
         }
         if (ConfigHandler.getConfig("config.yml").getBoolean("General.Settings.Features.Hook.PlaceHolderAPI")) {
-            this.setPlaceHolderStatus(Bukkit.getServer().getPluginManager().getPlugin("PlaceHolderAPI") != null);
+            this.setPlaceHolderStatus(Bukkit.getServer().getPlugin().getPlugin("PlaceHolderAPI") != null);
         }
         if (ConfigHandler.getConfig("config.yml").getBoolean("General.Settings.Features.Hook.Residence")) {
-            this.setResidenceStatus(Bukkit.getServer().getPluginManager().getPlugin("Residence") != null);
+            this.setResidenceStatus(Bukkit.getServer().getPlugin().getPlugin("Residence") != null);
         }
         if (ConfigHandler.getConfig("config.yml").getBoolean("General.Settings.Features.Hook.CMI")) {
-            this.setCMIStatus(Bukkit.getServer().getPluginManager().getPlugin("CMI") != null);
+            this.setCMIStatus(Bukkit.getServer().getPlugin().getPlugin("CMI") != null);
         }
         if (ConfigHandler.getConfig("config.yml").getBoolean("General.Settings.Features.Hook.MySQLPlayerDataBridge")) {
-            this.setMySQLPlayerDataBridgeStatus(Bukkit.getServer().getPluginManager().getPlugin("MySQLPlayerDataBridge") != null);
+            this.setMySQLPlayerDataBridgeStatus(Bukkit.getServer().getPlugin().getPlugin("MySQLPlayerDataBridge") != null);
         }
         if (ConfigHandler.getConfig("config.yml").getBoolean("General.Settings.Features.Hook.SkinsRestorer")) {
-            this.setSkinsRestorerStatus(Bukkit.getServer().getPluginManager().getPlugin("SkinsRestorer") != null);
+            this.setSkinsRestorerStatus(Bukkit.getServer().getPlugin().getPlugin("SkinsRestorer") != null);
         }
         if (ConfigHandler.getConfig("config.yml").getBoolean("General.Settings.Features.Hook.DiscordSRV")) {
-            this.setDiscordSRVStatus(Bukkit.getServer().getPluginManager().getPlugin("DiscordSRV") != null);
+            this.setDiscordSRVStatus(Bukkit.getServer().getPlugin().getPlugin("DiscordSRV") != null);
         }
         if (ConfigHandler.getConfig("config.yml").getBoolean("General.Settings.Features.Hook.LuckPerms")) {
-            this.setLuckPermsStatus(Bukkit.getServer().getPluginManager().getPlugin("LuckPerms") != null);
+            this.setLuckPermsStatus(Bukkit.getServer().getPlugin().getPlugin("LuckPerms") != null);
         }
         if (ConfigHandler.getConfig("config.yml").getBoolean("General.Settings.Features.Hook.MyPet")) {
-            this.setMyPetStatus(Bukkit.getServer().getPluginManager().getPlugin("MyPet") != null);
+            this.setMyPetStatus(Bukkit.getServer().getPlugin().getPlugin("MyPet") != null);
         }
         if (ConfigHandler.getConfig("config.yml").getBoolean("General.Settings.Features.Hook.AuthMe")) {
-            this.setAuthMeStatus(Bukkit.getServer().getPluginManager().getPlugin("AuthMe") != null);
+            this.setAuthMeStatus(Bukkit.getServer().getPlugin().getPlugin("AuthMe") != null);
         }
         if (ConfigHandler.getConfig("config.yml").getBoolean("General.Settings.Features.Hook.NameTagEdit")) {
-            this.setNameTagEditStatus(Bukkit.getServer().getPluginManager().getPlugin("NameTagEdit") != null);
+            this.setNameTagEditStatus(Bukkit.getServer().getPlugin().getPlugin("NameTagEdit") != null);
         }
         if (ConfigHandler.getConfig("config.yml").getBoolean("General.Settings.Features.Hook.Essentials")) {
-            this.setEssentialsStatus(Bukkit.getServer().getPluginManager().getPlugin("Essentials") != null);
+            this.setEssentialsStatus(Bukkit.getServer().getPlugin().getPlugin("Essentials") != null);
         }
         if (ConfigHandler.getConfig("config.yml").getBoolean("General.Settings.Features.Hook.MultiverseCore")) {
-            this.setMultiverseCoreStatus(Bukkit.getServer().getPluginManager().getPlugin("MultiverseCore") != null);
+            this.setMultiverseCoreStatus(Bukkit.getServer().getPlugin().getPlugin("MultiverseCore") != null);
         }
         if (ConfigHandler.getConfig("config.yml").getBoolean("General.Settings.Features.Hook.PlayerPoints")) {
-            this.setPlayerPointsStatus(Bukkit.getServer().getPluginManager().getPlugin("PlayerPoints") != null);
+            this.setPlayerPointsStatus(Bukkit.getServer().getPlugin().getPlugin("PlayerPoints") != null);
         }
         if (ConfigHandler.getConfig("config.yml").getBoolean("General.Settings.Features.Hook.MyCommand")) {
-            this.setMyCommandStatus(Bukkit.getServer().getPluginManager().getPlugin("MyCommand") != null);
+            this.setMyCommandStatus(Bukkit.getServer().getPlugin().getPlugin("MyCommand") != null);
         }
 
         sendUtilityDepends();

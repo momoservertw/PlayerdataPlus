@@ -23,7 +23,7 @@ public class ConfigHandler {
         genConfigFile("config.yml");
         setConfigPath(new ConfigPath());
         if (!reload) {
-            CorePlusAPI.getUpdateManager().check(getPluginName(), getPluginPrefix(), Bukkit.getConsoleSender(),
+            CorePlusAPI.getUpdate().check(getPluginName(), getPluginPrefix(), Bukkit.getConsoleSender(),
                     PlayerdataPlus.getInstance().getDescription().getName(),
                     PlayerdataPlus.getInstance().getDescription().getVersion(), true);
         }
@@ -50,7 +50,7 @@ public class ConfigHandler {
             try {
                 PlayerdataPlus.getInstance().saveResource(fileName, false);
             } catch (Exception e) {
-                CorePlusAPI.getLangManager().sendErrorMsg(getPluginName(), "&cCannot save " + fileName + " to disk!");
+                CorePlusAPI.getLang().sendErrorMsg(getPluginName(), "&cCannot save " + fileName + " to disk!");
                 return;
             }
         }
@@ -96,7 +96,7 @@ public class ConfigHandler {
                     File configFile = new File(filePath, fileName);
                     configFile.delete();
                     getConfigData(filePath, fileName);
-                    CorePlusAPI.getLangManager().sendConsoleMsg(getPrefix(), "&4The file \"" + fileName + "\" is out of date, generating a new one!");
+                    CorePlusAPI.getLang().sendConsoleMsg(getPrefix(), "&4The file \"" + fileName + "\" is out of date, generating a new one!");
                 }
             }
         }

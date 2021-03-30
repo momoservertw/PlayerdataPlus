@@ -91,13 +91,13 @@ public class UserConvert {
             CMIUser user1;
             CMIUser user2;
             try {
-                user1 = CMI.getInstance().getPlayerManager().getUser(name1);
+                user1 = CMI.getInstance().getPlayer().getUser(name1);
             } catch (Exception e) {
                 ServerHandler.sendConsoleMessage("&cCan not find CMI user \"" + name1 + "\"!");
                 return;
             }
             try {
-                user2 = CMI.getInstance().getPlayerManager().getUser(name2);
+                user2 = CMI.getInstance().getPlayer().getUser(name2);
             } catch (Exception e) {
                 ServerHandler.sendConsoleMessage("&cCan not find CMI user \"" + name2 + "\"!");
                 return;
@@ -120,8 +120,8 @@ public class UserConvert {
      */
     private void convertResidence(String name1, String name2, boolean replace) {
         if (ConfigHandler.getDepends().ResidenceEnabled()) {
-            ResidencePlayer resPlayer1 = Residence.getInstance().getPlayerManager().getResidencePlayer(name1);
-            ResidencePlayer resPlayer2 = Residence.getInstance().getPlayerManager().getResidencePlayer(name2);
+            ResidencePlayer resPlayer1 = Residence.getInstance().getPlayer().getResidencePlayer(name1);
+            ResidencePlayer resPlayer2 = Residence.getInstance().getPlayer().getResidencePlayer(name2);
             if (replace) {
                 for (ClaimedResidence residence : resPlayer2.getResList()) {
                     resPlayer2.removeResidence(residence);

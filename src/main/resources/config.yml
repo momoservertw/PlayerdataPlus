@@ -13,14 +13,12 @@ Nick:
     # Auto update the nick from database when player joined the game.
     # Need to setup the MySQL settings in CorePlus/config.yml
     Auto-Update: true
-  # The rule of nicks.
   Limits:
-    # The input custom nick length. It does not include the regular formats in the configuration.
-    # Permission: playerdataplus.nick.length.NUMBER |  playerdataplus.bypass.nick.length
+    # Permission: playerdataplus.nick.length.NUMBER | playerdataplus.bypass.nick.length
     Length: 8
     # Prevent players input any color code in their nicks.
-    # Permission: playerdataplus.nick.purecolor
-    Pure-Color: true
+    # Bypass permission: playerdataplus.bypass.nick.colorcode
+    Prevent-Color-Code: true
     # Prevent players input some bad words in their nicks. Support regular expression.
     # Bypass permission: playerdataplus.bypass.nick.blacklist
     Black-List:

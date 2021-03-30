@@ -10,6 +10,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import tw.momocraft.coreplus.api.CorePlusAPI;
 import tw.momocraft.playerdataplus.PlayerdataPlus;
 import tw.momocraft.playerdataplus.handlers.ConfigHandler;
 import tw.momocraft.playerdataplus.utils.ConfigPath;
@@ -56,7 +57,8 @@ public class PlayerStatusControl {
                                     }
                                     // Checking Location.
                                     if (!ConfigPath.getLocationUtils().checkLocation(loc, playerStatusMap.getLocMaps())) {
-                                        ServerHandler.sendFeatureMessage("Player-Status." + groupName, "world-change", "Location", "continue", groupName,
+                                        CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(),
+                                                "Player-Status." + groupName, "world-change", "Location", "continue", groupName,
                                                 new Throwable().getStackTrace()[0]);
                                         continue;
                                     }
@@ -64,7 +66,7 @@ public class PlayerStatusControl {
                                     ignorePerms = playerStatusMap.getIgnorePerms();
                                     if (!ignorePerms.isEmpty()) {
                                         if (isPerms(player, ignorePerms)) {
-                                            ServerHandler.sendFeatureMessage("Player-Status." + groupName, playerName, "World-Change", "bypass", "Permissions",
+                                            CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Player-Status." + groupName, playerName, "World-Change", "bypass", "Permissions",
                                                     new Throwable().getStackTrace()[0]);
                                             continue back;
                                         }
@@ -72,7 +74,7 @@ public class PlayerStatusControl {
                                     // Checking Residence flag "Fly".
                                     if (playerStatusMap.isFlyRes()) {
                                         if (isFlyRes(player)) {
-                                            ServerHandler.sendFeatureMessage("Player-Status." + groupName, playerName, "World-Change", "bypass", "Residence",
+                                            CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Player-Status." + groupName, playerName, "World-Change", "bypass", "Residence",
                                                     new Throwable().getStackTrace()[0]);
                                             continue back;
                                         }
@@ -81,26 +83,26 @@ public class PlayerStatusControl {
                                     if (playerStatusMap.isFlyCMIC() || playerStatusMap.isFlyCMIT()) {
                                         CMIUser user;
                                         try {
-                                            user = CMI.getInstance().getPlayerManager().getUser(player);
+                                            user = CMI.getInstance().getPlayer().getUser(player);
                                         } catch (Exception ex) {
                                             continue back;
                                         }
                                         if (isFlyCMI(user, playerStatusMap.isFlyCMIC(), playerStatusMap.isFlyCMIT())) {
-                                            ServerHandler.sendFeatureMessage("Player-Status." + groupName, playerName, "World-Change", "bypass", "CMIFlyC",
+                                            CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Player-Status." + groupName, playerName, "World-Change", "bypass", "CMIFlyC",
                                                     new Throwable().getStackTrace()[0]);
                                             continue back;
                                         }
                                     }
                                     // Cancel
                                     player.setFlying(false);
-                                    ServerHandler.sendFeatureMessage("Player-Status." + groupName, playerName, "World-Change", "cancel", "final",
+                                    CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Player-Status." + groupName, playerName, "World-Change", "cancel", "final",
                                             new Throwable().getStackTrace()[0]);
                                     continue back;
                                 case "god":
                                     // Getting the CMi user.
                                     CMIUser user;
                                     try {
-                                        user = CMI.getInstance().getPlayerManager().getUser(player);
+                                        user = CMI.getInstance().getPlayer().getUser(player);
                                     } catch (Exception ex) {
                                         continue back;
                                     }
@@ -110,7 +112,7 @@ public class PlayerStatusControl {
                                     }
                                     // Checking Location.
                                     if (!ConfigPath.getLocationUtils().checkLocation(loc, playerStatusMap.getLocMaps())) {
-                                        ServerHandler.sendFeatureMessage("Player-Status." + groupName, "world-change", "Location", "continue", groupName,
+                                        CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Player-Status." + groupName, "world-change", "Location", "continue", groupName,
                                                 new Throwable().getStackTrace()[0]);
                                         continue;
                                     }
@@ -118,7 +120,7 @@ public class PlayerStatusControl {
                                     ignorePerms = playerStatusMap.getIgnorePerms();
                                     if (!ignorePerms.isEmpty()) {
                                         if (isPerms(player, ignorePerms)) {
-                                            ServerHandler.sendFeatureMessage("Player-Status." + groupName, playerName, "World-Change", "bypass", "Permissions",
+                                            CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Player-Status." + groupName, playerName, "World-Change", "bypass", "Permissions",
                                                     new Throwable().getStackTrace()[0]);
                                             continue back;
                                         }
@@ -126,14 +128,14 @@ public class PlayerStatusControl {
                                     // Checking cmi "tgod".
                                     if (playerStatusMap.isGodCMIT()) {
                                         if (isGodCMI(user)) {
-                                            ServerHandler.sendFeatureMessage("Player-Status." + groupName, playerName, "World-Change", "bypass", "CMIGodT",
+                                            CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Player-Status." + groupName, playerName, "World-Change", "bypass", "CMIGodT",
                                                     new Throwable().getStackTrace()[0]);
                                             continue back;
                                         }
                                     }
                                     // Cancel
                                     user.setGod(false);
-                                    ServerHandler.sendFeatureMessage("Player-Status." + groupName, playerName, "World-Change", "cancel", "final",
+                                    CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Player-Status." + groupName, playerName, "World-Change", "cancel", "final",
                                             new Throwable().getStackTrace()[0]);
                                     return;
                                 case "op":
@@ -143,7 +145,7 @@ public class PlayerStatusControl {
                                     }
                                     // Checking Location.
                                     if (!ConfigPath.getLocationUtils().checkLocation(loc, playerStatusMap.getLocMaps())) {
-                                        ServerHandler.sendFeatureMessage("Player-Status." + groupName, "world-change", "Location", "continue", groupName,
+                                        CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Player-Status." + groupName, "world-change", "Location", "continue", groupName,
                                                 new Throwable().getStackTrace()[0]);
                                         continue;
                                     }
@@ -151,14 +153,14 @@ public class PlayerStatusControl {
                                     ignorePerms = playerStatusMap.getIgnorePerms();
                                     if (!ignorePerms.isEmpty()) {
                                         if (isPerms(player, ignorePerms)) {
-                                            ServerHandler.sendFeatureMessage("Player-Status." + groupName, playerName, "World-Change", "bypass", "Permissions",
+                                            CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Player-Status." + groupName, playerName, "World-Change", "bypass", "Permissions",
                                                     new Throwable().getStackTrace()[0]);
                                             continue back;
                                         }
                                     }
                                     // Cancel
                                     player.setOp(false);
-                                    ServerHandler.sendFeatureMessage("Player-Status." + groupName, playerName, "World-Change", "cancel", "final",
+                                    CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Player-Status." + groupName, playerName, "World-Change", "cancel", "final",
                                             new Throwable().getStackTrace()[0]);
                                     continue back;
                                 case "gamemode-survival":
@@ -171,7 +173,7 @@ public class PlayerStatusControl {
                                     }
                                     // Checking Location.
                                     if (!ConfigPath.getLocationUtils().checkLocation(loc, playerStatusMap.getLocMaps())) {
-                                        ServerHandler.sendFeatureMessage("Player-Status." + groupName, "world-change", "Location", "continue", groupName,
+                                        CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Player-Status." + groupName, "world-change", "Location", "continue", groupName,
                                                 new Throwable().getStackTrace()[0]);
                                         continue;
                                     }
@@ -179,14 +181,14 @@ public class PlayerStatusControl {
                                     ignorePerms = playerStatusMap.getIgnorePerms();
                                     if (!ignorePerms.isEmpty()) {
                                         if (isPerms(player, ignorePerms)) {
-                                            ServerHandler.sendFeatureMessage("Player-Status." + groupName, playerName, "World-Change", "bypass", "Permissions",
+                                            CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Player-Status." + groupName, playerName, "World-Change", "bypass", "Permissions",
                                                     new Throwable().getStackTrace()[0]);
                                             continue back;
                                         }
                                     }
                                     // Cancel
                                     player.setGameMode(GameMode.valueOf(playerStatusMap.getGmDefault().toUpperCase()));
-                                    ServerHandler.sendFeatureMessage("Player-Status." + groupName, playerName, "World-Change", "cancel", "final",
+                                    CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Player-Status." + groupName, playerName, "World-Change", "cancel", "final",
                                             new Throwable().getStackTrace()[0]);
                                     continue back;
                                 default:
@@ -220,7 +222,7 @@ public class PlayerStatusControl {
     }
 
     public static boolean isFlyRes(Player player) {
-        ClaimedResidence res = Residence.getInstance().getResidenceManager().getByLoc(player);
+        ClaimedResidence res = Residence.getInstance().getResidence().getByLoc(player);
         if (res != null) {
             return res.getPermissions().playerHas(player, Flags.fly, false);
         }

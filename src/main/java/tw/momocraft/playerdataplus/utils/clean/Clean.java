@@ -65,7 +65,7 @@ public class Clean {
         run = true;
         ConfigurationSection cleanConfig = ConfigHandler.getConfigPath().getCleanConfig();
         if (cleanConfig != null) {
-            lastLoginMap = CorePlusAPI.getPlayerManager().getLastLoginMap();
+            lastLoginMap = CorePlusAPI.getPlayer().getLastLoginMap();
             setCleanMap(cleanConfig);
             new BukkitRunnable() {
                 @Override
@@ -78,31 +78,31 @@ public class Clean {
                 @Override
                 public void run() {
                     boolean restart = false;
-                    CorePlusAPI.getLangManager().sendMsg(ConfigHandler.getPrefix(), sender,
+                    CorePlusAPI.getLang().sendMsg(ConfigHandler.getPrefix(), sender,
                             "&6Starting to clean the expired data...");
                     cleanMap = HashBasedTable.create();
                     cleanManager(title);
                     if (!cleanMap.isEmpty()) {
-                        backupManager();
+                        backup();
                     } else {
-                        CorePlusAPI.getLangManager().sendMsg(ConfigHandler.getPrefix(), sender,
+                        CorePlusAPI.getLang().sendMsg(ConfigHandler.getPrefix(), sender,
                                 "&6There has no any expired data!");
                         cancel();
                     }
                     if (restart) {
-                        CorePlusAPI.getLangManager().sendMsg(ConfigHandler.getPrefix(), sender,
+                        CorePlusAPI.getLang().sendMsg(ConfigHandler.getPrefix(), sender,
                                 "&eCleanup process has not finished yet! &8- &6" + title);
-                        CorePlusAPI.getLangManager().sendMsg(ConfigHandler.getPrefix(), sender, "");
+                        CorePlusAPI.getLang().sendMsg(ConfigHandler.getPrefix(), sender, "");
                     } else {
                         cancel();
                     }
                 }
             }.runTaskTimer(PlayerdataPlus.getInstance(), 0, 60L);
-            CorePlusAPI.getLangManager().sendMsg(ConfigHandler.getPrefix(), sender,
+            CorePlusAPI.getLang().sendMsg(ConfigHandler.getPrefix(), sender,
                     "&6Cleanup process has ended.");
             return;
         }
-        CorePlusAPI.getLangManager().sendMsg(ConfigHandler.getPrefix(), sender,
+        CorePlusAPI.getLang().sendMsg(ConfigHandler.getPrefix(), sender,
                 "&6There has no any expired data!");
     }
 
@@ -150,7 +150,7 @@ public class Clean {
         int expiration = ConfigHandler.getConfigPath().getCleanProp().get("AuthMe").getExpiration();
         List<String> list = new ArrayList<>();
         Map<UUID, CMIUser> userMap = AuthMeApi.getInstance().getPlayerInfo("").get().getLastLoginDate();
-        Map<String, Long> lastLoginMap = CorePlusAPI.getPlayerManager().getLastLoginMap();
+        Map<String, Long> lastLoginMap = CorePlusAPI.getPlayer().getLastLoginMap();
         for (UUID uuid : userMap.keySet()) {
             if (lastLoginMap.get(uuid.toString()) > expiration) {
                 list.add(uuid.toString());
@@ -162,8 +162,8 @@ public class Clean {
     private List<String> getDiscordSRVList() {
         int expiration = ConfigHandler.getConfigPath().getCleanProp().get("DiscordSRV").getExpiration();
         List<String> list = new ArrayList<>();
-        Map<UUID, CMIUser> userMap = DiscordUtil.get.getInstance().getPlayerManager().getAllUsers();
-        Map<String, Long> lastLoginMap = CorePlusAPI.getPlayerManager().getLastLoginMap();
+        Map<UUID, CMIUser> userMap = DiscordUtil.getInstance().getPlayer().getAllUsers();
+        Map<String, Long> lastLoginMap = CorePlusAPI.getPlayer().getLastLoginMap();
         for (UUID uuid : userMap.keySet()) {
             if (lastLoginMap.get(uuid.toString()) > expiration) {
                 list.add(uuid.toString());
@@ -175,8 +175,8 @@ public class Clean {
     private List<String> getCMIExpiredList() {
         int expiration = ConfigHandler.getConfigPath().getCleanProp().get("CMI").getExpiration();
         List<String> list = new ArrayList<>();
-        Map<UUID, CMIUser> userMap = CMI.getInstance().getPlayerManager().getAllUsers();
-        Map<String, Long> lastLoginMap = CorePlusAPI.getPlayerManager().getLastLoginMap();
+        Map<UUID, CMIUser> userMap = CMI.getInstance().getPlayer().getAllUsers();
+        Map<String, Long> lastLoginMap = CorePlusAPI.getPlayer().getLastLoginMap();
         for (UUID uuid : userMap.keySet()) {
             if (lastLoginMap.get(uuid.toString()) > expiration) {
                 list.add(uuid.toString());
@@ -229,7 +229,7 @@ public class Clean {
                     if (ConfigHandler.getDepends().SkinsRestorerEnabled()) {
                         Set<UUID> userList;
                         try {
-                            userList = LuckPermsProvider.get().getUserManager().getUniqueUsers().get();
+                            userList = LuckPermsProvider.get().getUser().getUniqueUsers().get();
                         } catch (InterruptedException | ExecutionException e) {
                             ServerHandler.sendDebugTrace(e);
                             break;
@@ -243,7 +243,7 @@ public class Clean {
                             cleanTable.put(title, "users", expiredList);
                             for (String uuid : expiredList) {
                                 Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "authme unregister " + user);
-                                LuckPermsProvider.get().getUserManager().getUser(UUID.fromString(uuid));
+                                LuckPermsProvider.get().getUser().getUser(UUID.fromString(uuid));
                             }
                         }
                     }
@@ -253,7 +253,7 @@ public class Clean {
         }
     }
 
-    private void backupManager() {
+    private void backup() {
         ServerHandler.sendConsoleMessage("&fData successfully cleaned  &a✔");
         ServerHandler.sendConsoleMessage("");
         ServerHandler.sendConsoleMessage("&f---- Statistics ----");
@@ -304,18 +304,18 @@ public class Clean {
         if (dataPath != null) {
             dataList = getDataList("Logs", dataPath);
             if (dataList.isEmpty()) {
-                ServerHandler.sendFeatureMessage("Clean", "Logs", "dataList", "return",
+                CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Clean", "Logs", "dataList", "return",
                         new Throwable().getStackTrace()[0]);
                 return;
             }
         } else {
-            ServerHandler.sendFeatureMessage("Clean", "Logs", "dataPath", "return",
+            CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Clean", "Logs", "dataPath", "return",
                     new Throwable().getStackTrace()[0]);
             return;
         }
         List<String> expiredList = getExpiredDataList("Logs", dataList, dataPath);
         if (expiredList.isEmpty()) {
-            ServerHandler.sendFeatureMessage("Clean", "Logs", "expiredList", "return",
+            CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Clean", "Logs", "expiredList", "return",
                     new Throwable().getStackTrace()[0]);
             return;
         }
@@ -333,7 +333,7 @@ public class Clean {
             if (dataPath != null) {
                 dataList = getDataList(title, dataPath);
                 if (dataList.isEmpty()) {
-                    ServerHandler.sendFeatureMessage("Clean", title, "dataList", "return",
+                    CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Clean", title, "dataList", "return",
                             new Throwable().getStackTrace()[0]);
                     return;
                 }
@@ -345,13 +345,13 @@ public class Clean {
                     }
                 }
             } else {
-                ServerHandler.sendFeatureMessage("Clean", title, "dataPath", "return",
+                CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Clean", title, "dataPath", "return",
                         new Throwable().getStackTrace()[0]);
                 return;
             }
             List<String> expiredList = getExpiredUUIDDataList(title, dataList);
             if (expiredList.isEmpty()) {
-                ServerHandler.sendFeatureMessage("Clean", title, "expiredList", "return",
+                CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Clean", title, "expiredList", "return",
                         new Throwable().getStackTrace()[0]);
                 return;
             }
@@ -374,7 +374,7 @@ public class Clean {
             if (dataPath != null) {
                 dataList = getDataList("Regions", dataPath);
                 if (dataList.isEmpty()) {
-                    ServerHandler.sendFeatureMessage("Clean", "Regions " + worldName, "dataList", "continue", "check another world",
+                    CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Clean", "Regions " + worldName, "dataList", "continue", "check another world",
                             new Throwable().getStackTrace()[0]);
                     continue;
                 }
@@ -386,19 +386,19 @@ public class Clean {
                     }
                 }
             } else {
-                ServerHandler.sendFeatureMessage("Clean", "Regions " + worldName, "dataPath", "continue", "check another world",
+                CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Clean", "Regions " + worldName, "dataPath", "continue", "check another world",
                         new Throwable().getStackTrace()[0]);
                 continue;
             }
             expiredList = getExpiredDataList("Regions", dataList, dataPath);
             if (expiredList.isEmpty()) {
-                ServerHandler.sendFeatureMessage("Clean", "Regions", "expiredList", "break",
+                CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Clean", "Regions", "expiredList", "break",
                         new Throwable().getStackTrace()[0]);
                 break;
             }
             List<String> unignoredList = getUnignoreRegions(worldName, expiredList);
             if (unignoredList.isEmpty()) {
-                ServerHandler.sendFeatureMessage("Clean", "Regions", "unignoredList", "break",
+                CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Clean", "Regions", "unignoredList", "break",
                         new Throwable().getStackTrace()[0]);
                 break;
             }
@@ -412,7 +412,7 @@ public class Clean {
     private void cleanCMI() {
         if (ConfigHandler.getDepends().getVault().vaultEnabled()) {
             if (ConfigHandler.getDepends().CMIEnabled()) {
-                Map<UUID, CMIUser> userMap = CMI.getInstance().getPlayerManager().getAllUsers();
+                Map<UUID, CMIUser> userMap = CMI.getInstance().getPlayer().getAllUsers();
                 List<String> uuidList = new ArrayList<>();
                 for (UUID uuid : userMap.keySet()) {
                     uuidList.add(uuid.toString());
@@ -429,7 +429,7 @@ public class Clean {
                     cleanMap.put("CMI", "users", expiredList);
                     for (String uuid : expiredList) {
                         try {
-                            CMI.getInstance().getPlayerManager().removeUser(userMap.get(UUID.fromString(uuid)));
+                            CMI.getInstance().getPlayer().removeUser(userMap.get(UUID.fromString(uuid)));
                         } catch (Exception e) {
                             ServerHandler.sendDebugTrace(e);
                         }
@@ -442,7 +442,7 @@ public class Clean {
     private void cleanEssentials() {
         if (ConfigHandler.getDepends().getVault().vaultEnabled()) {
             if (ConfigHandler.getDepends().EssentialsEnabled()) {
-                Essentials ess = (Essentials) getServer().getPluginManager().getPlugin("Essentials");
+                Essentials ess = (Essentials) getServer().getPlugin().getPlugin("Essentials");
                 if (ess == null) {
                     return;
                 }
@@ -498,7 +498,7 @@ public class Clean {
     private void cleanDiscordSRV() {
         if (ConfigHandler.getDepends().getVault().vaultEnabled()) {
             if (ConfigHandler.getDepends().DiscordSRVEnabled()) {
-                Map<String, UUID> linkedAccounts = DiscordSRV.getPlugin().getAccountLinkManager().getLinkedAccounts();
+                Map<String, UUID> linkedAccounts = DiscordSRV.getPlugin().getAccountLink().getLinkedAccounts();
                 List<String> uuidList = new ArrayList<>();
                 for (String id : linkedAccounts.keySet()) {
                     uuidList.add(linkedAccounts.get(id).toString());
@@ -515,7 +515,7 @@ public class Clean {
                     cleanMap.put("DiscordSRV", "users", expiredList);
                     for (String uuid : expiredList) {
                         try {
-                            DiscordSRV.getPlugin().getAccountLinkManager().unlink(UUID.fromString(uuid));
+                            DiscordSRV.getPlugin().getAccountLink().unlink(UUID.fromString(uuid));
                         } catch (Exception e) {
                             ServerHandler.sendDebugTrace(e);
                         }
@@ -529,7 +529,7 @@ public class Clean {
         if (ConfigHandler.getDepends().getVault().vaultEnabled()) {
             // Can only remove pets and still have player list need to remove.
             if (ConfigHandler.getDepends().MyPetEnabled()) {
-                MyPet[] myPets = MyPetApi.getMyPetManager().getAllActiveMyPets();
+                MyPet[] myPets = MyPetApi.getMyPet().getAllActiveMyPets();
                 List<MyPet> myPetList = new ArrayList<>(Arrays.asList(myPets));
                 int maxData = ConfigHandler.getConfigPath().getCleanMaxDataSize();
                 if (maxData > 0) {
@@ -713,10 +713,10 @@ public class Clean {
             diffDays = TimeUnit.DAYS.convert(Math.abs(currentDate.getTime() - lastDate.getTime()), TimeUnit.MILLISECONDS);
             if (diffDays > expiredDay) {
                 expiredData.add(data);
-                ServerHandler.sendFeatureMessage("Clean", title, "expiredDataList", "continue", data,
+                CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Clean", title, "expiredDataList", "continue", data,
                         new Throwable().getStackTrace()[0]);
             } else {
-                ServerHandler.sendFeatureMessage("Clean", title, "expiredDataList", "bypass", data,
+                CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Clean", title, "expiredDataList", "bypass", data,
                         new Throwable().getStackTrace()[0]);
             }
         }
@@ -746,7 +746,7 @@ public class Clean {
             try {
                 playerUUID = UUID.fromString(data);
             } catch (IllegalArgumentException e) {
-                ServerHandler.sendFeatureMessage("Clean", title, "expiredUUIDDataList", "bypass", data + "&f not UUID",
+                CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Clean", title, "expiredUUIDDataList", "bypass", data + "&f not UUID",
                         new Throwable().getStackTrace()[0]);
                 expiredList.remove(expiredMap.get(data));
                 break;
@@ -766,14 +766,14 @@ public class Clean {
                     }
                     diffDays = TimeUnit.DAYS.convert(Math.abs(lastTime - currentTime), TimeUnit.MILLISECONDS);
                     if (diffDays > expiredDay) {
-                        ServerHandler.sendFeatureMessage("Clean", title, "expiredUUIDDataList", "remove", data,
+                        CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Clean", title, "expiredUUIDDataList", "remove", data,
                                 new Throwable().getStackTrace()[0]);
                         continue;
                     }
-                    ServerHandler.sendFeatureMessage("Clean", title, "expiredUUIDDataList", "bypass", data + "&f not expired",
+                    CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Clean", title, "expiredUUIDDataList", "bypass", data + "&f not expired",
                             new Throwable().getStackTrace()[0]);
                 } else {
-                    ServerHandler.sendFeatureMessage("Clean", title, "expiredUUIDDataList", "bypass", data + "&f has bypass permission",
+                    CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Clean", title, "expiredUUIDDataList", "bypass", data + "&f has bypass permission",
                             new Throwable().getStackTrace()[0]);
                 }
                 expiredList.remove(expiredMap.get(data));
@@ -815,14 +815,14 @@ public class Clean {
                     }
                     diffDays = TimeUnit.DAYS.convert(Math.abs(lastTime - currentTime), TimeUnit.MILLISECONDS);
                     if (diffDays > expiredDay) {
-                        ServerHandler.sendFeatureMessage("Clean", title, "ExpiredPlayerDataList", "remove", data,
+                        CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Clean", title, "ExpiredPlayerDataList", "remove", data,
                                 new Throwable().getStackTrace()[0]);
                         continue;
                     }
-                    ServerHandler.sendFeatureMessage("Clean", title, "ExpiredPlayerDataList", "bypass", data,
+                    CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Clean", title, "ExpiredPlayerDataList", "bypass", data,
                             new Throwable().getStackTrace()[0]);
                 } else {
-                    ServerHandler.sendFeatureMessage("Clean", title, "ExpiredPlayerDataList", "bypass", data + "&f has bypass permission",
+                    CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Clean", title, "ExpiredPlayerDataList", "bypass", data + "&f has bypass permission",
                             new Throwable().getStackTrace()[0]);
                 }
                 expiredList.remove(expiredMap.get(data));
@@ -846,7 +846,7 @@ public class Clean {
             try {
                 playerUUID = UUID.fromString(data);
             } catch (IllegalArgumentException e) {
-                ServerHandler.sendFeatureMessage("Clean", title, "ExpiredUUIDList", "bypass", data + "&f not UUID",
+                CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Clean", title, "ExpiredUUIDList", "bypass", data + "&f not UUID",
                         new Throwable().getStackTrace()[0]);
                 expiredList.remove(data);
                 break;
@@ -865,14 +865,14 @@ public class Clean {
                     }
                     diffDays = TimeUnit.DAYS.convert(Math.abs(lastTime - currentTime), TimeUnit.MILLISECONDS);
                     if (diffDays > expiredDay) {
-                        ServerHandler.sendFeatureMessage("Clean", title, "ExpiredUUIDList", "remove", data,
+                        CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Clean", title, "ExpiredUUIDList", "remove", data,
                                 new Throwable().getStackTrace()[0]);
                         continue;
                     }
-                    ServerHandler.sendFeatureMessage("Clean", title, "ExpiredUUIDList", "bypass", data + "&f not expired",
+                    CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Clean", title, "ExpiredUUIDList", "bypass", data + "&f not expired",
                             new Throwable().getStackTrace()[0]);
                 } else {
-                    ServerHandler.sendFeatureMessage("Clean", title, "ExpiredUUIDList", "bypass", data + "&f has bypass permission",
+                    CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Clean", title, "ExpiredUUIDList", "bypass", data + "&f has bypass permission",
                             new Throwable().getStackTrace()[0]);
                 }
                 expiredList.remove(data);
@@ -906,14 +906,14 @@ public class Clean {
                     }
                     diffDays = TimeUnit.DAYS.convert(Math.abs(lastTime - currentTime), TimeUnit.MILLISECONDS);
                     if (diffDays > expiredDay) {
-                        ServerHandler.sendFeatureMessage("Clean", title, "ExpiredPlayerList", "remove", data,
+                        CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Clean", title, "ExpiredPlayerList", "remove", data,
                                 new Throwable().getStackTrace()[0]);
                         continue;
                     }
-                    ServerHandler.sendFeatureMessage("Clean", title, "ExpiredPlayerList", "bypass", data + "&f not expired",
+                    CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Clean", title, "ExpiredPlayerList", "bypass", data + "&f not expired",
                             new Throwable().getStackTrace()[0]);
                 } else {
-                    ServerHandler.sendFeatureMessage("Clean", title, "ExpiredPlayerList", "bypass", data + "&f has bypass permission",
+                    CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Clean", title, "ExpiredPlayerList", "bypass", data + "&f has bypass permission",
                             new Throwable().getStackTrace()[0]);
                 }
                 expiredList.remove(data);
@@ -935,7 +935,7 @@ public class Clean {
         try {
             playerUUID = UUID.fromString(data);
         } catch (IllegalArgumentException e) {
-            ServerHandler.sendFeatureMessage("Clean", title, "ExpiredUUIDList", "bypass", data + "&f not UUID",
+            CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Clean", title, "ExpiredUUIDList", "bypass", data + "&f not UUID",
                     new Throwable().getStackTrace()[0]);
             return false;
         }
@@ -953,14 +953,14 @@ public class Clean {
                 }
                 diffDays = TimeUnit.DAYS.convert(Math.abs(lastTime - currentTime), TimeUnit.MILLISECONDS);
                 if (diffDays > expiredDay) {
-                    ServerHandler.sendFeatureMessage("Clean", title, "ExpiredUUIDList", "remove", data,
+                    CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Clean", title, "ExpiredUUIDList", "remove", data,
                             new Throwable().getStackTrace()[0]);
                     return true;
                 }
-                ServerHandler.sendFeatureMessage("Clean", title, "ExpiredUUIDList", "bypass", data + "&f not expired",
+                CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Clean", title, "ExpiredUUIDList", "bypass", data + "&f not expired",
                         new Throwable().getStackTrace()[0]);
             } else {
-                ServerHandler.sendFeatureMessage("Clean", title, "ExpiredUUIDList", "bypass", data + "&f has bypass permission",
+                CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Clean", title, "ExpiredUUIDList", "bypass", data + "&f has bypass permission",
                         new Throwable().getStackTrace()[0]);
             }
             return false;
@@ -997,15 +997,15 @@ public class Clean {
             if (ignoreMap.keySet().contains(worldName)) {
                 if (ignoreMap.get(worldName).contains(region)) {
                     i.remove();
-                    ServerHandler.sendFeatureMessage("Clean", "Logs", "DataList", "continue",
+                    CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Clean", "Logs", "DataList", "continue",
                             new Throwable().getStackTrace()[0]);
-                    ServerHandler.sendFeatureMessage("Clean", "Regions " + worldName + " r." + region + ".mac", "ignore-regions", "bypass",
+                    CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Clean", "Regions " + worldName + " r." + region + ".mac", "ignore-regions", "bypass",
                             new Throwable().getStackTrace()[0]);
                     continue;
                 }
             }
             if (ConfigHandler.getDepends().ResidenceEnabled()) {
-                for (ClaimedResidence residence : Residence.getInstance().getResidenceManager().getResidences().values()) {
+                for (ClaimedResidence residence : Residence.getInstance().getResidence().getResidences().values()) {
                     if (residence.isSubzone()) {
                         continue;
                     }
@@ -1025,17 +1025,17 @@ public class Clean {
                         if (regionHighX >= resHighX && resHighX >= regionLowX || regionHighX >= resLowX && resLowX >= regionLowX) {
                             if (regionHighZ >= resHighZ && resHighZ >= regionLowZ || regionHighZ >= resLowZ && resLowZ >= regionLowZ) {
                                 if (ConfigHandler.getConfigPath().isCleanRegionBypassRes()) {
-                                    ServerHandler.sendFeatureMessage("Clean - Regions", worldName + " r." + region + ".mac", "has-residence \"" + resHighX + "." + resHighY + "." + resHighZ + "\"", "bypass",
+                                    CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Clean - Regions", worldName + " r." + region + ".mac", "has-residence \"" + resHighX + "." + resHighY + "." + resHighZ + "\"", "bypass",
                                             new Throwable().getStackTrace()[0]);
                                     i.remove();
                                     continue back;
                                 } else {
                                     loc = new Location(world, resHighX, resHighY, resHighZ);
-                                    ClaimedResidence res = Residence.getInstance().getResidenceManager().getByLoc(loc);
+                                    ClaimedResidence res = Residence.getInstance().getResidence().getByLoc(loc);
                                     if (res != null) {
                                         ResidencePermissions perms = res.getPermissions();
                                         if (perms.has("bypassclean", false)) {
-                                            ServerHandler.sendFeatureMessage("Clean - Regions", worldName + " r." + region + ".mac", "has-residence-bypass-flag \"" + resHighX + "." + resHighY + "." + resHighZ + "\"", "bypass",
+                                            CorePlusAPI.getLang().sendFeatureMsg(ConfigHandler.isDebugging(), ConfigHandler.getPluginName(), "Clean - Regions", worldName + " r." + region + ".mac", "has-residence-bypass-flag \"" + resHighX + "." + resHighY + "." + resHighZ + "\"", "bypass",
                                                     new Throwable().getStackTrace()[0]);
                                             i.remove();
                                             continue back;

@@ -23,7 +23,7 @@ public class ConfigHandler {
         genConfigFile("config.yml");
         setConfigPath(new ConfigPath());
         if (!reload) {
-            CorePlusAPI.getUpdate().check(getPluginName(), getPluginPrefix(), Bukkit.getConsoleSender(),
+            CorePlusAPI.getUpdate().check(getPlugin(), getPluginPrefix(), Bukkit.getConsoleSender(),
                     PlayerdataPlus.getInstance().getDescription().getName(),
                     PlayerdataPlus.getInstance().getDescription().getVersion(), true);
         }
@@ -50,7 +50,7 @@ public class ConfigHandler {
             try {
                 PlayerdataPlus.getInstance().saveResource(fileName, false);
             } catch (Exception e) {
-                CorePlusAPI.getLang().sendErrorMsg(getPluginName(), "&cCannot save " + fileName + " to disk!");
+                CorePlusAPI.getLang().sendErrorMsg(getPlugin(), "&cCannot save " + fileName + " to disk!");
                 return;
             }
         }
@@ -111,7 +111,7 @@ public class ConfigHandler {
         return configPath;
     }
 
-    public static String getPluginName() {
+    public static String getPlugin() {
         return CorePlus.getInstance().getDescription().getName();
     }
 
@@ -123,7 +123,7 @@ public class ConfigHandler {
         return getConfig("config.yml").getString("Message.prefix");
     }
 
-    public static boolean isDebugging() {
+    public static boolean isDebug() {
         return ConfigHandler.getConfig("config.yml").getBoolean("Debugging");
     }
 }

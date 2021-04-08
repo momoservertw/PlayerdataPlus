@@ -7,6 +7,7 @@
     <list default="true" id="55df3580-7d8b-4dd9-afca-eac36992f8e3" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/Commands.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/Commands.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/extra/CorePlus-1.0.0.jar" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/extra/CorePlus-1.0.0.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/handlers/ConfigHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/handlers/ConfigHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/handlers/RegisterHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/handlers/RegisterHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/playerstatus/PlayerStatusControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/playerstatus/PlayerStatusControl.java" afterDir="false" />

@@ -5,7 +5,7 @@
 Config-Version: 4
 Debugging: false
 
-# Format players' nicks and make the chat channel more tidy.
+# Format player nicks and make the chat channel more tidy.
 # More information: https://github.com/momoservertw/PlayerdataPlus/wiki/Nick
 Nick:
   Enable: false
@@ -24,21 +24,16 @@ Nick:
     Black-List:
       - fuck
       - bitch
-  # Formatting the nicks and adding player id in their nicks.
   Formats:
     CMI:
       Enable: false
-      # Updating tab list after player changed their name.
+      # Updating tab list after one player changed their name.
       Tablist-Update: true
-      # The format of nick when players changed their nicks.
       Set: "&%color%%nick%(%player%)"
-      # The format of nick when players canceled their nicks.
       Clear: "&%color%%player%"
     Essentials:
       Enable: false
-      # The format of nick when players changed their nicks.
       Set: "&%color%%nick%(%player%)"
-      # The format of nick when players canceled their nicks.
       Clear: "&%color%%player%"
     NameTagEdit:
       Enable: false
@@ -48,25 +43,18 @@ Nick:
       Clear:
         Prefix: "&%color%"
         Suffix: ""
-    # Executed custom commands when players changed their nicks.
-    # More information: https://github.com/momoservertw/CorePlus/wiki/Custom-Commands
+    # Executing commands when players changed their nicks.
     Commands: []
-    Commands-Off: []
+    Commands-Clear: []
   # Define the player"s default nick color.
   # Permission: playerdataplus.nick.group.GROUP
-  # Permission: playerdataplus.nick.color.COLOR
   Groups:
-    # The default nick color if player doesn"t have any permission.
-    Default:
-      Color: a
-    vip:
-      Color: b
-      Priority: 1
-    mvp:
-      Color: d
-      Priority: 2
+    # Priority is top to bottom.
+    Default: a
+    Vip: b
+    Mvp: d
 
-# Automatically disabled the players" status such as flight mode and creative mode.
+# Controls player status to improve the gaming experience or fixed.
 # More information: https://github.com/momoservertw/PlayerdataPlus/wiki/Player-Status
 Player-Status:
   Enable: false
@@ -76,11 +64,10 @@ Player-Status:
   Fly:
     Enable: false
     Settings:
-      Features:
-        CMI:
-          tfly: true
-          cfly: true
-        Residence: true
+      CMI:
+        tfly: true
+        cfly: true
+      Residence: true
     Disabled:
       Enable: true
       Check:
@@ -166,9 +153,8 @@ Player-Status:
         - cmi.command.gm.spectator
     Location: []
 
-
-# Clean the old player data.
-# Player bypass permission: playerdataplus.bypass.clean
+# Cleans the old player data.
+# Bypass permission: playerdataplus.bypass.clean
 # More information: https://github.com/momoservertw/PlayerdataPlus/wiki/Clean
 Clean:
   Enable: false
@@ -276,3 +262,12 @@ Message:
     clearTarget: "&f%targetplayer%''s new nick &8- &%color%%player%"
     changeColor: "&fYour new nick color &8- &%color%❤"
     changeColorTarget: "&f%targetplayer%''s new nick color &8- &%color%❤"
+  Clean:
+    succeed: "%prefix% &eRemoved a total of: &7%amount% &e(%value%&e)"
+    listed: "%prefix% &eListed a total of: &7%amount% &e(%value%&e)"
+    start: "%prefix% &6Start checking player data..."
+    end: "%prefix% &6Clean process has ended."
+    toggleOn: "%prefix% &aEnabled the clean process."
+    toggleOff: "%prefix% &cDisabled the clean process."
+    alreadyOn: "%prefix% &fThe clean process has already enabled."
+    alreadyOff: "%prefix% &fThe clean process has already disabled."

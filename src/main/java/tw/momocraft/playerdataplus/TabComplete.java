@@ -1,17 +1,15 @@
 package tw.momocraft.playerdataplus;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
-import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 import tw.momocraft.coreplus.api.CorePlusAPI;
 import tw.momocraft.playerdataplus.handlers.ConfigHandler;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class TabComplete implements TabCompleter {
 
@@ -19,8 +17,6 @@ public class TabComplete implements TabCompleter {
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         final List<String> completions = new ArrayList<>();
         final List<String> commands = new ArrayList<>();
-        Collection<?> playersOnlineNew = null;
-        Player[] playersOnlineOld;
         if (args.length == 2 && args[0].equalsIgnoreCase("help") && CorePlusAPI.getPlayer().hasPerm(sender, "playerdataplus.use")) {
             commands.add("2");
         } else if (args.length == 1) {

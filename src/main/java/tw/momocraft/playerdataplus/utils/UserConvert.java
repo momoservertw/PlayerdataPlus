@@ -8,7 +8,6 @@ import com.bekvon.bukkit.residence.economy.CMIEconomy;
 import com.bekvon.bukkit.residence.protection.ClaimedResidence;
 import org.bukkit.Bukkit;
 import tw.momocraft.playerdataplus.handlers.ConfigHandler;
-import tw.momocraft.playerdataplus.handlers.PlayerHandler;
 
 import java.util.UUID;
 

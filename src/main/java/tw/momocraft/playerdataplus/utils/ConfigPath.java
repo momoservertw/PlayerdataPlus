@@ -6,6 +6,7 @@ import tw.momocraft.playerdataplus.playerstatus.PlayerStatusMap;
 import tw.momocraft.playerdataplus.utils.clean.CleanMap;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -49,6 +50,15 @@ public class ConfigPath {
     private String msgNickChangeColor;
     private String msgNickChangeColorTarget;
 
+    private String msgCleanStart;
+    private String msgCleanEnd;
+    private String msgCleanSucceed;
+    private String msgCleanListed;
+    private String msgCleanToggleOn;
+    private String msgCleanToggleOff;
+    private String msgCleanAlreadyOn;
+    private String msgCleanAlreadyOff;
+
     //  ============================================== //
     //         Clean Variables                         //
     //  ============================================== //
@@ -58,31 +68,28 @@ public class ConfigPath {
     private boolean cleanBackup;
     private boolean cleanBackupZip;
     private String cleanBackupPath;
-    private ConfigurationSection cleanConfig;
-    private HashMap<String, CleanMap> cleanProp = new HashMap<>();
+    private final Map<String, CleanMap> cleanProp = new HashMap<>();
 
     //  ============================================== //
     //         Nick Variables                          //
     //  ============================================== //
     private boolean nick;
     private int nickLimit;
-    private boolean nickPure;
+    private boolean nickColorCode;
     private List<String> nickBlackList;
     private boolean nickCMI;
-    private boolean nickCMIUpdate;
-    private String nickCMIOn;
-    private String nickCMIOff;
+    private boolean nickCMIUpdateTablist;
+    private String nickCMISet;
+    private String nickCMIClear;
     private boolean nickNameTagEdit;
-    private String nickNTEOnPrefix;
-    private String nickNTEOnSuffix;
-    private String nickNTEOffPrefix;
-    private String nickNTEOffSuffix;
-    private List<String> nickCommandOn;
-    private List<String> nickCommandOff;
+    private String nickNTESetPrefix;
+    private String nickNTESetSuffix;
+    private String nickNTEClearPrefix;
+    private String nickNTEClearSuffix;
+    private List<String> nickCommandSet;
+    private List<String> nickCommandClear;
 
-    private String nickGroupsDefault;
-    private Map<Integer, String> nickGroupsMap;
-    private Map<String, String> nickColorsMap;
+    private final Map<String, String> nickGroupsProp = new LinkedHashMap<>();
 
     //  ============================================== //
     //         Player Status Variables                 //
@@ -121,6 +128,15 @@ public class ConfigPath {
         msgNickClearTarget = ConfigHandler.getConfig("config.yml").getString("Message.Commands.Nick.clearTarget");
         msgNickChangeColor = ConfigHandler.getConfig("config.yml").getString("Message.Commands.Nick.changeColor");
         msgNickChangeColorTarget = ConfigHandler.getConfig("config.yml").getString("Message.Commands.Nick.changeColorTarget");
+
+        msgCleanStart = ConfigHandler.getConfig("config.yml").getString("Message.Clean.start");
+        msgCleanEnd = ConfigHandler.getConfig("config.yml").getString("Message.Clean.end");
+        msgCleanSucceed = ConfigHandler.getConfig("config.yml").getString("Message.Clean.succeed");
+        msgCleanListed = ConfigHandler.getConfig("config.yml").getString("Message.Clean.listed");
+        msgCleanToggleOn = ConfigHandler.getConfig("config.yml").getString("Message.Clean.toggleOn");
+        msgCleanToggleOff = ConfigHandler.getConfig("config.yml").getString("Message.Clean.toggleOff");
+        msgCleanAlreadyOn = ConfigHandler.getConfig("config.yml").getString("Message.Clean.alreadyOn");
+        msgCleanAlreadyOff = ConfigHandler.getConfig("config.yml").getString("Message.Clean.alreadyOff");
     }
 
     //  ============================================== //
@@ -129,12 +145,14 @@ public class ConfigPath {
     private void setClean() {
         clean = ConfigHandler.getConfig("config.yml").getBoolean("Clean.Enable");
         cleanAuto = ConfigHandler.getConfig("config.yml").getBoolean("Clean.Settings.Auto-Clean.Enable");
-        cleanConfig = ConfigHandler.getConfig("config.yml").getConfigurationSection("Clean.Groups");
         cleanLog = ConfigHandler.getConfig("config.yml").getBoolean("Clean.Settings.Log");
         cleanBackup = ConfigHandler.getConfig("config.yml").getBoolean("Clean.Settings.Backup.Enable");
         cleanBackupPath = ConfigHandler.getConfig("config.yml").getString("Clean.Settings.Backup.Path");
         cleanBackupZip = ConfigHandler.getConfig("config.yml").getBoolean("Clean.Settings.Backup.Zip");
         CleanMap cleanMap;
+        ConfigurationSection cleanConfig = ConfigHandler.getConfig("config.yml").getConfigurationSection("Clean.Groups");
+        if (cleanConfig == null)
+            return;
         for (String group : cleanConfig.getKeys(false)) {
             if (!ConfigHandler.getConfig("config.yml").getBoolean("Clean.Groups." + group + ".Enable"))
                 continue;
@@ -167,34 +185,23 @@ public class ConfigPath {
     private void setNick() {
         nick = ConfigHandler.getConfig("config.yml").getBoolean("Nick.Enable");
         nickLimit = ConfigHandler.getConfig("config.yml").getInt("Nick.Limits.Length");
-        nickPure = ConfigHandler.getConfig("config.yml").getBoolean("Nick.Limits.Pure-Color");
+        nickColorCode = ConfigHandler.getConfig("config.yml").getBoolean("Nick.Limits.Prevent-Color-Code");
         nickBlackList = ConfigHandler.getConfig("config.yml").getStringList("Nick.Limits.Black-List");
         nickCMI = ConfigHandler.getConfig("config.yml").getBoolean("Nick.Formats.CMI.Enable");
-        nickCMIUpdate = ConfigHandler.getConfig("config.yml").getBoolean("Nick.Formats.CMI.Tablist-Update");
-        nickCMIOn = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.CMI.On");
-        nickCMIOff = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.CMI.Off");
+        nickCMIUpdateTablist = ConfigHandler.getConfig("config.yml").getBoolean("Nick.Formats.CMI.Tablist-Update");
+        nickCMISet = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.CMI.Set");
+        nickCMIClear = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.CMI.Clear");
         nickNameTagEdit = ConfigHandler.getConfig("config.yml").getBoolean("Nick.Formats.NameTagEdit.Enable");
-        nickNTEOnPrefix = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.NameTagEdit.On.Prefix");
-        nickNTEOnSuffix = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.NameTagEdit.On.Suffix");
-        nickNTEOffPrefix = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.NameTagEdit.Off.Prefix");
-        nickNTEOffSuffix = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.NameTagEdit.Off.Suffix");
-        nickCommandOn = ConfigHandler.getConfig("config.yml").getStringList("Nick.Formats.Commands");
-        nickCommandOff = ConfigHandler.getConfig("config.yml").getStringList("Nick.Formats.Commands-Off");
-        nickGroupsDefault = ConfigHandler.getConfig("config.yml").getString("Nick.Groups.Default");
-
-        nickGroupsMap = new HashMap<>();
-        ConfigurationSection nickGroups = ConfigHandler.getConfig("config.yml").getConfigurationSection("Nick.Groups.Custom");
+        nickNTESetPrefix = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.NameTagEdit.Set.Prefix");
+        nickNTESetSuffix = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.NameTagEdit.Set.Suffix");
+        nickNTEClearPrefix = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.NameTagEdit.Clear.Prefix");
+        nickNTEClearSuffix = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.NameTagEdit.Clear.Suffix");
+        nickCommandSet = ConfigHandler.getConfig("config.yml").getStringList("Nick.Formats.Commands");
+        nickCommandClear = ConfigHandler.getConfig("config.yml").getStringList("Nick.Formats.Commands-Clear");
+        ConfigurationSection nickGroups = ConfigHandler.getConfig("config.yml").getConfigurationSection("Nick.Groups");
         if (nickGroups != null) {
-            for (String group : nickGroups.getKeys(false)) {
-                nickGroupsMap.put(Integer.parseInt(group), ConfigHandler.getConfig("config.yml").getString("Nick.Groups.Custom." + group));
-            }
-        }
-        nickColorsMap = new HashMap<>();
-        ConfigurationSection nickColors = ConfigHandler.getConfig("config.yml").getConfigurationSection("Nick.Colors.Correspond");
-        if (nickColors != null) {
-            for (String group : nickColors.getKeys(false)) {
-                nickColorsMap.put(group, ConfigHandler.getConfig("config.yml").getString("Nick.Colors.Correspond." + group));
-            }
+            for (String group : nickGroups.getKeys(false))
+                nickGroupsProp.put(group, ConfigHandler.getConfig("config.yml").getString("Nick.Groups." + group));
         }
     }
 
@@ -332,6 +339,38 @@ public class ConfigPath {
         return msgNickChangeColorTarget;
     }
 
+    public String getMsgCleanStart() {
+        return msgCleanStart;
+    }
+
+    public String getMsgCleanEnd() {
+        return msgCleanEnd;
+    }
+
+    public String getMsgCleanSucceed() {
+        return msgCleanSucceed;
+    }
+
+    public String getMsgCleanListed() {
+        return msgCleanListed;
+    }
+
+    public String getMsgCleanToggleOn() {
+        return msgCleanToggleOn;
+    }
+
+    public String getMsgCleanToggleOff() {
+        return msgCleanToggleOff;
+    }
+
+    public String getMsgCleanAlreadyOn() {
+        return msgCleanAlreadyOn;
+    }
+
+    public String getMsgCleanAlreadyOff() {
+        return msgCleanAlreadyOff;
+    }
+
     //  ============================================== //
     //         Clean Getter                            //
     //  ============================================== //
@@ -359,11 +398,7 @@ public class ConfigPath {
         return cleanBackupPath;
     }
 
-    public ConfigurationSection getCleanConfig() {
-        return cleanConfig;
-    }
-
-    public HashMap<String, CleanMap> getCleanProp() {
+    public Map<String, CleanMap> getCleanProp() {
         return cleanProp;
     }
 

@@ -10,7 +10,6 @@ import com.earth2me.essentials.Essentials;
 import com.google.common.collect.HashBasedTable;
 import de.Keyle.MyPet.MyPetApi;
 import de.Keyle.MyPet.api.entity.MyPet;
-import fr.xephi.authme.AuthMe;
 import fr.xephi.authme.api.v3.AuthMeApi;
 import github.scarsz.discordsrv.DiscordSRV;
 import github.scarsz.discordsrv.util.DiscordUtil;
@@ -25,7 +24,6 @@ import tw.momocraft.coreplus.CorePlus;
 import tw.momocraft.coreplus.api.CorePlusAPI;
 import tw.momocraft.playerdataplus.PlayerdataPlus;
 import tw.momocraft.playerdataplus.handlers.ConfigHandler;
-import tw.momocraft.playerdataplus.handlers.PlayerHandler;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -50,23 +48,69 @@ import static org.bukkit.Bukkit.getServer;
 public class Clean {
     // Type, List
     private Map<String, List<String>> cleanMap;
-    Map<String, Long> lastLoginMap;
-    private boolean run = false;
+    Map<String, Long> playerLoginedMap;
 
-    public void setRun(boolean run) {
-        this.run = run;
+    private static boolean starting = false;
+
+    public static void setStarting(boolean enable) {
+        starting = enable;
     }
 
-    public boolean getRun() {
-        return this.run;
+    public static boolean getStarting() {
+        return starting;
     }
 
-    public void start(CommandSender sender, String title) {
-        run = true;
-        ConfigurationSection cleanConfig = ConfigHandler.getConfigPath().getCleanConfig();
-        if (cleanConfig != null) {
-            lastLoginMap = CorePlusAPI.getPlayer().getLastLoginMap();
-            setCleanMap(cleanConfig);
+    public static void toggle(CommandSender sender, String type, boolean toggle) {
+        if (toggle) {
+            if (starting) {
+                // Already on
+                CorePlusAPI.getMsg().sendConsoleMsg(ConfigHandler.getPrefix(),
+                        ConfigHandler.getConfigPath().getMsgCleanAlreadyOn());
+            } else {
+                // Turns on
+                CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPrefix(),
+                        ConfigHandler.getConfigPath().getMsgCleanToggleOn(), sender);
+                start(sender, type);
+            }
+        } else {
+            if (!starting) {
+                // Already off
+                CorePlusAPI.getMsg().sendConsoleMsg(ConfigHandler.getPrefix(),
+                        ConfigHandler.getConfigPath().getMsgCleanAlreadyOff());
+            } else {
+                // Turns off
+                starting = false;
+                CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPrefix(),
+                        ConfigHandler.getConfigPath().getMsgCleanToggleOff(), sender);
+            }
+        }
+    }
+
+    public static void start(CommandSender sender, String title) {
+        CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPrefix(),
+                ConfigHandler.getConfigPath().getMsgCleanStart(), Bukkit.getConsoleSender());
+        starting = true;
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (!starting) {
+                    cancel();
+                    CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPrefix(),
+                            ConfigHandler.getConfigPath().getMsgCleanEnd(), Bukkit.getConsoleSender());
+                    return;
+                }
+                checkAll(true, true);
+            }
+        }.runTaskTimer(EntityPlus.getInstance(), 0, ConfigHandler.getConfigPath().getEnPurgeCheckScheduleInterval());
+    }
+
+
+    public static void start(CommandSender sender, String title) {
+        starting = true;
+        CleanMap cleanProp = ConfigHandler.getConfigPath().getCleanProp().get(title);
+        if (cleanProp != null) {
+            playerLoginedMap = CorePlusAPI.getPlayer().getLastLoginMap();
+            setCleanMap(cleanProp);
             new BukkitRunnable() {
                 @Override
                 public void run() {

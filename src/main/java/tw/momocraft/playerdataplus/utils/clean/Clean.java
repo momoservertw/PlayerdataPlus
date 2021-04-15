@@ -48,7 +48,7 @@ import static org.bukkit.Bukkit.getServer;
 public class Clean {
     // Type, List
     private Map<String, List<String>> cleanMap;
-    Map<String, Long> playerLoginedMap;
+    private static Map<String, Long> playerLoginMap;
 
     private static boolean starting = false;
 
@@ -90,6 +90,7 @@ public class Clean {
         CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPrefix(),
                 ConfigHandler.getConfigPath().getMsgCleanStart(), Bukkit.getConsoleSender());
         starting = true;
+
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -109,7 +110,7 @@ public class Clean {
         starting = true;
         CleanMap cleanProp = ConfigHandler.getConfigPath().getCleanProp().get(title);
         if (cleanProp != null) {
-            playerLoginedMap = CorePlusAPI.getPlayer().getLastLoginMap();
+            playerLoginMap = CorePlusAPI.getPlayer().getLastLoginMap();
             setCleanMap(cleanProp);
             new BukkitRunnable() {
                 @Override

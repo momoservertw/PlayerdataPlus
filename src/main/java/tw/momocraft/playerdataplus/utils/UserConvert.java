@@ -7,6 +7,7 @@ import com.bekvon.bukkit.residence.containers.ResidencePlayer;
 import com.bekvon.bukkit.residence.economy.CMIEconomy;
 import com.bekvon.bukkit.residence.protection.ClaimedResidence;
 import org.bukkit.Bukkit;
+import tw.momocraft.coreplus.api.CorePlusAPI;
 import tw.momocraft.playerdataplus.handlers.ConfigHandler;
 
 import java.util.UUID;
@@ -20,8 +21,8 @@ public class UserConvert {
      * @param name2 the name of second player.
      */
     private void convertManager(String name1, String name2, boolean replace) {
-        UUID uuid1 = PlayerHandler.getOfflineUUID(name1);
-        UUID uuid2 = PlayerHandler.getOfflineUUID(name2);
+        UUID uuid1 = CorePlusAPI.getPlayer().getPlayerUUID(name1);
+        UUID uuid2 = CorePlusAPI.getPlayer().getPlayerUUID.getOfflineUUID(name2);
 
         convertPlayerdata(uuid1, uuid2);
         //convertAdvancements(uuid1, uuid2);
@@ -40,7 +41,7 @@ public class UserConvert {
 
 
     private void convertMoney(String name1, String name2, UUID uuid1, UUID uuid2, boolean replace) {
-        if (ConfigHandler.getDepends().CMIEnabled()) {
+        if (CorePlusAPI.getDepend().CMIEnabled()) {
             CMIEconomy economy = new CMIEconomy();
             economy.transfer(name1, name2, economy.getBalance(name1));
         }/* else if (ConfigHandler.getDepends().getVault().vaultEnabled() && ConfigHandler.getDepends().getVault().getEconomy().isEnabled()) {
@@ -58,7 +59,7 @@ public class UserConvert {
 
 
     private void convertPoints(UUID uuid1, UUID uuid2, boolean replace) {
-        if (ConfigHandler.getDepends().PlayerPointsEnabled()) {
+        if (CorePlusAPI.getDepend().PlayerPointsEnabled()) {
             PlayerPointsAPI playerPointsAPI = new PlayerPointsAPI();
             if (replace) {
                 playerPointsAPI.setPoints(uuid2, playerPointsAPI.getPoints(uuid1));
@@ -73,7 +74,7 @@ public class UserConvert {
     }
 
     private void convertPerms(String name1, String name2, boolean replace) {
-        if (ConfigHandler.getDepends().LuckPermsEnabled()) {
+        if (CorePlusAPI.getDepend().LuckPermsEnabled()) {
             if (replace) {
                 Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "lp user " + name1 + " clone " + name2);
             } else {

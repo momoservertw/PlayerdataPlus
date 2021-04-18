@@ -6,15 +6,12 @@ import com.bekvon.bukkit.residence.Residence;
 import com.bekvon.bukkit.residence.protection.ClaimedResidence;
 import com.bekvon.bukkit.residence.protection.CuboidArea;
 import com.bekvon.bukkit.residence.protection.ResidencePermissions;
-import com.earth2me.essentials.Essentials;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import de.Keyle.MyPet.MyPetApi;
-import de.Keyle.MyPet.api.entity.MyPet;
 import de.Keyle.MyPet.api.player.MyPetPlayer;
 import fr.xephi.authme.api.v3.AuthMeApi;
 import github.scarsz.discordsrv.DiscordSRV;
-import github.scarsz.discordsrv.util.DiscordUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -24,6 +21,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.scheduler.BukkitRunnable;
 import tw.momocraft.coreplus.api.CorePlusAPI;
 import tw.momocraft.coreplus.handlers.UtilsHandler;
+import tw.momocraft.coreplus.utils.file.MySQLMap;
 import tw.momocraft.playerdataplus.PlayerdataPlus;
 import tw.momocraft.playerdataplus.handlers.ConfigHandler;
 
@@ -50,6 +48,7 @@ import static org.bukkit.Bukkit.getServer;
 public class Clean {
     private Map<UUID, Long> playerTimeMap;
     private Map<String, UUID> playerUUIDMap;
+    private Map<UUID, String> playerNameMap;
     // Type, Group, Element
     private Table<String, String, List<String>> expiredTable;
 
@@ -143,6 +142,7 @@ public class Clean {
             uuid = UUID.fromString(uuidString);
             playerTimeMap.put(uuid, Long.parseLong(map.get(uuidString).get("last_login")));
             playerUUIDMap.put(map.get(uuidString).get("username"), uuid);
+            playerNameMap = CorePlusAPI.getUtils().invertMap(playerUUIDMap);
         }
     }
 
@@ -306,9 +306,13 @@ public class Clean {
     }
 
     private void purgeMyPet(List<String> list) {
-        String database = CorePlusAPI.getConfig().get
+        MySQLMap mySQLMap = CorePlusAPI.getFile().getMySQLProp().get("mypet");
+        String database = mySQLMap.getDatabase();
+        String playersTable = mySQLMap.getTables().get("players");
+        String petsTable = mySQLMap.getTables().get("pets");
         for (String uuid : list) {
-            CorePlusAPI.getFile().removeMySQLValue(ConfigHandler.getPlugin(), "mypet", );
+            CorePlusAPI.getFile().removeMySQLValue(ConfigHandler.getPlugin(), database, petsTable, "owner_uuid", uuid);
+            CorePlusAPI.getFile().removeMySQLValue(ConfigHandler.getPlugin(), database, playersTable, "name", playerNameMap.get(uuid));
         }
     }
 

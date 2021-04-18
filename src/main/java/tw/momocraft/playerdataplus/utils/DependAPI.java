@@ -4,7 +4,6 @@ import org.bukkit.Bukkit;
 import tw.momocraft.playerdataplus.handlers.ConfigHandler;
 
 public class DependAPI {
-    private VaultAPI vaultApi;
     private boolean Vault = false;
     private boolean CMI = false;
     private boolean Residence = false;
@@ -201,12 +200,4 @@ public class DependAPI {
     private void setPlayerPointsStatus(boolean bool) { this.PlayerPoints = bool; }
 
     private void setMyCommandStatus(boolean bool) { this.MyCommand = bool; }
-
-    public VaultAPI getVaultApi() {
-        return this.vaultApi;
-    }
-
-    private void setVaultApi() {
-        vaultApi = new VaultAPI();
-    }
 }

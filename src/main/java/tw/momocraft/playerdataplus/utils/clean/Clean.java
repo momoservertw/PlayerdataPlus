@@ -8,8 +8,10 @@ import com.bekvon.bukkit.residence.protection.CuboidArea;
 import com.bekvon.bukkit.residence.protection.ResidencePermissions;
 import com.earth2me.essentials.Essentials;
 import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Table;
 import de.Keyle.MyPet.MyPetApi;
 import de.Keyle.MyPet.api.entity.MyPet;
+import de.Keyle.MyPet.api.player.MyPetPlayer;
 import fr.xephi.authme.api.v3.AuthMeApi;
 import github.scarsz.discordsrv.DiscordSRV;
 import github.scarsz.discordsrv.util.DiscordUtil;
@@ -20,8 +22,8 @@ import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.scheduler.BukkitRunnable;
-import tw.momocraft.coreplus.CorePlus;
 import tw.momocraft.coreplus.api.CorePlusAPI;
+import tw.momocraft.coreplus.handlers.UtilsHandler;
 import tw.momocraft.playerdataplus.PlayerdataPlus;
 import tw.momocraft.playerdataplus.handlers.ConfigHandler;
 
@@ -46,21 +48,22 @@ import java.util.zip.ZipOutputStream;
 import static org.bukkit.Bukkit.getServer;
 
 public class Clean {
-    // Type, List
-    private Map<String, List<String>> cleanMap;
-    private static Map<String, Long> playerLoginMap;
+    private Map<UUID, Long> playerTimeMap;
+    private Map<String, UUID> playerUUIDMap;
+    // Type, Group, Element
+    private Table<String, String, List<String>> expiredTable;
 
-    private static boolean starting = false;
+    private boolean starting = false;
 
-    public static void setStarting(boolean enable) {
+    public void setStarting(boolean enable) {
         starting = enable;
     }
 
-    public static boolean getStarting() {
+    public boolean getStarting() {
         return starting;
     }
 
-    public static void toggle(CommandSender sender, String type, boolean toggle) {
+    public void toggle(CommandSender sender, String type, boolean toggle) {
         if (toggle) {
             if (starting) {
                 // Already on
@@ -86,148 +89,97 @@ public class Clean {
         }
     }
 
-    public static void start(CommandSender sender, String title) {
-        CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPrefix(),
-                ConfigHandler.getConfigPath().getMsgCleanStart(), Bukkit.getConsoleSender());
+    public void start(CommandSender sender, String title) {
         starting = true;
-
+        Map<String, CleanMap> cleanProp = ConfigHandler.getConfigPath().getCleanProp();
+        setPlayersLoginTime();
+        expiredTable = HashBasedTable.create();
+        // Scanning the data.
+        if (title != null) {
+            CleanMap cleanMap = cleanProp.get(title);
+            if (cleanMap != null)
+                scanData(cleanMap);
+        } else {
+            scanAllData();
+        }
+        if (expiredTable.isEmpty()) {
+            CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPrefix(), ConfigHandler.getConfigPath().getMsgCleanEnd(), sender);
+            return;
+        }
         new BukkitRunnable() {
             @Override
             public void run() {
-                if (!starting) {
+                boolean restart = false;
+                cleanManager(title);
+                backup();
+                if (expiredTable.isEmpty()) {
+                    CorePlusAPI.getMsg().sendMsg(ConfigHandler.getPrefix(), sender,
+                            "&6There has no any expired data!");
                     cancel();
-                    CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPrefix(),
-                            ConfigHandler.getConfigPath().getMsgCleanEnd(), Bukkit.getConsoleSender());
                     return;
                 }
-                checkAll(true, true);
-            }
-        }.runTaskTimer(EntityPlus.getInstance(), 0, ConfigHandler.getConfigPath().getEnPurgeCheckScheduleInterval());
-    }
-
-
-    public static void start(CommandSender sender, String title) {
-        starting = true;
-        CleanMap cleanProp = ConfigHandler.getConfigPath().getCleanProp().get(title);
-        if (cleanProp != null) {
-            playerLoginMap = CorePlusAPI.getPlayer().getLastLoginMap();
-            setCleanMap(cleanProp);
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-
-                }
-            }.runTaskLater(CorePlus.getInstance(), 3);
-
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    boolean restart = false;
+                if (restart) {
                     CorePlusAPI.getMsg().sendMsg(ConfigHandler.getPrefix(), sender,
-                            "&6Starting to clean the expired data...");
-                    cleanMap = HashBasedTable.create();
-                    cleanManager(title);
-                    if (!cleanMap.isEmpty()) {
-                        backup();
-                    } else {
-                        CorePlusAPI.getMsg().sendMsg(ConfigHandler.getPrefix(), sender,
-                                "&6There has no any expired data!");
-                        cancel();
-                    }
-                    if (restart) {
-                        CorePlusAPI.getMsg().sendMsg(ConfigHandler.getPrefix(), sender,
-                                "&eCleanup process has not finished yet! &8- &6" + title);
-                        CorePlusAPI.getMsg().sendMsg(ConfigHandler.getPrefix(), sender, "");
-                    } else {
-                        cancel();
-                    }
+                            "&eCleanup process has not finished yet! &8- &6" + title);
+                    CorePlusAPI.getMsg().sendMsg(ConfigHandler.getPrefix(), sender, "");
+                } else {
+                    cancel();
                 }
-            }.runTaskTimer(PlayerdataPlus.getInstance(), 0, 60L);
-            CorePlusAPI.getMsg().sendMsg(ConfigHandler.getPrefix(), sender,
-                    "&6Cleanup process has ended.");
-            return;
-        }
-        CorePlusAPI.getMsg().sendMsg(ConfigHandler.getPrefix(), sender,
-                "&6There has no any expired data!");
-    }
-
-    private void setCleanMap(ConfigurationSection config) {
-        for (String group : config.getKeys(false)) {
-            switch (group) {
-                case "logs":
-                    cleanMap.put(group, getLogList());
-                    break;
-                case "playerdata":
-                    cleanMap.put(group, getPlayerdataList());
-                    break;
-                case "advancements":
-                    cleanMap.put(group, getAdvancementList());
-                    break;
-                case "stats":
-                    cleanMap.put(group, getStatsList());
-                    break;
-                case "regions":
-                    cleanMap.put(group, getRegionList());
-                    break;
-                case "authme":
-                    cleanMap.put(group, getAuthMeList());
-                    break;
-                case "cmi":
-                    cleanMap.put(group, getCMIExpiredList());
-                    break;
-                case "discordsrv":
-                    cleanMap.put(group, getDiscordSRVList());
-                    break;
-                case "mypet":
-                    cleanMap.put(group, getMyPetList());
-                    break;
-                case "mycommand":
-                    cleanMap.put(group, getMyCommandList());
-                    break;
             }
+        }.runTaskTimer(PlayerdataPlus.getInstance(), 0, 60L);
+        CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPrefix(), ConfigHandler.getConfigPath().getMsgCleanEnd(), sender);
+    }
+
+    private void setPlayersLoginTime() {
+        playerTimeMap = new HashMap<>();
+        playerUUIDMap = new HashMap<>();
+        List<String> variables = new ArrayList<>();
+        variables.add("username");
+        variables.add("last_login");
+        Map<String, Map<String, String>> map = UtilsHandler.getMySQL().getValues(ConfigHandler.getPlugin(),
+                "coreplus", "players", "uuid", variables);
+        UUID uuid;
+        for (String uuidString : map.keySet()) {
+            uuid = UUID.fromString(uuidString);
+            playerTimeMap.put(uuid, Long.parseLong(map.get(uuidString).get("last_login")));
+            playerUUIDMap.put(map.get(uuidString).get("username"), uuid);
         }
     }
 
-    private List<String> getLogList() {
-    }
-
-    private List<String> getAuthMeExpiredList() {
-        int expiration = ConfigHandler.getConfigPath().getCleanProp().get("AuthMe").getExpiration();
-        List<String> list = new ArrayList<>();
-        Map<UUID, CMIUser> userMap = AuthMeApi.getInstance().getPlayerInfo("").get().getLastLoginDate();
-        Map<String, Long> lastLoginMap = CorePlusAPI.getPlayer().getLastLoginMap();
-        for (UUID uuid : userMap.keySet()) {
-            if (lastLoginMap.get(uuid.toString()) > expiration) {
-                list.add(uuid.toString());
-            }
+    private void scanData(CleanMap cleanMap) {
+        String groupName = cleanMap.getGroupName();
+        switch (groupName) {
+            case "logs":
+                expiredTable.put(groupName, cleanMap);
+                break;
+            case "playerdata":
+                expiredTable.put(groupName, getPlayerdataList());
+                break;
+            case "advancements":
+                expiredTable.put(groupName, getAdvancementList());
+                break;
+            case "stats":
+                expiredTable.put(groupName, getStatsList());
+                break;
+            case "regions":
+                expiredTable.put(groupName, getRegionList());
+                break;
+            case "authme":
+                expiredTable.add(groupName, getAuthMeExpiredList());
+                break;
+            case "cmi":
+                expiredTable.put(groupName, getCMIExpiredList());
+                break;
+            case "discordsrv":
+                expiredTable.put(groupName, getDiscordSRVList());
+                break;
+            case "mypet":
+                expiredTable.put(groupName, getMyPetList());
+                break;
+            case "mycommand":
+                expiredTable.put(groupName, getMyCommandList());
+                break;
         }
-        return list;
-    }
-
-    private List<String> getDiscordSRVList() {
-        int expiration = ConfigHandler.getConfigPath().getCleanProp().get("DiscordSRV").getExpiration();
-        List<String> list = new ArrayList<>();
-        Map<UUID, CMIUser> userMap = DiscordUtil.getInstance().getPlayer().getAllUsers();
-        Map<String, Long> lastLoginMap = CorePlusAPI.getPlayer().getLastLoginMap();
-        for (UUID uuid : userMap.keySet()) {
-            if (lastLoginMap.get(uuid.toString()) > expiration) {
-                list.add(uuid.toString());
-            }
-        }
-        return list;
-    }
-
-    private List<String> getCMIExpiredList() {
-        int expiration = ConfigHandler.getConfigPath().getCleanProp().get("CMI").getExpiration();
-        List<String> list = new ArrayList<>();
-        Map<UUID, CMIUser> userMap = CMI.getInstance().getPlayer().getAllUsers();
-        Map<String, Long> lastLoginMap = CorePlusAPI.getPlayer().getLastLoginMap();
-        for (UUID uuid : userMap.keySet()) {
-            if (lastLoginMap.get(uuid.toString()) > expiration) {
-                list.add(uuid.toString());
-            }
-        }
-        return list;
     }
 
     private void cleanManager(String title) {
@@ -298,14 +250,77 @@ public class Clean {
         }
     }
 
+    // AuthMe
+    private Map<String, List<String>> getAuthMeExpiredList(CleanMap cleanMap) {
+        Map<String, List<String>> output = new HashMap<>();
+        List<String> list = new ArrayList<>();
+        long time = cleanMap.getExpiration();
+        for (String name : AuthMeApi.getInstance().getRegisteredNames()) {
+            if (playerTimeMap.get(playerUUIDMap.get(name)) >= time)
+                list.add(name);
+        }
+        output.put("player", list);
+        return output;
+    }
+
+    private void purgeAuthMe(List<String> list) {
+        for (String value : list)
+            CorePlusAPI.getCmd().dispatchConsoleCmd(ConfigHandler.getPlugin(),
+                    "authme unregister " + value);
+    }
+
+    // CMI
+    private Map<String, List<String>> getCMIExpiredList(CleanMap cleanMap) {
+        Map<String, List<String>> output = new HashMap<>();
+        List<String> list = new ArrayList<>();
+        long time = cleanMap.getExpiration();
+        for (UUID uuid : CMI.getInstance().getPlayerManager().getAllUsers().keySet()) {
+            if (playerTimeMap.get(uuid) >= time)
+                list.add(uuid.toString());
+        }
+        output.put("player", list);
+        return output;
+    }
+
+    private void purgeCMI(List<String> list) {
+        for (String value : list)
+            CorePlusAPI.getCmd().dispatchConsoleCmd(ConfigHandler.getPlugin(),
+                    "authme unregister " + value);
+    }
+
+    private Map<String, List<String>> getMyPetExpiredList(CleanMap cleanMap) {
+        if (CorePlusAPI.getDepend().MyPetEnabled()) {
+            Map<String, List<String>> output = new HashMap<>();
+            List<String> list = new ArrayList<>();
+            long time = cleanMap.getExpiration();
+            UUID uuid;
+            for (MyPetPlayer myPetPlayers : MyPetApi.getPlayerManager().getMyPetPlayers()) {
+                uuid = myPetPlayers.getPlayerUUID();
+                if (playerTimeMap.get(uuid) >= time)
+                    list.add(uuid.toString());
+            }
+            output.put("player", list);
+            return output;
+        }
+        return null;
+    }
+
+    private void purgeMyPet(List<String> list) {
+        String database = CorePlusAPI.getConfig().get
+        for (String uuid : list) {
+            CorePlusAPI.getFile().removeMySQLValue(ConfigHandler.getPlugin(), "mypet", );
+        }
+    }
+
+
     private void backup() {
         ServerHandler.sendConsoleMessage("&fData successfully cleaned  &a✔");
         ServerHandler.sendConsoleMessage("");
         ServerHandler.sendConsoleMessage("&f---- Statistics ----");
-        for (String title : cleanMap.rowKeySet()) {
+        for (String title : expiredMap.rowKeySet()) {
             ServerHandler.sendConsoleMessage(title + ":" + cleanCustomStatus(title));
-            for (String subtitle : cleanMap.rowMap().get(title).keySet()) {
-                ServerHandler.sendConsoleMessage("> " + subtitle + " - " + cleanMap.get(title, subtitle).size());
+            for (String subtitle : expiredMap.rowMap().get(title).keySet()) {
+                ServerHandler.sendConsoleMessage("> " + subtitle + " - " + expiredMap.get(title, subtitle).size());
             }
             ServerHandler.sendConsoleMessage("");
         }
@@ -366,7 +381,7 @@ public class Clean {
         }
         List<String> cleanedList = deleteFiles("Logs", null, dataPath, expiredList);
         if (!cleanedList.isEmpty()) {
-            cleanMap.put("Logs", "logs", cleanedList);
+            expiredMap.put("Logs", "logs", cleanedList);
         }
     }
 
@@ -402,7 +417,7 @@ public class Clean {
             }
             List<String> cleanedList = deleteFiles(title, null, dataPath, expiredList);
             if (!cleanedList.isEmpty()) {
-                cleanMap.put(title, folderTitle, cleanedList);
+                expiredMap.put(title, folderTitle, cleanedList);
             }
         } else {
             ServerHandler.sendConsoleMessage("&cYou need Vault to check the offline player's permission");
@@ -449,7 +464,7 @@ public class Clean {
             }
             cleanedList = deleteFiles("Regions", worldName, dataPath, unignoredList);
             if (!cleanedList.isEmpty()) {
-                cleanMap.put("Regions", worldName, cleanedList);
+                expiredMap.put("Regions", worldName, cleanedList);
             }
         }
     }
@@ -471,45 +486,10 @@ public class Clean {
                 }
                 List<String> expiredList = getExpiredUUIDList("CMI", uuidList);
                 if (!expiredList.isEmpty()) {
-                    cleanMap.put("CMI", "users", expiredList);
+                    expiredMap.put("CMI", "users", expiredList);
                     for (String uuid : expiredList) {
                         try {
                             CMI.getInstance().getPlayer().removeUser(userMap.get(UUID.fromString(uuid)));
-                        } catch (Exception e) {
-                            ServerHandler.sendDebugTrace(e);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private void cleanEssentials() {
-        if (ConfigHandler.getDepends().getVault().vaultEnabled()) {
-            if (ConfigHandler.getDepends().EssentialsEnabled()) {
-                Essentials ess = (Essentials) getServer().getPlugin().getPlugin("Essentials");
-                if (ess == null) {
-                    return;
-                }
-                Set<UUID> userSet = ess.getUserMap().getAllUniqueUsers();
-                List<String> userList = new ArrayList<>();
-                for (UUID uuid : userSet) {
-                    userList.add(uuid.toString());
-                }
-                int maxData = ConfigHandler.getConfigPath().getCleanMaxDataSize();
-                if (maxData > 0) {
-                    if (userList.size() > maxData) {
-                        userList = userList.subList(0, maxData);
-                        restart = true;
-                    }
-                }
-                List<String> expiredList = getExpiredUUIDList("Essentials", userList);
-                if (!expiredList.isEmpty()) {
-                    cleanMap.put("Essentials", "users", expiredList);
-                    for (String uuidString : expiredList) {
-                        try {
-                            // Unsure!!!!!!!!!!!!!!!!!!!!!!!!!
-                            ess.getUserMap().removeUser(uuidString);
                         } catch (Exception e) {
                             ServerHandler.sendDebugTrace(e);
                         }
@@ -531,7 +511,7 @@ public class Clean {
                 }
                 List<String> expiredList = getExpiredPlayerList("AuthMe", dataList);
                 if (!expiredList.isEmpty()) {
-                    cleanMap.put("AuthMe", "users", expiredList);
+                    expiredMap.put("AuthMe", "users", expiredList);
                     for (String user : expiredList) {
                         getServer().dispatchCommand(Bukkit.getConsoleSender(), "authme unregister " + user);
                     }
@@ -557,7 +537,7 @@ public class Clean {
                 }
                 List<String> expiredList = getExpiredUUIDList("DiscordSRV", uuidList);
                 if (!expiredList.isEmpty()) {
-                    cleanMap.put("DiscordSRV", "users", expiredList);
+                    expiredMap.put("DiscordSRV", "users", expiredList);
                     for (String uuid : expiredList) {
                         try {
                             DiscordSRV.getPlugin().getAccountLink().unlink(UUID.fromString(uuid));
@@ -565,39 +545,6 @@ public class Clean {
                             ServerHandler.sendDebugTrace(e);
                         }
                     }
-                }
-            }
-        }
-    }
-
-    private void cleanMyPet() {
-        if (ConfigHandler.getDepends().getVault().vaultEnabled()) {
-            // Can only remove pets and still have player list need to remove.
-            if (ConfigHandler.getDepends().MyPetEnabled()) {
-                MyPet[] myPets = MyPetApi.getMyPet().getAllActiveMyPets();
-                List<MyPet> myPetList = new ArrayList<>(Arrays.asList(myPets));
-                int maxData = ConfigHandler.getConfigPath().getCleanMaxDataSize();
-                if (maxData > 0) {
-                    if (myPetList.size() > maxData) {
-                        myPetList = myPetList.subList(0, maxData);
-                        restart = true;
-                    }
-                }
-                List<String> expiredPetList = new ArrayList<>();
-                String uuid;
-                for (MyPet pet : myPetList) {
-                    uuid = pet.getOwner().getPlayerUUID().toString();
-                    if (getExpiredUUID("MyPet", uuid)) {
-                        try {
-                            pet.removePet();
-                        } catch (Exception e) {
-                            ServerHandler.sendDebugTrace(e);
-                        }
-                        expiredPetList.add(uuid);
-                    }
-                }
-                if (!expiredPetList.isEmpty()) {
-                    cleanMap.put("MyPet", "users", expiredPetList);
                 }
             }
         }
@@ -1157,7 +1104,7 @@ public class Clean {
         boolean autoClean = ConfigHandler.getConfigPath().isCleanAutoEnable();
         boolean toZip = ConfigHandler.getConfigPath().isBackupToZip();
         StringBuilder sb = new StringBuilder();
-        for (String value : cleanMap.rowKeySet()) {
+        for (String value : expiredMap.rowKeySet()) {
             sb.append(value);
         }
         String controlList = sb.toString();
@@ -1178,18 +1125,18 @@ public class Clean {
         ConfigHandler.getLogger().addLog("log", "Auto-Clean: " + autoClean, false);
         ConfigHandler.getLogger().addLog("log", "", false);
         ConfigHandler.getLogger().addLog("log", "---- Statistics ----", false);
-        for (String title : cleanMap.rowKeySet()) {
+        for (String title : expiredMap.rowKeySet()) {
             ConfigHandler.getLogger().addLog("log", title + ":" + cleanCustomStatus(title), false);
-            for (String subtitle : cleanMap.rowMap().get(title).keySet()) {
-                ConfigHandler.getLogger().addLog("log", "> " + subtitle + " - " + cleanMap.get(title, subtitle).size(), false);
+            for (String subtitle : expiredMap.rowMap().get(title).keySet()) {
+                ConfigHandler.getLogger().addLog("log", "> " + subtitle + " - " + expiredMap.get(title, subtitle).size(), false);
             }
             ConfigHandler.getLogger().addLog("log", "", false);
         }
         ConfigHandler.getLogger().addLog("log", "---- Details ----", false);
-        for (String title : cleanMap.rowKeySet()) {
+        for (String title : expiredMap.rowKeySet()) {
             ConfigHandler.getLogger().addLog("log", title + ":", false);
-            for (String subtitle : cleanMap.rowMap().get(title).keySet()) {
-                for (String value : cleanMap.get(title, subtitle)) {
+            for (String subtitle : expiredMap.rowMap().get(title).keySet()) {
+                for (String value : expiredMap.get(title, subtitle)) {
                     ConfigHandler.getLogger().addLog("log", " - " + value, false);
                 }
             }

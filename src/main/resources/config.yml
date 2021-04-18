@@ -173,6 +173,17 @@ Clean:
       Enable: false
       Backup: true
       Expiration: 90
+    Region:
+      Enable: false
+      Backup: true
+      Expiration: 60
+      Residence-Bypass: true
+      Worlds:
+        - world
+        - world_nether
+        - world_the_end
+      Ignore-Regions: []
+      #  - "world, 8.8"
     Playerdata:
       Enable: false
       Backup: true
@@ -185,35 +196,21 @@ Clean:
       Enable: false
       Backup: true
       Expiration: 60
-    Region:
-      Enable: false
-      Backup: true
-      Expiration: 60
-      Residence-Bypass: true
-      Worlds:
-        - world
-        - world_nether
-        - world_the_end
-      Ignore-Regions: []
-      #  - "world, 8.8"
     AuthMe:
       Enable: false
       Expiration: 60
     CMI:
       Enable: false
       Expiration: 60
-    DiscordSRV:
-      Enable: false
-      Expiration: 60
-      Backup: true
     MyCommand:
       Enable: false
       Expiration: 60
       Backup: true
-      Variable-List: []
-      Variable-Ignore-List: []
-      Playerdata-List: []
-      Playerdata-Ignore-List: []
+      # To remove the useless variables.
+      Playerdata:
+        Enable: false
+        List: []
+        Ignore-List: []
 
 # Command: /pdp convert <type> <feature>
 # More information: https://github.com/momoservertw/PlayerdataPlus/wiki/Data-Convertor

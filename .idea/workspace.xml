@@ -6,7 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="55df3580-7d8b-4dd9-afca-eac36992f8e3" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/extra/CorePlus-1.0.0.jar" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/extra/CorePlus-1.0.0.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/handlers/RegisterHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/handlers/RegisterHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/playerstatus/PlayerStatusControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/playerstatus/PlayerStatusControl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/utils/Nick.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/utils/Nick.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/utils/clean/Clean.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/utils/clean/Clean.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -90,10 +92,18 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="556" y="163" width="594" height="594" key="find.popup" timestamp="1618554687713">
+    <state x="659" y="166" key="#com.intellij.ide.util.MemberChooser" timestamp="1618857359203">
       <screen x="0" y="0" width="1707" height="920" />
     </state>
-    <state x="556" y="163" width="594" height="594" key="find.popup/2560.0.1707.920/0.0.1707.920@0.0.1707.920" timestamp="1618554687713" />
+    <state x="659" y="166" key="#com.intellij.ide.util.MemberChooser/2560.0.1707.920/0.0.1707.920@0.0.1707.920" timestamp="1618857359203" />
+    <state x="334" y="35" key="SettingsEditor" timestamp="1618862130977">
+      <screen x="0" y="0" width="1707" height="920" />
+    </state>
+    <state x="334" y="35" key="SettingsEditor/2560.0.1707.920/0.0.1707.920@0.0.1707.920" timestamp="1618862130977" />
+    <state x="556" y="163" width="594" height="594" key="find.popup" timestamp="1618742738956">
+      <screen x="0" y="0" width="1707" height="920" />
+    </state>
+    <state x="556" y="163" width="594" height="594" key="find.popup/2560.0.1707.920/0.0.1707.920@0.0.1707.920" timestamp="1618742738956" />
     <state x="510" y="211" key="run.anything.popup" timestamp="1618402967239">
       <screen x="0" y="0" width="1707" height="920" />
     </state>

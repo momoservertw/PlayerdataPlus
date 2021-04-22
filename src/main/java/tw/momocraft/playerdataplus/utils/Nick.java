@@ -30,25 +30,25 @@ public class Nick {
                 nickColor = getDefaultColor(player);
             } else if (!getColorPerm(player, nickColor)) {
                 Language.sendLangMessage("Message.PlayerdataPlus.Nick.invalidColor", sender);
-                CorePlusAPI.getMsg().sendFeatureMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-On", playerName, "colorPerm", "return",
+                CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-On", playerName, "colorPerm", "return",
                         new Throwable().getStackTrace()[0]);
                 return;
             }
             if (!getLength(player, nickName)) {
                 Language.sendLangMessage("Message.PlayerdataPlus.Nick.invalidLength", sender);
-                CorePlusAPI.getMsg().sendFeatureMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-On", playerName, "length", "return",
+                CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-On", playerName, "length", "return",
                         new Throwable().getStackTrace()[0]);
                 return;
             }
             if (!getPureColor(player, nickName)) {
                 Language.sendLangMessage("Message.PlayerdataPlus.Nick.invalidColorInside", sender);
-                CorePlusAPI.getMsg().sendFeatureMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-On", playerName, "pureColor", "return",
+                CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-On", playerName, "pureColor", "return",
                         new Throwable().getStackTrace()[0]);
                 return;
             }
             if (!getBlackList(player, nickName)) {
                 Language.sendLangMessage("Message.PlayerdataPlus.Nick.invalidNick", sender);
-                CorePlusAPI.getMsg().sendFeatureMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-On", playerName, "blackList", "return",
+                CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-On", playerName, "blackList", "return",
                         new Throwable().getStackTrace()[0]);
                 return;
             }
@@ -63,7 +63,7 @@ public class Nick {
         placeHolders[3] = nickName;
         placeHolders[4] = nickColor;
         Language.sendLangMessage("Message.PlayerdataPlus.Nick.successOn", sender, placeHolders);
-        CorePlusAPI.getMsg().sendFeatureMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-On", playerName, "final", "return",
+        CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-On", playerName, "final", "return",
                 new Throwable().getStackTrace()[0]);
     }
 
@@ -87,26 +87,26 @@ public class Nick {
             } else {
                 if (!getColorPerm(player, nickColor)) {
                     Language.sendLangMessage("Message.PlayerdataPlus.Nick.targetInvalidColor", sender, placeHolders);
-                    CorePlusAPI.getMsg().sendFeatureMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-On", playerName, "colorPerm", "return", "other",
+                    CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-On", playerName, "colorPerm", "return", "other",
                             new Throwable().getStackTrace()[0]);
                     return;
                 }
             }
             if (!getLength(player, nickName)) {
                 Language.sendLangMessage("Message.PlayerdataPlus.Nick.targetInvalidLength", sender, placeHolders);
-                CorePlusAPI.getMsg().sendFeatureMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-On", playerName, "length", "return", "other",
+                CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-On", playerName, "length", "return", "other",
                         new Throwable().getStackTrace()[0]);
                 return;
             }
             if (!getPureColor(player, nickName)) {
                 Language.sendLangMessage("Message.PlayerdataPlus.Nick.targetInvalidColorInside", sender, placeHolders);
-                CorePlusAPI.getMsg().sendFeatureMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-On", playerName, "pureColor", "return", "other",
+                CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-On", playerName, "pureColor", "return", "other",
                         new Throwable().getStackTrace()[0]);
                 return;
             }
             if (!getBlackList(player, nickName)) {
                 Language.sendLangMessage("Message.PlayerdataPlus.Nick.targetInvalidNick", sender, placeHolders);
-                CorePlusAPI.getMsg().sendFeatureMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-On", playerName, "blackList", "return", "other",
+                CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-On", playerName, "blackList", "return", "other",
                         new Throwable().getStackTrace()[0]);
                 return;
             }
@@ -121,7 +121,7 @@ public class Nick {
         placeHolders[4] = nickColor;
         Language.sendLangMessage("Message.PlayerdataPlus.Nick.successOn", player, placeHolders);
         Language.sendLangMessage("Message.PlayerdataPlus.Nick.targetSuccessOn", sender, placeHolders);
-        CorePlusAPI.getMsg().sendFeatureMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-On", playerName, "final", "return", "other",
+        CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-On", playerName, "final", "return", "other",
                 new Throwable().getStackTrace()[0]);
     }
 
@@ -135,7 +135,7 @@ public class Nick {
         placeHolders[1] = playerName;
         placeHolders[4] = nickColor;
         Language.sendLangMessage("Message.PlayerdataPlus.Nick.successOff", player, placeHolders);
-        CorePlusAPI.getMsg().sendFeatureMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-Off", playerName, "final", "return",
+        CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-Off", playerName, "final", "return",
                 new Throwable().getStackTrace()[0]);
     }
 
@@ -150,7 +150,7 @@ public class Nick {
         placeHolders[4] = nickColor;
         Language.sendLangMessage("Message.PlayerdataPlus.Nick.successOff", player, placeHolders);
         Language.sendLangMessage("Message.PlayerdataPlus.Nick.targetSuccessOff", sender, placeHolders);
-        CorePlusAPI.getMsg().sendFeatureMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-Off", playerName, "final", "return", "other",
+        CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-Off", playerName, "final", "return", "other",
                 new Throwable().getStackTrace()[0]);
     }
 
@@ -165,7 +165,7 @@ public class Nick {
         if (!bypass) {
             if (!getColorPerm(player, nickColor)) {
                 Language.sendLangMessage("Message.PlayerdataPlus.Nick.invalidColor", sender);
-                CorePlusAPI.getMsg().sendFeatureMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-Color", playerName, "colorPerm", "return",
+                CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-Color", playerName, "colorPerm", "return",
                         new Throwable().getStackTrace()[0]);
                 return;
             }
@@ -175,7 +175,7 @@ public class Nick {
         placeHolders[4] = nickColor;
         Language.sendLangMessage("Message.PlayerdataPlus.Nick.successColor", player, placeHolders);
         colorChanging(player, playerName, nickColor);
-        CorePlusAPI.getMsg().sendFeatureMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-Color", playerName, "final", "return",
+        CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-Color", playerName, "final", "return",
                 new Throwable().getStackTrace()[0]);
     }
 
@@ -186,7 +186,7 @@ public class Nick {
         if (!bypass) {
             if (!getColorPerm(player, nickColor)) {
                 Language.sendLangMessage("Message.PlayerdataPlus.Nick.targetInvalidColor", sender, placeHolders);
-                CorePlusAPI.getMsg().sendFeatureMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-Color", playerName, "colorPerm", "return", "other",
+                CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-Color", playerName, "colorPerm", "return", "other",
                         new Throwable().getStackTrace()[0]);
                 return;
             }
@@ -196,7 +196,7 @@ public class Nick {
         placeHolders[4] = nickColor;
         Language.sendLangMessage("Message.PlayerdataPlus.Nick.successColor", player, placeHolders);
         Language.sendLangMessage("Message.PlayerdataPlus.Nick.targetSuccessColor", sender, placeHolders);
-        CorePlusAPI.getMsg().sendFeatureMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-Color", playerName, "final", "return",
+        CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-Color", playerName, "final", "return",
                 new Throwable().getStackTrace()[0]);
     }
 
@@ -219,7 +219,7 @@ public class Nick {
             if (ConfigHandler.getConfigPath().isNickCMIUpdate()) {
                 CMI.getInstance().getTabList().updateTabList(20);
             }
-            CorePlusAPI.getMsg().sendFeatureMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-On", playerName, "CMI", "setColor", nickName,
+            CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-On", playerName, "CMI", "setColor", nickName,
                     new Throwable().getStackTrace()[0]);
         }
     }
@@ -238,7 +238,7 @@ public class Nick {
                 nickName = nickName.replaceAll("[§][a-fA-F0-9]", "§" + nickColor);
             }
             user.setNickname(nickName);
-            CorePlusAPI.getMsg().sendFeatureMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-On", playerName, "Essentials", "setColor", nickName,
+            CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-On", playerName, "Essentials", "setColor", nickName,
                     new Throwable().getStackTrace()[0]);
         }
     }
@@ -260,7 +260,7 @@ public class Nick {
                 }
             }
             //NametagEdit.getApi().setNametag(player.getName(), nteFormatPrefix, nteFormatSuffix);
-            CorePlusAPI.getMsg().sendFeatureMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-On", playerName, "NameEditTag", "setColor", formatPrefix + playerName + formatSuffix,
+            CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-On", playerName, "NameEditTag", "setColor", formatPrefix + playerName + formatSuffix,
                     new Throwable().getStackTrace()[0]);
         }
     }
@@ -294,7 +294,7 @@ public class Nick {
                 CMI.getInstance().getTabList().updateTabList(20);
                 //Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "cmi tablistupdate");
             }
-            CorePlusAPI.getMsg().sendFeatureMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-On", playerName, "CMI", "set", format,
+            CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-On", playerName, "CMI", "set", format,
                     new Throwable().getStackTrace()[0]);
         }
     }
@@ -321,7 +321,7 @@ public class Nick {
                 }
             }
             ess.getUser(player).setNickname(format);
-            CorePlusAPI.getMsg().sendFeatureMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-On", playerName, "Essentials", "set", format,
+            CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-On", playerName, "Essentials", "set", format,
                     new Throwable().getStackTrace()[0]);
         }
     }
@@ -358,7 +358,7 @@ public class Nick {
                 Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), Utils.translateLayout("nte player " + playerName + " suffix " + formatSuffix, player));
             }
             //NametagEdit.getApi().setNametag(player, nteFormatPrefix, nteFormatSuffix);
-            CorePlusAPI.getMsg().sendFeatureMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-On", playerName, "NameEditTag", "set", formatPrefix + playerName + formatSuffix,
+            CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-On", playerName, "NameEditTag", "set", formatPrefix + playerName + formatSuffix,
                     new Throwable().getStackTrace()[0]);
         }
     }
@@ -373,7 +373,7 @@ public class Nick {
         for (String command : cmdList) {
             command = translate(command, playerName, nickName, nickColor, player);
             ServerHandler.executeCommands(player, command);
-            CorePlusAPI.getMsg().sendFeatureMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-On", playerName, "commands", "set", command,
+            CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-On", playerName, "commands", "set", command,
                     new Throwable().getStackTrace()[0]);
         }
     }

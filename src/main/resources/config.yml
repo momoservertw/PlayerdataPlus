@@ -159,24 +159,26 @@ Player-Status:
 Clean:
   Enable: false
   Settings:
-    #
-    Speed-Limit: 300
     Auto-Clean:
       Enable: false
     Log: true
     Backup:
-      Enable: true
-      Path: "plugins//PlayerdataPlus//Backup"
-      Zip: false
+      File:
+        Path: "plugins//PlayerdataPlus//Backup"
+        Zip: false
+      # Needed to setup in CorePlus's data.yml.
+      MySQL:
+        Enable: true
+    # The default setting of groups.
+    Default:
+      Expiration: 60
+      Backup: true
   Groups:
     Log:
       Enable: false
-      Backup: true
       Expiration: 90
     Region:
       Enable: false
-      Backup: true
-      Expiration: 60
       Residence-Bypass: true
       Worlds:
         - world
@@ -186,26 +188,16 @@ Clean:
       #  - "world, 8.8"
     Playerdata:
       Enable: false
-      Backup: true
-      Expiration: 60
     Advancement:
       Enable: false
-      Backup: true
-      Expiration: 60
     Statistic:
       Enable: false
-      Backup: true
-      Expiration: 60
     AuthMe:
       Enable: false
-      Expiration: 60
     CMI:
       Enable: false
-      Expiration: 60
     MyCommand:
       Enable: false
-      Expiration: 60
-      Backup: true
       # To remove the useless variables.
       Playerdata:
         Enable: false
@@ -264,6 +256,7 @@ Message:
     listed: "%prefix% &eListed a total of: &7%amount% &e(%value%&e)"
     start: "%prefix% &6Start checking player data..."
     end: "%prefix% &6Clean process has ended."
+      start: "%prefix% &6Start checking player data..."
     toggleOn: "%prefix% &aEnabled the clean process."
     toggleOff: "%prefix% &cDisabled the clean process."
     alreadyOn: "%prefix% &fThe clean process has already enabled."

@@ -6,10 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="55df3580-7d8b-4dd9-afca-eac36992f8e3" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/handlers/RegisterHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/handlers/RegisterHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/playerstatus/PlayerStatusControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/playerstatus/PlayerStatusControl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/utils/Nick.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/utils/Nick.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/utils/clean/Clean.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/utils/clean/Clean.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/config.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -100,14 +98,14 @@
       <screen x="0" y="0" width="1707" height="920" />
     </state>
     <state x="334" y="35" key="SettingsEditor/2560.0.1707.920/0.0.1707.920@0.0.1707.920" timestamp="1618862130977" />
-    <state x="556" y="163" width="594" height="594" key="find.popup" timestamp="1618742738956">
+    <state x="556" y="163" width="594" height="594" key="find.popup" timestamp="1620142347248">
       <screen x="0" y="0" width="1707" height="920" />
     </state>
-    <state x="556" y="163" width="594" height="594" key="find.popup/2560.0.1707.920/0.0.1707.920@0.0.1707.920" timestamp="1618742738956" />
-    <state x="510" y="211" key="run.anything.popup" timestamp="1618402967239">
+    <state x="556" y="163" width="594" height="594" key="find.popup/2560.0.1707.920/0.0.1707.920@0.0.1707.920" timestamp="1620142347248" />
+    <state x="510" y="211" key="run.anything.popup" timestamp="1620142720090">
       <screen x="0" y="0" width="1707" height="920" />
     </state>
-    <state x="510" y="211" key="run.anything.popup/2560.0.1707.920/0.0.1707.920@0.0.1707.920" timestamp="1618402967239" />
+    <state x="510" y="211" key="run.anything.popup/2560.0.1707.920/0.0.1707.920@0.0.1707.920" timestamp="1620142720090" />
   </component>
   <component name="antWorkspaceConfiguration">
     <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />

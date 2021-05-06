@@ -16,7 +16,6 @@ import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.scheduler.BukkitRunnable;
 import tw.momocraft.coreplus.api.CorePlusAPI;
 import tw.momocraft.coreplus.handlers.UtilsHandler;
@@ -71,16 +70,15 @@ public class Clean {
 
     public void start(CommandSender sender, String title) {
         starting = true;
-        Map<String, CleanMap> cleanProp = ConfigHandler.getConfigPath().getCleanProp();
         setPlayersLoginTime();
         expiredTable = HashBasedTable.create();
         // Scanning the data.
         if (title != null) {
-            CleanMap cleanMap = cleanProp.get(title);
+            CleanMap cleanMap = ConfigHandler.getConfigPath().getCleanProp().get(title);
             if (cleanMap != null)
                 scanData(cleanMap);
         } else {
-            for (CleanMap cleanMap : cleanProp.values())
+            for (CleanMap cleanMap : ConfigHandler.getConfigPath().getCleanProp().values())
                 scanData(cleanMap);
         }
         // Purging the data.
@@ -135,48 +133,44 @@ public class Clean {
         playerNameMap = CorePlusAPI.getUtils().invertMap(playerUUIDMap);
     }
 
-
     private void scanData(CleanMap cleanMap) {
         String title = cleanMap.getGroupName();
-        Map<String, List<String>> expiredMap;
         switch (title) {
             case "logs":
-                expiredMap = addAuthMeList(cleanMap);
+                expiredMap = addAuthMe(cleanMap);
                 break;
             case "playerdata":
-                expiredMap = addAuthMeList(cleanMap);
+                expiredMap = addAuthMe(cleanMap);
                 break;
             case "advancements":
-                expiredMap = addAuthMeList(cleanMap);
+                expiredMap = addAuthMe(cleanMap);
                 break;
             case "stats":
-                expiredMap = addAuthMeList(cleanMap);
+                expiredMap = addAuthMe(cleanMap);
                 break;
             case "regions":
-                expiredMap = addAuthMeList(cleanMap);
+                expiredMap = addAuthMe(cleanMap);
                 break;
             case "authme":
-                expiredMap = addAuthMeList(cleanMap);
+                expiredMap = addAuthMe(cleanMap);
                 break;
             case "cmi":
-                expiredMap = addCMIList(cleanMap);
+                expiredMap = addCMI(cleanMap);
                 break;
             case "discordsrv":
-                expiredMap = addDiscordSRVList(cleanMap);
+                expiredMap = addDiscordSRV(cleanMap);
                 break;
             case "mypet":
-                expiredMap = addMyPetList(cleanMap);
+                expiredMap = addMyPet(cleanMap);
                 break;
             case "mycommand":
-                expiredMap = getMyCommandList(cleanMap);
+                expiredMap = addMyCommand(cleanMap);
                 break;
             default:
                 CorePlusAPI.getMsg().sendErrorMsg(ConfigHandler.getPlugin(),
                         "Can not clean the clean group: " + title);
                 return;
         }
-        for (String key : expiredMap.keySet())
-            expiredTable.put(title, key, expiredMap.get(key));
     }
 
     private void purgeData(String title, String group, List<String> list) {
@@ -207,16 +201,14 @@ public class Clean {
     }
 
     // AuthMe
-    private Map<String, List<String>> addAuthMeList(CleanMap cleanMap) {
-        Map<String, List<String>> output = new HashMap<>();
+    private void addAuthMe(CleanMap cleanMap) {
         List<String> list = new ArrayList<>();
         long time = cleanMap.getExpiration();
         for (String name : AuthMeApi.getInstance().getRegisteredNames()) {
             if (playerTimeMap.get(playerUUIDMap.get(name)) >= time)
                 list.add(name);
         }
-        output.put("player", list);
-        return output;
+        expiredTable.put("AuthMe", "player", list);
     }
 
     private void purgeAuthMe(List<String> list) {
@@ -226,16 +218,14 @@ public class Clean {
     }
 
     // CMI
-    private Map<String, List<String>> addCMIList(CleanMap cleanMap) {
-        Map<String, List<String>> output = new HashMap<>();
+    private void addCMI(CleanMap cleanMap) {
         List<String> list = new ArrayList<>();
         long time = cleanMap.getExpiration();
         for (UUID uuid : CMI.getInstance().getPlayerManager().getAllUsers().keySet()) {
             if (playerTimeMap.get(uuid) >= time)
                 list.add(uuid.toString());
         }
-        output.put("player", list);
-        return output;
+        expiredTable.put("CMI", "player", list);
     }
 
     private void purgeCMI(List<String> list) {
@@ -245,9 +235,8 @@ public class Clean {
     }
 
     // MyPet
-    private Map<String, List<String>> addMyPetList(CleanMap cleanMap) {
+    private void addMyPet(CleanMap cleanMap) {
         if (CorePlusAPI.getDepend().MyPetEnabled()) {
-            Map<String, List<String>> output = new HashMap<>();
             List<String> list = new ArrayList<>();
             long time = cleanMap.getExpiration();
             UUID uuid;
@@ -256,10 +245,8 @@ public class Clean {
                 if (playerTimeMap.get(uuid) >= time)
                     list.add(uuid.toString());
             }
-            output.put("player", list);
-            return output;
+            expiredTable.put("MyPet", "player", list);
         }
-        return null;
     }
 
     private void purgeMyPet(List<String> list) {
@@ -268,14 +255,17 @@ public class Clean {
         String playersTable = mySQLMap.getTables().get("players");
         String petsTable = mySQLMap.getTables().get("pets");
         for (String uuid : list) {
-            CorePlusAPI.getFile().removeMySQLValue(ConfigHandler.getPlugin(), database, petsTable, "owner_uuid", uuid);
-            CorePlusAPI.getFile().removeMySQLValue(ConfigHandler.getPlugin(), database, playersTable, "name", playerNameMap.get(uuid));
+            CorePlusAPI.getFile().removeMySQLValue(ConfigHandler.getPlugin(),
+                    database, petsTable, "owner_uuid", uuid);
+            CorePlusAPI.getFile().removeMySQLValue(ConfigHandler.getPlugin(),
+                    database, playersTable, "name", playerNameMap.get(uuid));
         }
     }
 
     // DiscordSRV
-    private List<UUID> addDiscordSRVList() {
-        return new ArrayList<>(DiscordSRV.getPlugin().getAccountLinkManager().getLinkedAccounts().values());
+    private List<UUID> addDiscordSRV() {
+        List<String> list = new ArrayList<>(DiscordSRV.getPlugin().getAccountLinkManager().getLinkedAccounts().values()));
+        expiredTable.put("MyPet", "player", list);
     }
 
     private void purgeDiscordSRV(List<String> list) {
@@ -285,34 +275,29 @@ public class Clean {
     }
 
     // MyCommand
-    private List<UUID> getMyCommandList() {
+    private List<UUID> addMyCommand() {
         return new ArrayList<>(DiscordSRV.getPlugin().getAccountLinkManager().getLinkedAccounts().values());
     }
 
     private void purgeMyCommand(String group, List<String> list) {
         String value;
-        ConfigurationSection playerdatasConfig = ConfigHandler.getConfig("playerdata.yml").getConfigurationSection("");
-        ConfigurationSection playerConfig;
-        ConfigurationSection varConfig = ConfigHandler.getConfig("othersdb.yml").getConfigurationSection("");
         boolean uuidSet;
-        if (playerdatasConfig != null) {
-            ConfigHandler.getLogger().createLog("", PlayerdataPlus.getInstance().getDataFolder().getPath() + "\\MyCommand", "playerdata.yml");
-            for (String uuid : playerdatasConfig.getKeys(false)) {
-                playerConfig = ConfigHandler.getConfig("playerdata.yml").getConfigurationSection(uuid);
-                if (playerConfig != null) {
-                    uuidSet = false;
-                    for (String key : playerConfig.getKeys(false)) {
-                        if (ignorePlayerdatas.contains(key)) {
-                            value = ConfigHandler.getConfig("playerdata.yml").getString(uuid + "." + key);
-                            if (ignoreValues.contains(value)) {
-                                continue;
-                            }
-                            if (!uuidSet) {
-                                ConfigHandler.getLogger().addLog("", uuid + ":", false);
-                                uuidSet = true;
-                            }
-                            ConfigHandler.getLogger().addLog("", "  " + key + ":" + value, false);
+        ConfigHandler.getLogger().createLog("", PlayerdataPlus.getInstance().getDataFolder().getPath() + "\\MyCommand", "playerdata.yml");
+        for (String uuid : playerdatasConfig.getKeys(false)) {
+            playerConfig = ConfigHandler.getConfig("playerdata.yml").getConfigurationSection(uuid);
+            if (playerConfig != null) {
+                uuidSet = false;
+                for (String key : playerConfig.getKeys(false)) {
+                    if (ignorePlayerdatas.contains(key)) {
+                        value = ConfigHandler.getConfig("playerdata.yml").getString(uuid + "." + key);
+                        if (ignoreValues.contains(value)) {
+                            continue;
                         }
+                        if (!uuidSet) {
+                            ConfigHandler.getLogger().addLog("", uuid + ":", false);
+                            uuidSet = true;
+                        }
+                        ConfigHandler.getLogger().addLog("", "  " + key + ":" + value, false);
                     }
                 }
             }
@@ -331,8 +316,7 @@ public class Clean {
     }
 
     // Logs
-    private Map<String, List<String>> getLogsExpiredList(CleanMap cleanMap) {
-        Map<String, List<String>> output = new HashMap<>();
+    private void addLogsList(CleanMap cleanMap) {
         List<String> list = new ArrayList<>();
         long time = cleanMap.getExpiration();
         UUID uuid;
@@ -341,8 +325,7 @@ public class Clean {
             if (playerTimeMap.get(uuid) >= time)
                 list.add(uuid.toString());
         }
-        output.put("player", list);
-        return output;
+        expiredTable.put("Logs", "data", list);
     }
 
     private void purgeLogs(List<String> list) {

@@ -68,6 +68,9 @@ public class ConfigPath {
     private boolean cleanBackup;
     private boolean cleanBackupZip;
     private String cleanBackupPath;
+    private boolean cleanMycmd;
+    private List<String> cleanMycmdList;
+    private List<String> cleanMycmdIgnoreList;
     private final Map<String, CleanMap> cleanProp = new HashMap<>();
 
     //  ============================================== //
@@ -149,6 +152,9 @@ public class ConfigPath {
         cleanBackup = ConfigHandler.getConfig("config.yml").getBoolean("Clean.Settings.Backup.Enable");
         cleanBackupPath = ConfigHandler.getConfig("config.yml").getString("Clean.Settings.Backup.Path");
         cleanBackupZip = ConfigHandler.getConfig("config.yml").getBoolean("Clean.Settings.Backup.Zip");
+        cleanMycmd = ConfigHandler.getConfig("config.yml").getBoolean("Clean.Groups.MyCommand.Playerdata.Enable");
+        cleanMycmdList = ConfigHandler.getConfig("config.yml").getStringList("Clean.Groups.MyCommand.Playerdata.List");
+        cleanMycmdIgnoreList = ConfigHandler.getConfig("config.yml").getStringList("Clean.Groups.MyCommand.Playerdata.Ignore-List");
         CleanMap cleanMap;
         ConfigurationSection cleanConfig = ConfigHandler.getConfig("config.yml").getConfigurationSection("Clean.Groups");
         if (cleanConfig == null)
@@ -396,6 +402,18 @@ public class ConfigPath {
 
     public String getCleanBackupPath() {
         return cleanBackupPath;
+    }
+
+    public boolean isCleanMycmd() {
+        return cleanMycmd;
+    }
+
+    public List<String> getCleanMycmdList() {
+        return cleanMycmdList;
+    }
+
+    public List<String> getCleanMycmdIgnoreList() {
+        return cleanMycmdIgnoreList;
     }
 
     public Map<String, CleanMap> getCleanProp() {

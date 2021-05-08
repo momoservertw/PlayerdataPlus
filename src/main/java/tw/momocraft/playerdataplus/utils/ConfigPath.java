@@ -50,10 +50,11 @@ public class ConfigPath {
     private String msgNickChangeColor;
     private String msgNickChangeColorTarget;
 
-    private String msgCleanStart;
-    private String msgCleanEnd;
     private String msgCleanSucceed;
     private String msgCleanListed;
+    private String msgCleanStart;
+    private String msgCleanEnd;
+    private String msgCleanEmpty;
     private String msgCleanToggleOn;
     private String msgCleanToggleOff;
     private String msgCleanAlreadyOn;
@@ -135,6 +136,7 @@ public class ConfigPath {
         msgCleanStart = ConfigHandler.getConfig("config.yml").getString("Message.Clean.start");
         msgCleanEnd = ConfigHandler.getConfig("config.yml").getString("Message.Clean.end");
         msgCleanSucceed = ConfigHandler.getConfig("config.yml").getString("Message.Clean.succeed");
+        msgCleanEmpty = ConfigHandler.getConfig("config.yml").getString("Message.Clean.empty");
         msgCleanListed = ConfigHandler.getConfig("config.yml").getString("Message.Clean.listed");
         msgCleanToggleOn = ConfigHandler.getConfig("config.yml").getString("Message.Clean.toggleOn");
         msgCleanToggleOff = ConfigHandler.getConfig("config.yml").getString("Message.Clean.toggleOff");
@@ -345,6 +347,14 @@ public class ConfigPath {
         return msgNickChangeColorTarget;
     }
 
+    public String getMsgCleanSucceed() {
+        return msgCleanSucceed;
+    }
+
+    public String getMsgCleanListed() {
+        return msgCleanListed;
+    }
+
     public String getMsgCleanStart() {
         return msgCleanStart;
     }
@@ -353,12 +363,8 @@ public class ConfigPath {
         return msgCleanEnd;
     }
 
-    public String getMsgCleanSucceed() {
-        return msgCleanSucceed;
-    }
-
-    public String getMsgCleanListed() {
-        return msgCleanListed;
+    public String getMsgCleanEmpty() {
+        return msgCleanEmpty;
     }
 
     public String getMsgCleanToggleOn() {

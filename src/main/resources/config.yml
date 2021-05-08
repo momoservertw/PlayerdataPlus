@@ -200,9 +200,11 @@ Clean:
       Enable: false
       # To remove the useless variables.
       Playerdata:
-        Enable: false
         List: []
         Ignore-List: []
+    Example:
+      Enable: false
+      
 
 # Command: /pdp convert <type> <feature>
 # More information: https://github.com/momoservertw/PlayerdataPlus/wiki/Data-Convertor

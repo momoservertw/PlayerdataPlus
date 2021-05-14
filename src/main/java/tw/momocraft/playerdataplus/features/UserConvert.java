@@ -1,4 +1,4 @@
-package tw.momocraft.playerdataplus.utils;
+package tw.momocraft.playerdataplus.features;
 
 import com.Zrips.CMI.CMI;
 import com.Zrips.CMI.Containers.CMIUser;
@@ -14,19 +14,13 @@ import java.util.UUID;
 
 public class UserConvert {
 
-    /**
-     * The manager if converting player data.
-     *
-     * @param name1 the name of first player.
-     * @param name2 the name of second player.
-     */
     private void convertManager(String name1, String name2, boolean replace) {
         UUID uuid1 = CorePlusAPI.getPlayer().getPlayerUUID(name1);
-        UUID uuid2 = CorePlusAPI.getPlayer().getPlayerUUID.getOfflineUUID(name2);
+        UUID uuid2 = CorePlusAPI.getPlayer().getPlayerUUID(name2);
 
         convertPlayerdata(uuid1, uuid2);
-        //convertAdvancements(uuid1, uuid2);
-        //convertStats(uuid1, uuid2);
+        convertAdvancements(uuid1, uuid2);
+        convertStats(uuid1, uuid2);
 
         convertMoney(name1, name2, uuid1, uuid2, replace);
         convertPoints(uuid1, uuid2, replace);
@@ -44,9 +38,9 @@ public class UserConvert {
         if (CorePlusAPI.getDepend().CMIEnabled()) {
             CMIEconomy economy = new CMIEconomy();
             economy.transfer(name1, name2, economy.getBalance(name1));
-        }/* else if (ConfigHandler.getDepends().getVault().vaultEnabled() && ConfigHandler.getDepends().getVault().getEconomy().isEnabled()) {
+        }/* else if (CorePlusAPI.getDepend().getVault().vaultEnabled() && CorePlusAPI.getDepend().getVault().getEconomy().isEnabled()) {
 
-            Economy economy = ConfigHandler.getDepends().getVault().getEconomy();
+            Economy economy = CorePlusAPI.getDepend().getVault().getEconomy();
             if (replace) {
                 economy.depositPlayer()
                 economy.bankWithdraw();
@@ -80,14 +74,14 @@ public class UserConvert {
             } else {
                 Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "lp user " + name1 + " clone " + name2);
             }
-        } /*else if (ConfigHandler.getDepends().getVault().vaultEnabled() && ConfigHandler.getDepends().getVault().getPermissions().isEnabled()) {
-            ConfigHandler.getDepends().getVault().getPermissions().
+        } /*else if (CorePlusAPI.getDepend().getVault().vaultEnabled() && CorePlusAPI.getDepend().getVault().getPermissions().isEnabled()) {
+            CorePlusAPI.getDepend().getVault().getPermissions().
         }
        */
     }
 
     private void convertCMI(String name1, String name2) {
-        if (ConfigHandler.getDepends().CMIEnabled()) {
+        if (CorePlusAPI.getDepend().CMIEnabled()) {
             CMIUser user1;
             CMIUser user2;
             try {
@@ -119,7 +113,7 @@ public class UserConvert {
      * @param replace clear the target player data first.
      */
     private void convertResidence(String name1, String name2, boolean replace) {
-        if (ConfigHandler.getDepends().ResidenceEnabled()) {
+        if (CorePlusAPI.getDepend().ResidenceEnabled()) {
             ResidencePlayer resPlayer1 = Residence.getInstance().getPlayer().getResidencePlayer(name1);
             ResidencePlayer resPlayer2 = Residence.getInstance().getPlayer().getResidencePlayer(name2);
             if (replace) {

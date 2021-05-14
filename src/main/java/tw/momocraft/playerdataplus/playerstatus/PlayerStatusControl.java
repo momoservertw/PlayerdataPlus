@@ -214,7 +214,7 @@ public class PlayerStatusControl {
 
     public static boolean isPerms(Player player, List<String> ignorePerms) {
         for (String perms : ignorePerms) {
-            if (PermissionsHandler.hasPermission(player, perms)) {
+            if (CorePlusAPI.getPlayer().hasPerm(player, perms)) {
                 return true;
             }
         }
@@ -231,7 +231,7 @@ public class PlayerStatusControl {
 
     public static boolean isFlyCMI(CMIUser user, boolean c, boolean t) {
         if (c) {
-            return PermissionsHandler.hasPermission(user.getPlayer(), "cmi.command.flyc");
+            return CorePlusAPI.getPlayer().hasPerm(user.getPlayer(), "cmi.command.flyc");
         }
         if (t) {
             return user.getTfly() > 0;

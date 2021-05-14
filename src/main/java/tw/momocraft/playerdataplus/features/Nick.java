@@ -1,112 +1,63 @@
-package tw.momocraft.playerdataplus.utils;
+package tw.momocraft.playerdataplus.features;
 
 import com.Zrips.CMI.CMI;
 import com.Zrips.CMI.Containers.CMIUser;
-import com.earth2me.essentials.Essentials;
-import com.earth2me.essentials.User;
 import com.nametagedit.plugin.NametagEdit;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
+import tw.momocraft.coreplus.api.CorePlusAPI;
 import tw.momocraft.playerdataplus.handlers.ConfigHandler;
 
-import java.util.*;
-
-import static org.bukkit.Bukkit.getServer;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 public class Nick {
 
-    public static void setNick(CommandSender sender, String nickName, String nickColor) {
-        if (sender instanceof ConsoleCommandSender) {
-            Language.sendLangMessage("Message.PlayerdataPlus.Commands.nickOther", sender);
-            Language.sendLangMessage("Message.PlayerdataPlus.Commands.nickOffOther", sender);
-            return;
-        }
-        Player player = (Player) sender;
-        String playerName = player.getName();
-        if (!bypass && !PermissionsHandler.hasPermission(player, "playerdataplus.bypass.nick.*")) {
-            if (nickColor.equals("")) {
-                nickColor = getDefaultColor(player);
-            } else if (!getColorPerm(player, nickColor)) {
-                Language.sendLangMessage("Message.PlayerdataPlus.Nick.invalidColor", sender);
-                CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-On", playerName, "colorPerm", "return",
-                        new Throwable().getStackTrace()[0]);
-                return;
-            }
-            if (!getLength(player, nickName)) {
-                Language.sendLangMessage("Message.PlayerdataPlus.Nick.invalidLength", sender);
-                CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-On", playerName, "length", "return",
-                        new Throwable().getStackTrace()[0]);
-                return;
-            }
-            if (!getPureColor(player, nickName)) {
-                Language.sendLangMessage("Message.PlayerdataPlus.Nick.invalidColorInside", sender);
-                CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-On", playerName, "pureColor", "return",
-                        new Throwable().getStackTrace()[0]);
-                return;
-            }
-            if (!getBlackList(player, nickName)) {
-                Language.sendLangMessage("Message.PlayerdataPlus.Nick.invalidNick", sender);
-                CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-On", playerName, "blackList", "return",
-                        new Throwable().getStackTrace()[0]);
-                return;
-            }
-        } else {
-            if (nickColor.equals("")) {
-                nickColor = getDefaultColor(player);
-            }
-        }
-        formatting(true, player, playerName, nickName, nickColor);
-        String[] placeHolders = Language.newString();
-        placeHolders[1] = playerName;
-        placeHolders[3] = nickName;
-        placeHolders[4] = nickColor;
-        Language.sendLangMessage("Message.PlayerdataPlus.Nick.successOn", sender, placeHolders);
-        CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-On", playerName, "final", "return",
-                new Throwable().getStackTrace()[0]);
-    }
-
-    /**
-     * Changing player's nick.
-     * Using command: /nickplus nick <nickName> [color] [player]
-     *
-     * @param sender    the sender of this method.
-     * @param player    the changing nick target.
-     * @param bypass    bypass the nick limits.
-     * @param nickName  the new nick name.
-     * @param nickColor the new nick color.
-     */
-    public static void setNick(CommandSender sender, Player player, boolean bypass, String nickName, String nickColor) {
-        String playerName = player.getName();
+    public static void setNick(CommandSender sender, Player target, String nickName, String nickColor) {
+        Player player;
+        if (target != null)
+            player = target;
+        else if (sender instanceof ConsoleCommandSender)
+            Language.sendLangMessage("Message.onlyPlayer", sender);
+        else
+            player = (Player) sender;
         String[] placeHolders = Language.newString();
         placeHolders[2] = playerName;
-        if (!bypass && !PermissionsHandler.hasPermission(player, "playerdataplus.bypass.nick.*")) {
-            if (nickColor.equals("")) {
+        if (!CorePlusAPI.getPlayer().hasPerm(player, "playerdataplus.bypass.nick.*")) {
+            if (nickColor == null) {
                 nickColor = getDefaultColor(player);
             } else {
                 if (!getColorPerm(player, nickColor)) {
-                    Language.sendLangMessage("Message.PlayerdataPlus.Nick.targetInvalidColor", sender, placeHolders);
-                    CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-On", playerName, "colorPerm", "return", "other",
+                    Language.sendLangMessage("Message.PlayerdataPlus.Nick.targetInvalidColor",
+                            sender, placeHolders);
+                    CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(),
+                            "Nick", playerName, "Color Permission", "cancel",
                             new Throwable().getStackTrace()[0]);
                     return;
                 }
             }
             if (!getLength(player, nickName)) {
                 Language.sendLangMessage("Message.PlayerdataPlus.Nick.targetInvalidLength", sender, placeHolders);
-                CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-On", playerName, "length", "return", "other",
+                CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(),
+                        "Nick", playerName, "Length", "cancel",
                         new Throwable().getStackTrace()[0]);
                 return;
             }
-            if (!getPureColor(player, nickName)) {
+            if (!getColorCode(player, nickName)) {
                 Language.sendLangMessage("Message.PlayerdataPlus.Nick.targetInvalidColorInside", sender, placeHolders);
-                CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-On", playerName, "pureColor", "return", "other",
+                CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(),
+                        "Nick", playerName, "Pure Color", "cancel",
                         new Throwable().getStackTrace()[0]);
                 return;
             }
             if (!getBlackList(player, nickName)) {
                 Language.sendLangMessage("Message.PlayerdataPlus.Nick.targetInvalidNick", sender, placeHolders);
-                CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-On", playerName, "blackList", "return", "other",
+                CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(),
+                        "Nick", playerName, "Black List", "cancel",
                         new Throwable().getStackTrace()[0]);
                 return;
             }
@@ -121,21 +72,7 @@ public class Nick {
         placeHolders[4] = nickColor;
         Language.sendLangMessage("Message.PlayerdataPlus.Nick.successOn", player, placeHolders);
         Language.sendLangMessage("Message.PlayerdataPlus.Nick.targetSuccessOn", sender, placeHolders);
-        CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-On", playerName, "final", "return", "other",
-                new Throwable().getStackTrace()[0]);
-    }
-
-    // Command: /nickplus nick off [player]
-    public static void setNickOff(CommandSender sender) {
-        Player player = (Player) sender;
-        String playerName = player.getName();
-        String nickColor = getDefaultColor(player);
-        formatting(false, player, playerName, "", nickColor);
-        String[] placeHolders = Language.newString();
-        placeHolders[1] = playerName;
-        placeHolders[4] = nickColor;
-        Language.sendLangMessage("Message.PlayerdataPlus.Nick.successOff", player, placeHolders);
-        CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-Off", playerName, "final", "return",
+        CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick", playerName, "final", "return", "other",
                 new Throwable().getStackTrace()[0]);
     }
 
@@ -154,32 +91,7 @@ public class Nick {
                 new Throwable().getStackTrace()[0]);
     }
 
-    public static void setColor(CommandSender sender, boolean bypass, String nickColor) {
-        if (sender instanceof ConsoleCommandSender) {
-            Language.sendLangMessage("Message.PlayerdataPlus.Commands.nickOther", sender);
-            Language.sendLangMessage("Message.PlayerdataPlus.Commands.nickOffOther", sender);
-            return;
-        }
-        Player player = (Player) sender;
-        String playerName = player.getName();
-        if (!bypass) {
-            if (!getColorPerm(player, nickColor)) {
-                Language.sendLangMessage("Message.PlayerdataPlus.Nick.invalidColor", sender);
-                CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-Color", playerName, "colorPerm", "return",
-                        new Throwable().getStackTrace()[0]);
-                return;
-            }
-        }
-        colorChanging(player, playerName, nickColor);
-        String[] placeHolders = Language.newString();
-        placeHolders[4] = nickColor;
-        Language.sendLangMessage("Message.PlayerdataPlus.Nick.successColor", player, placeHolders);
-        colorChanging(player, playerName, nickColor);
-        CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-Color", playerName, "final", "return",
-                new Throwable().getStackTrace()[0]);
-    }
-
-    public static void setColor(CommandSender sender, Player player, boolean bypass, String nickColor) {
+    public static void setColor(CommandSender sender, Player player, String nickColor) {
         String playerName = player.getName();
         String[] placeHolders = Language.newString();
         placeHolders[2] = playerName;
@@ -202,12 +114,13 @@ public class Nick {
 
     private static void colorChanging(Player player, String playerName, String nickColor) {
         CMIColorChanging(player, playerName, nickColor);
-        EssColorChanging(player, playerName, nickColor);
         NTEColorChanging(player, playerName, nickColor);
     }
 
     private static void CMIColorChanging(Player player, String playerName, String nickColor) {
-        if (ConfigHandler.getDepends().CMIEnabled() && ConfigHandler.getConfigPath().isNickCMI()) {
+        if (!CorePlusAPI.getDepend().CMIEnabled())
+            return;
+        if (ConfigHandler.getConfigPath().isNickCMI()) {
             CMIUser user = CMI.getInstance().getPlayer().getUser(player);
             String nickName = user.getNickName();
             if (nickName == null) {
@@ -224,27 +137,10 @@ public class Nick {
         }
     }
 
-    private static void EssColorChanging(Player player, String playerName, String nickColor) {
-        if (ConfigHandler.getDepends().EssentialsEnabled() && ConfigHandler.getConfigPath().isNickEssentials()) {
-            Essentials ess = (Essentials) getServer().getPlugin().getPlugin("Essentials");
-            if (ess == null) {
-                return;
-            }
-            User user = ess.getUser(player);
-            String nickName = user.getDisplayName();
-            if (nickName == null) {
-                nickName = "";
-            } else {
-                nickName = nickName.replaceAll("[§][a-fA-F0-9]", "§" + nickColor);
-            }
-            user.setNickname(nickName);
-            CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-On", playerName, "Essentials", "setColor", nickName,
-                    new Throwable().getStackTrace()[0]);
-        }
-    }
-
     private static void NTEColorChanging(Player player, String playerName, String nickColor) {
-        if (ConfigHandler.getDepends().NameTagEditEnabled() && ConfigHandler.getConfigPath().isNickNameTagEdit()) {
+        if (!CorePlusAPI.getDepend().NameTagEditEnabled())
+            return;
+        if (ConfigHandler.getConfigPath().isNickNameTagEdit()) {
             String formatPrefix = NametagEdit.getApi().getNametag(player).getPrefix();
             String formatSuffix = NametagEdit.getApi().getNametag(player).getSuffix();
             if (formatPrefix != null) {
@@ -267,13 +163,13 @@ public class Nick {
 
     private static void formatting(boolean toggle, Player player, String playerName, String nickName, String nickColor) {
         CMIFormatting(toggle, player, playerName, nickName, nickColor);
-        EssFormatting(toggle, player, playerName, nickName, nickColor);
         NTEFormatting(toggle, player, playerName, nickName, nickColor);
         CMDFormatting(toggle, player, playerName, nickName, nickColor);
     }
 
-    private static void CMIFormatting(boolean toggle, Player player, String playerName, String nickName, String nickColor) {
-        if (ConfigHandler.getDepends().CMIEnabled() && ConfigHandler.getConfigPath().isNickCMI()) {
+    private static void CMIFormatting(boolean toggle, Player player, String playerName, String nickName, String
+            nickColor) {
+        if (CorePlusAPI.getDepend().CMIEnabled() && ConfigHandler.getConfigPath().isNickCMI()) {
             String format;
             if (toggle) {
                 format = ConfigHandler.getConfigPath().getNickCMIOn();
@@ -281,7 +177,7 @@ public class Nick {
                 format = ConfigHandler.getConfigPath().getNickCMIOff();
             }
             if (format != null) {
-                format = translate(format, playerName, nickName, nickColor, player);
+                format = translate(format, playerName, nickName, nickColor);
             } else {
                 if (toggle) {
                     format = "§" + nickColor + nickName + "(" + playerName + ")";
@@ -299,35 +195,8 @@ public class Nick {
         }
     }
 
-    private static void EssFormatting(boolean toggle, Player player, String playerName, String nickName, String nickColor) {
-        if (ConfigHandler.getDepends().EssentialsEnabled() && ConfigHandler.getConfigPath().isNickNameTagEdit()) {
-            Essentials ess = (Essentials) getServer().getPlugin().getPlugin("Essentials");
-            if (ess == null) {
-                return;
-            }
-            String format;
-            if (toggle) {
-                format = ConfigHandler.getConfigPath().getNickEssOn();
-            } else {
-                format = ConfigHandler.getConfigPath().getNickEssOff();
-            }
-            if (format != null) {
-                format = translate(format, playerName, nickName, nickColor, player);
-            } else {
-                if (toggle) {
-                    format = "§" + nickColor + nickName + "(" + playerName + ")";
-                } else {
-                    format = "§" + nickColor + playerName;
-                }
-            }
-            ess.getUser(player).setNickname(format);
-            CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-On", playerName, "Essentials", "set", format,
-                    new Throwable().getStackTrace()[0]);
-        }
-    }
-
     private static void NTEFormatting(boolean toggle, Player player, String playerName, String nickName, String nickColor) {
-        if (ConfigHandler.getDepends().NameTagEditEnabled() && ConfigHandler.getConfigPath().isNickNameTagEdit()) {
+        if (CorePlusAPI.getDepend().NameTagEditEnabled() && ConfigHandler.getConfigPath().isNickNameTagEdit()) {
             String formatPrefix;
             String formatSuffix;
             if (toggle) {
@@ -338,7 +207,7 @@ public class Nick {
                 formatSuffix = ConfigHandler.getConfigPath().getNickNTEOffSuffix();
             }
             if (formatPrefix != null) {
-                formatPrefix = translate(formatPrefix, playerName, nickName, nickColor, player);
+                formatPrefix = translate(formatPrefix, playerName, nickName, nickColor);
             } else {
                 if (toggle) {
                     formatPrefix = "§" + nickColor + nickName + " &f";
@@ -347,7 +216,7 @@ public class Nick {
                 }
             }
             if (formatSuffix != null) {
-                formatSuffix = translate(formatSuffix, playerName, nickName, nickColor, player);
+                formatSuffix = translate(formatSuffix, playerName, nickName, nickColor);
             } else {
                 formatSuffix = "";
             }
@@ -371,7 +240,7 @@ public class Nick {
             cmdList = ConfigHandler.getConfigPath().getNickCommandOff();
         }
         for (String command : cmdList) {
-            command = translate(command, playerName, nickName, nickColor, player);
+            command = translate(command, playerName, nickName, nickColor);
             ServerHandler.executeCommands(player, command);
             CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick-On", playerName, "commands", "set", command,
                     new Throwable().getStackTrace()[0]);
@@ -402,48 +271,43 @@ public class Nick {
     }
 
     private static boolean getLength(Player player, String nickName) {
-        if (!PermissionsHandler.hasPermission(player, "playerdataplus.bypass.nick.length")) {
-            return nickName.length() <= ConfigHandler.getConfigPath().getNickLimit();
-        }
-        return true;
+        if (CorePlusAPI.getPlayer().hasPerm(player, "playerdataplus.bypass.nick.length"))
+            return true;
+        return nickName.length() <= ConfigHandler.getConfigPath().getNickLength();
     }
 
-    private static boolean getPureColor(Player player, String nickName) {
-        if (!PermissionsHandler.hasPermission(player, "playerdataplus.bypass.nick.purecolor")) {
-            if (ConfigHandler.getConfigPath().isNickPure()) {
-                return !nickName.contains("§") && !nickName.contains("&");
-            } else {
-                String[] nickNameSplit = nickName.split("[&§]");
-                if (nickNameSplit.length != 1) {
-                    for (String split : nickNameSplit) {
-                        if (!PermissionsHandler.hasPermission(player, "playerdataplus.nick.color." + split.charAt(0))
-                                && !getDefaultColor(player).equals(String.valueOf(split.charAt(0)))) {
-                            return false;
-                        }
-                    }
-                }
+    private static boolean getColorCode(Player player, String nickName) {
+        if (CorePlusAPI.getPlayer().hasPerm(player, "playerdataplus.bypass.nick.colorcode"))
+            return true;
+        if (ConfigHandler.getConfigPath().isNickColorCode()) {
+            return !nickName.contains("§") && !nickName.contains("&");
+        } else {
+            String[] split = nickName.split("[&§]");
+            for (int i = 0; i <= split.length; i++) {
+                if (i == 0)
+                    continue;
+                if (!getColorPerm(player, String.valueOf(split[i].charAt(0))))
+                    return false;
             }
         }
         return true;
     }
 
     private static boolean getBlackList(Player player, String nickName) {
-        if (!PermissionsHandler.hasPermission(player, "playerdataplus.bypass.nick.blacklist")) {
-            for (String key : ConfigHandler.getConfigPath().getNickBlackList()) {
-                if (nickName.contains(key)) {
-                    return false;
-                }
-            }
-        }
+        if (CorePlusAPI.getPlayer().hasPerm(player, "playerdataplus.bypass.nick.blacklist"))
+            return true;
+        for (String key : ConfigHandler.getConfigPath().getNickBlackList())
+            if (nickName.contains(key) || nickName.matches(key))
+                return false;
         return true;
     }
 
     private static boolean getColorPerm(Player player, String nickColor) {
-        return PermissionsHandler.hasPermission(player, "playerdataplus.nick.color." + nickColor)
+        return CorePlusAPI.getPlayer().hasPerm(player, "playerdataplus.nick.color." + nickColor)
                 || getDefaultColor(player).equals(nickColor);
     }
 
-    private static String translate(String command, String playerName, String nickName, String nickColor, Player player) {
+    private static String translate(String command, String playerName, String nickName, String nickColor) {
         command = command.replace("%player%", playerName);
         command = command.replace("%nick%", nickName);
         command = command.replace("%color%", nickColor);

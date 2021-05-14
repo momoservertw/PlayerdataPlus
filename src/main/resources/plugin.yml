@@ -4,7 +4,7 @@ author: Momocraft
 api-version: 1.13
 version: 1.2.0
 description: Clean the old player data and formatting nicknames.
-softdepend: [ Vault, AuthMe,CMI, Residence, PlaceHolderAPI, MySQLPlayerDataBridge, SkinsRestorer, ChatControlPro, DiscordSRV, LuckPerms, MyPet, Essentials ]
+softdepend: [Vault, AuthMe, CMI, Residence, PlaceHolderAPI, MySQLPlayerDataBridge, SkinsRestorer, ChatControlPro, DiscordSRV, LuckPerms, MyPet ]
 
 commands:
   playerdataplus:

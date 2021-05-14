@@ -28,11 +28,7 @@ Nick:
     CMI:
       Enable: false
       # Updating tab list after one player changed their name.
-      Tablist-Update: true
-      Set: "&%color%%nick%(%player%)"
-      Clear: "&%color%%player%"
-    Essentials:
-      Enable: false
+      Update-Tablist: true
       Set: "&%color%%nick%(%player%)"
       Clear: "&%color%%player%"
     NameTagEdit:
@@ -46,13 +42,13 @@ Nick:
     # Executing commands when players changed their nicks.
     Commands: []
     Commands-Clear: []
-  # Define the player"s default nick color.
+  # Defining the player"s default nick color.
   # Permission: playerdataplus.nick.group.GROUP
   Groups:
     # Priority is top to bottom.
-    Default: a
-    Vip: b
-    Mvp: d
+    default: a
+    VIP: b
+    MVP: d
 
 # Controls player status to improve the gaming experience or fixed.
 # More information: https://github.com/momoservertw/PlayerdataPlus/wiki/Player-Status
@@ -130,28 +126,28 @@ Player-Status:
     Ignore:
       Permissions:
         - cmi.command.gm.survival
-    Location: []
+    Location: [ ]
   Gamemode-Creative:
     Enable: true
     Default: "Survival"
     Ignore:
       Permissions:
         - cmi.command.gm.creative
-    Location: []
+    Location: [ ]
   Gamemode-Adventure:
     Enable: true
     Default: "Survival"
     Ignore:
       Permissions:
         - cmi.command.gm.adventure
-    Location: []
+    Location: [ ]
   Gamemode-Spectator:
     Enable: true
     Default: "Survival"
     Ignore:
       Permissions:
         - cmi.command.gm.spectator
-    Location: []
+    Location: [ ]
 
 # Cleans the old player data.
 # Bypass permission: playerdataplus.bypass.clean
@@ -177,15 +173,13 @@ Clean:
     Log:
       Enable: false
       Expiration: 90
+      Ignore-List: []
     Region:
       Enable: false
       Residence-Bypass: true
-      Worlds:
-        - world
-        - world_nether
-        - world_the_end
-      Ignore-Regions: []
-      #  - "world, 8.8"
+      Ignore-List: []
+      #  - "example_world"
+      #  - "world(8.8)"
     Playerdata:
       Enable: false
     Advancement:
@@ -196,6 +190,10 @@ Clean:
       Enable: false
     CMI:
       Enable: false
+    DiscordSRV:
+      Enable: false
+    MyPet:
+      Enable: false
     MyCommand:
       Enable: false
       # To remove the useless variables.
@@ -204,7 +202,7 @@ Clean:
         Ignore-List: []
     Example:
       Enable: false
-      
+
 
 # Command: /pdp convert <type> <feature>
 # More information: https://github.com/momoservertw/PlayerdataPlus/wiki/Data-Convertor

@@ -69,6 +69,7 @@ public class ConfigPath {
     private boolean cleanBackup;
     private boolean cleanBackupZip;
     private String cleanBackupPath;
+    private boolean cleanResBypass;
     private boolean cleanMycmd;
     private List<String> cleanMycmdList;
     private List<String> cleanMycmdIgnoreList;
@@ -78,18 +79,18 @@ public class ConfigPath {
     //         Nick Variables                          //
     //  ============================================== //
     private boolean nick;
-    private int nickLimit;
+    private int nickLength;
     private boolean nickColorCode;
     private List<String> nickBlackList;
     private boolean nickCMI;
-    private boolean nickCMIUpdateTablist;
+    private boolean nickCMIUpdateTabList;
     private String nickCMISet;
     private String nickCMIClear;
     private boolean nickNameTagEdit;
-    private String nickNTESetPrefix;
-    private String nickNTESetSuffix;
-    private String nickNTEClearPrefix;
-    private String nickNTEClearSuffix;
+    private String nickNTEPrefixSet;
+    private String nickNTESuffixSet;
+    private String nickNTEPrefixClear;
+    private String nickNTESuffixClear;
     private List<String> nickCommandSet;
     private List<String> nickCommandClear;
 
@@ -154,6 +155,7 @@ public class ConfigPath {
         cleanBackup = ConfigHandler.getConfig("config.yml").getBoolean("Clean.Settings.Backup.Enable");
         cleanBackupPath = ConfigHandler.getConfig("config.yml").getString("Clean.Settings.Backup.Path");
         cleanBackupZip = ConfigHandler.getConfig("config.yml").getBoolean("Clean.Settings.Backup.Zip");
+        cleanResBypass = ConfigHandler.getConfig("config.yml").getBoolean("Clean.Groups.Region.Residence-Bypass");
         cleanMycmd = ConfigHandler.getConfig("config.yml").getBoolean("Clean.Groups.MyCommand.Playerdata.Enable");
         cleanMycmdList = ConfigHandler.getConfig("config.yml").getStringList("Clean.Groups.MyCommand.Playerdata.List");
         cleanMycmdIgnoreList = ConfigHandler.getConfig("config.yml").getStringList("Clean.Groups.MyCommand.Playerdata.Ignore-List");
@@ -168,21 +170,7 @@ public class ConfigPath {
             cleanMap.setGroupName(group);
             cleanMap.setExpiration(ConfigHandler.getConfig("config.yml").getInt("Clean.Groups." + group + ".Expiration"));
             cleanMap.setBackup(ConfigHandler.getConfig("config.yml").getBoolean("Clean.Groups." + group + ".Backup"));
-            if (group.equals("Region")) {
-                cleanMap.setResidenceBypass(ConfigHandler.getConfig("config.yml").getBoolean("Clean.Groups." + group + ".Residence-Bypass"));
-            }
-            switch (group.toLowerCase()) {
-                case "region":
-                    cleanMap.setList(ConfigHandler.getConfig("config.yml").getStringList("Clean.Groups." + group + ".Worlds"));
-                    cleanMap.setIgnoreList(ConfigHandler.getConfig("config.yml").getStringList("Clean.Groups." + group + ".Ignore-Regions"));
-                    break;
-                case "mycommand":
-                    cleanMap.setList(ConfigHandler.getConfig("config.yml").getStringList("Clean.Groups." + group + ".Variable"));
-                    cleanMap.setIgnoreList(ConfigHandler.getConfig("config.yml").getStringList("Clean.Groups." + group + ".Ignore-Variable"));
-                    cleanMap.setList2(ConfigHandler.getConfig("config.yml").getStringList("Clean.Groups." + group + ".Playerdata"));
-                    cleanMap.setIgnoreList2(ConfigHandler.getConfig("config.yml").getStringList("Clean.Groups." + group + ".Ignore-Playerdata"));
-                    break;
-            }
+            cleanMap.setIgnoreList(ConfigHandler.getConfig("config.yml").getStringList("Clean.Groups." + group + ".Ignore-Variable"));
             cleanProp.put(group, cleanMap);
         }
     }
@@ -192,25 +180,24 @@ public class ConfigPath {
     //  ============================================== //
     private void setNick() {
         nick = ConfigHandler.getConfig("config.yml").getBoolean("Nick.Enable");
-        nickLimit = ConfigHandler.getConfig("config.yml").getInt("Nick.Limits.Length");
+        nickLength = ConfigHandler.getConfig("config.yml").getInt("Nick.Limits.Length");
         nickColorCode = ConfigHandler.getConfig("config.yml").getBoolean("Nick.Limits.Prevent-Color-Code");
         nickBlackList = ConfigHandler.getConfig("config.yml").getStringList("Nick.Limits.Black-List");
         nickCMI = ConfigHandler.getConfig("config.yml").getBoolean("Nick.Formats.CMI.Enable");
-        nickCMIUpdateTablist = ConfigHandler.getConfig("config.yml").getBoolean("Nick.Formats.CMI.Tablist-Update");
+        nickCMIUpdateTabList = ConfigHandler.getConfig("config.yml").getBoolean("Nick.Formats.CMI.Update-Tablist");
         nickCMISet = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.CMI.Set");
         nickCMIClear = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.CMI.Clear");
         nickNameTagEdit = ConfigHandler.getConfig("config.yml").getBoolean("Nick.Formats.NameTagEdit.Enable");
-        nickNTESetPrefix = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.NameTagEdit.Set.Prefix");
-        nickNTESetSuffix = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.NameTagEdit.Set.Suffix");
-        nickNTEClearPrefix = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.NameTagEdit.Clear.Prefix");
-        nickNTEClearSuffix = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.NameTagEdit.Clear.Suffix");
+        nickNTEPrefixSet = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.NameTagEdit.Set.Prefix");
+        nickNTESuffixSet = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.NameTagEdit.Set.Suffix");
+        nickNTEPrefixClear = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.NameTagEdit.Clear.Prefix");
+        nickNTESuffixClear = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.NameTagEdit.Clear.Suffix");
         nickCommandSet = ConfigHandler.getConfig("config.yml").getStringList("Nick.Formats.Commands");
         nickCommandClear = ConfigHandler.getConfig("config.yml").getStringList("Nick.Formats.Commands-Clear");
         ConfigurationSection nickGroups = ConfigHandler.getConfig("config.yml").getConfigurationSection("Nick.Groups");
-        if (nickGroups != null) {
+        if (nickGroups != null)
             for (String group : nickGroups.getKeys(false))
                 nickGroupsProp.put(group, ConfigHandler.getConfig("config.yml").getString("Nick.Groups." + group));
-        }
     }
 
     //  ============================================== //
@@ -233,7 +220,7 @@ public class ConfigPath {
             for (String group : groupsConfig.getKeys(false)) {
                 if (ConfigHandler.getConfig("config.yml").getBoolean("Player-Status." + group + ".Enable")) {
                     // Checking the CMI enabled.
-                    if (group.equals("God") && !ConfigHandler.getDepends().CMIEnabled()) {
+                    if (group.equals("God") && !CorePlusAPI.getDepend().CMIEnabled()) {
                         continue;
                     }
                     playerStatusMap = new PlayerStatusMap();
@@ -244,11 +231,11 @@ public class ConfigPath {
                         playerStatusMap.setLocMaps(locMaps);
                     }
                     // Adding the special setting for CMI.
-                    if (group.equals("Fly") && ConfigHandler.getDepends().CMIEnabled()) {
+                    if (group.equals("Fly") && CorePlusAPI.getDepend().CMIEnabled()) {
                         playerStatusMap.setFlyCMIT(ConfigHandler.getConfig("config.yml").getBoolean("Player-Status." + group + ".Ignore.CMI.tfly"));
                         playerStatusMap.setFlyCMIC(ConfigHandler.getConfig("config.yml").getBoolean("Player-Status." + group + ".Ignore.CMI.cfly"));
                         playerStatusMap.setFlyRes(ConfigHandler.getConfig("config.yml").getBoolean("Player-Status." + group + ".Ignore.Residence"));
-                    } else if (group.equals("God") && ConfigHandler.getDepends().CMIEnabled()) {
+                    } else if (group.equals("God") && CorePlusAPI.getDepend().CMIEnabled()) {
                         playerStatusMap.setGodCMIT(ConfigHandler.getConfig("config.yml").getBoolean("Player-Status." + group + ".Ignore.CMI.tgod"));
                     }
                     playerStatusProp.put(group, playerStatusMap);
@@ -410,6 +397,10 @@ public class ConfigPath {
         return cleanBackupPath;
     }
 
+    public boolean isCleanResBypass() {
+        return cleanResBypass;
+    }
+
     public boolean isCleanMycmd() {
         return cleanMycmd;
     }
@@ -430,6 +421,70 @@ public class ConfigPath {
     //  ============================================== //
     //         Nick Getter                             //
     //  ============================================== //
+    public boolean isNick() {
+        return nick;
+    }
+
+    public int getNickLength() {
+        return nickLength;
+    }
+
+    public boolean isNickColorCode() {
+        return nickColorCode;
+    }
+
+    public List<String> getNickBlackList() {
+        return nickBlackList;
+    }
+
+    public boolean isNickCMI() {
+        return nickCMI;
+    }
+
+    public boolean isNickCMIUpdateTabList() {
+        return nickCMIUpdateTabList;
+    }
+
+    public String getNickCMISet() {
+        return nickCMISet;
+    }
+
+    public String getNickCMIClear() {
+        return nickCMIClear;
+    }
+
+    public boolean isNickNameTagEdit() {
+        return nickNameTagEdit;
+    }
+
+    public String getNickNTEPrefixSet() {
+        return nickNTEPrefixSet;
+    }
+
+    public String getNickNTESuffixSet() {
+        return nickNTESuffixSet;
+    }
+
+    public String getNickNTEPrefixClear() {
+        return nickNTEPrefixClear;
+    }
+
+    public String getNickNTESuffixClear() {
+        return nickNTESuffixClear;
+    }
+
+    public List<String> getNickCommandSet() {
+        return nickCommandSet;
+    }
+
+    public List<String> getNickCommandClear() {
+        return nickCommandClear;
+    }
+
+    public Map<String, String> getNickGroupsProp() {
+        return nickGroupsProp;
+    }
+
 
     //  ============================================== //
     //         Player Status Getter                    //

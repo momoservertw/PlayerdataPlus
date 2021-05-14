@@ -31,11 +31,6 @@
             <id>papermc</id>
             <url>https://papermc.io/repo/repository/maven-public/</url>
         </repository>
-        <!--PlaceholderAPI Repo-->
-        <repository>
-            <id>placeholderapi</id>
-            <url>http://repo.extendedclip.com/content/repositories/placeholderapi/</url>
-        </repository>
         <!--AuthMe Repo-->
         <repository>
             <id>codemc-repo</id>
@@ -45,16 +40,6 @@
         <repository>
             <id>Scarsz-Nexus</id>
             <url>https://nexus.scarsz.me/content/groups/public/</url>
-        </repository>
-        <!--NameTagEdit Repo-->
-        <repository>
-        <id>upstream</id>
-        <url>http://ci.nametagedit.com/plugin/repository/everything/</url>
-        </repository>
-        <!--EssentialsX Repo-->
-        <repository>
-            <id>ess-repo</id>
-            <url>https://ci.ender.zone/plugin/repository/everything/</url>
         </repository>
     </repositories>
 
@@ -86,14 +71,6 @@
             <artifactId>CMI</artifactId>
             <scope>system</scope>
             <systemPath>${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/CMIAPI7.6.2.0.jar</systemPath>
-            <version>LEGACY</version>
-        </dependency>
-        <!--Residence API-->
-        <dependency>
-            <groupId>me.Residence</groupId>
-            <artifactId>Residence</artifactId>
-            <scope>system</scope>
-            <systemPath>${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/Residence4.9.2.0.jar</systemPath>
             <version>LEGACY</version>
         </dependency>
         <!--MysqlPlayerDataBridge API-->
@@ -129,13 +106,6 @@
             <version>LATEST</version>
             <scope>provided</scope>
         </dependency>
-        <!--LuckPerms API-->
-        <dependency>
-            <groupId>net.luckperms</groupId>
-            <artifactId>api</artifactId>
-            <version>5.0</version>
-            <scope>provided</scope>
-        </dependency>
         <!--MyPet API-->
         <dependency>
             <groupId>me.MyPet</groupId>
@@ -144,19 +114,6 @@
             <systemPath>${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/MyPet-3.11-SNAPSHOT-B1543.jar
             </systemPath>
             <version>LATEST</version>
-        </dependency>
-        <!--NameTagEdit API-->
-        <dependency>
-            <groupId>com.nametagedit</groupId>
-            <artifactId>nametagedit</artifactId>
-            <version>4.4.0</version>
-        </dependency>
-        <!--EssentialsX API-->
-        <dependency>
-            <groupId>net.ess3</groupId>
-            <artifactId>EssentialsX</artifactId>
-            <version>2.16.1</version>
-            <scope>provided</scope>
         </dependency>
         <!--Multiverse-Core API-->
         <dependency>

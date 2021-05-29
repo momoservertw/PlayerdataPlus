@@ -22,7 +22,7 @@ public class Nick {
         if (target != null)
             player = target;
         else if (sender instanceof ConsoleCommandSender)
-            Language.sendLangMessage("Message.onlyPlayer", sender);
+            CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPlugin(), "Message.onlyPlayer", sender);
         else
             player = (Player) sender;
         String[] placeHolders = Language.newString();

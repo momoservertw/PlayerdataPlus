@@ -162,10 +162,10 @@ public class Clean {
                 continue;
             worldName = residence.getWorld();
             for (CuboidArea area : residence.getAreaArray()) {
-                regionHighX = area.getHighLoc().getChunk().getX() >> 5;
-                regionHighZ = area.getHighLoc().getChunk().getZ() >> 5;
-                regionLowX = area.getLowLoc().getChunk().getX() >> 5;
-                regionLowZ = area.getLowLoc().getChunk().getZ() >> 5;
+                regionHighX = area.getHighLocation().getChunk().getX() >> 5;
+                regionHighZ = area.getHighLocation().getChunk().getZ() >> 5;
+                regionLowX = area.getLowLocation().getChunk().getX() >> 5;
+                regionLowZ = area.getLowLocation().getChunk().getZ() >> 5;
                 for (int x = regionLowX; x <= regionHighX; x++)
                     for (int z = regionLowZ; z <= regionHighZ; z++)
                         try {

@@ -1,220 +1,109 @@
-# --{ =-=-=-=-=-=-=-=-=-= PlayerdataPlus's Configuration Settings, by Momocraft =-=-=-=-=-=-=-=-=-= }--
+# ░░░░░░░░░░░░░░░   PlayerdataPlus, By Momocraft♥   ░░░░░░░░░░░░░░░
+#  Spigot: https://www.spigotmc.org/resources/playerdataplus.75169/
+#  Wiki: https://github.com/momoservertw/PlayerdataPlus/wiki
+# ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 Config-Version: 4
 Debugging: false
-Check-Updates: true
 
-General:
-  # Specifying the spawn locations.
-  # More information: https://github.com/momoservertw/PlayerPlus/wiki/Location
-  Location:
-    NormalWorlds:
-      Worlds:
-        - world
-    NetherWorlds:
-      Worlds:
-        - world_nether
-    EndWorlds:
-      Worlds:
-        - world_the_end
-    NormalBorder:
-      Worlds:
-        - world
-      Area:
-        S: 10000
-
-# Clean the old data and improve the server's performance.
-# Player bypass permission: playerdataplus.bypass.clean
-Clean:
-  Enable: false
-  Settings:
-    Offline-Player:
-      # The sequence of getting offline player data.
-      Priority-Order:
-        - LuckPerms
-        - CMI
-        - Playerdata
-    Expiry-Days: 60
-    # Create a detail log file in plugin folder.
-    Log: true
-    # It will clean up a limited amount of data once and then restart the clean process again. Set "0" to disable this feature.
-    Max-Clean-Per-Data: 10000
-    # If your "timeout-time" setting in spigot.yml is too low, it may cause the server to restart in the middle of cleaning.
-    # Please set a higher number of seconds based on the number of server players, especially for the first time.
-    Timeout-Warning: true
-    # Automatic clean the old data when the server is starting.
-    Auto-Clean:
-      Enable: false
-      Delay: 20
-    # Backup the data in plugin folder, it only support some data types.
-    Backup:
-      Enable: true
-      # The backup folder: plugin, custom
-      Mode: 'plugin'
-      Folder-Name: 'Backup'
-      # Custom the backup path like "C:\Server". You need to set the Backup Mode to "custom".
-      Custom-Path: 'C:\Server'
-      To-Zip: true
-  Control:
-    Logs:
-      Enable: false
-      # You can specific the expiry day for each data.
-      Expiry-Days: 90
-      # You can disable the backup feature for each data.
-      Backup: true
-    # Bypass permission: playerdataplus.bypass.clean.* or playerdataplus.bypass.clean.playerdata
-    Playerdata:
-      Enable: false
-    Advancements:
-      Enable: false
-    Stats:
-      Enable: false
-    Regions:
-      Enable: false
-      # Bypass clean the regions which contain Residences.
-      # If you disable this option, you can still add the custom flag "bypassclean" to the residences to bypass the clean event.
-      Residence-Bypass: true
-      Worlds:
-        - world
-        - world_nether
-        - world_the_end
-      Ignore-Regions: []
-      #  - 'world 8.8'
-    AuthMe:
-      Enable: false
-    CMI:
-      Enable: false
-    Essentials:
-      Enable: false
-    DiscordSRV:
-      Enable: false
-    # To clean the variables and playerdatas which not included.
-    # It will create a new file in the PlayerdataPlus folder.
-    MyCommand:
-      Enable: false
-      Ignore-Values: []
-      # - "0"
-      Variables: []
-      Playerdatas: []
-      # - points
-
-# Format players' nicks and make chat messages more tidy.
-# Commands: /playerdataplus nick [nick] [color] [bypass] [player]
-# Commands: /playerdataplus nick off
-# More information: https://github.com/momoservertw/PlayerdataPlus/wiki/Commands
+# Format player nicks and make the chat channel more tidy.
+# More information: https://github.com/momoservertw/PlayerdataPlus/wiki/Nick
 Nick:
   Enable: false
-  # The rule of nicks.
+  Settings:
+    # Auto update the nick from database when player joined the game.
+    # Need to setup the MySQL settings in CorePlus/config.yml
+    Auto-Update: true
   Limits:
-    # The input custom nick length. It does not include the regular formats in the configuration.
-    # Bypass permission: playerdataplus.bypass.nick.length
+    # Permission: playerdataplus.nick.length.NUMBER | playerdataplus.bypass.nick.length
     Length: 8
     # Prevent players input any color code in their nicks.
-    # Bypass permission: playerdataplus.bypass.nick.purecolor
-    Pure-Color: true
-    # Prevent players input some bad words in their nicks.
+    # Bypass permission: playerdataplus.bypass.nick.colorcode
+    Prevent-Color-Code: true
+    # Prevent players input some bad words in their nicks. Support regular expression.
     # Bypass permission: playerdataplus.bypass.nick.blacklist
     Black-List:
       - fuck
       - bitch
-  # Formatting the nicks and adding player id in their nicks.
   Formats:
-    # Require: MyCommand, PlaceHolderAPI
-    MyCommand:
-      Enable: false
-      Auto-Update: true
-      "On": '&%color%%nick%(%player%)'
     CMI:
       Enable: false
-      # Updates the player names in the tablist.
-      Tablist-Update: true
-      # The format of nick when players changed their nicks.
-      "On": '&%color%%nick%(%player%)'
-      # The format of nick when players canceled their nicks.
-      "Off": '&%color%%player%'
+      # Updating tab list after one player changed their name.
+      Update-Tablist: true
+      Set: "&%color%%nick%(%player%)"
+      Clear: "&%color%%player%"
     NameTagEdit:
       Enable: false
-      "On":
-        Prefix: '&%color%%nick% &f'
-        Suffix: ''
-      "Off":
-        Prefix: '&%color%'
-        Suffix: ''
-    Essentials:
-      Enable: false
-      # The format of nick when players changed their nicks.
-      "On": '&%color%%nick%(%player%)'
-      # The format of nick when players canceled their nicks.
-      "Off": '&%color%%player%'
-    # Executed custom commands when players changed their nicks.
-    # More information: https://github.com/momoservertw/PlayerdataPlus/wiki/Custom-Commands
+      Set:
+        Prefix: "&%color%%nick% &f"
+        Suffix: ""
+      Clear:
+        Prefix: "&%color%"
+        Suffix: ""
+    # Executing commands when players changed their nicks.
     Commands: []
-    Commands-Off: []
-  # Define the player's default nick color.
+    Commands-Clear: []
+  # Defining the player"s default nick color.
   # Permission: playerdataplus.nick.group.GROUP
   Groups:
-    # The default nick color if player doesn't have any permission.
-    Default: 'a'
-    # The default nick color for a player who has color permission. The highest number of group name will be chosen.
-    Custom:
-      0: 'a'
-      1: 'b'
-      2: 'd'
-      3: 'e'
-  # The input words of colors when players are using commands to custom their nicks' color.
-  # For example, /playerdataplus nick green
-  # Permission: playerdataplus.nick.color.COLOR
-  Colors:
-    Correspond:
-      a: 'green'
-      b: 'aqua'
-      c: 'red'
-      d: 'light_purple'
-      e: 'yellow'
-      f: 'white'
-      0: 'black'
-      1: 'dark_blue'
-      2: 'dark_green'
-      3: 'dark_aqua'
-      4: 'dark_red'
-      5: 'dark_purple'
-      6: 'gold'
-      7: 'gray'
-      8: 'dark_gray'
-      9: 'blue'
+    # Priority is top to bottom.
+    default: a
+    VIP: b
+    MVP: d
 
-# Automatically set the players' status such as flight mode and creative mode.
+# Controls player status to improve the gaming experience or fixed.
+# More information: https://github.com/momoservertw/PlayerdataPlus/wiki/Player-Status
 Player-Status:
   Enable: false
   Settings:
-    Check:
-      Schedule:
-        Enable: true
-        Interval: 100
-      Login: true
-      World-Change: false
+    Schedule:
+      Interval: 100
   Fly:
     Enable: false
-    Auto-Disable:
-      Enable: false
-      # Teleport players to save location and cancel the fly status.
-      Teleport: true
-      Ignore:
-        Permissions:
-          - playerdataplus.bypass.status.fly
-          - cmi.command.fly
-        CMI:
-          tfly: true
-          cfly: true
-        Residence: true
+    Settings:
+      CMI:
+        tfly: true
+        cfly: true
+      Residence: true
+    Disabled:
+      Enable: true
+      Check:
+        Schedule: true
+        Login: true
+        World-Change: true
+      # Teleport players to save location when canceled the fly mode.
+      Teleport:
+        Enable: true
+        Spawn:
+          Force: false
+          World: world
+          X: 0
+          Y: 0
+          Z: 0
+          Pitch: 0
+          Yaw: 0
+      Permissions:
+        - cmi.command.fly
       Location:
         - world
         - world_nether
         - world_the_end
+    Enabled:
+      Enable: true
+      Ignore:
+        Permissions:
+          - cmi.command.fly
+      Location:
+        - world
+        - world_nether
+        - world_the_end
+      Check:
+        Schedule: false
+        Login: true
+        World-Change: true
   God:
     Enable: false
     Ignore:
       Permission:
-        - playerdataplus.bypass.status.god
         - cmi.command.god
       CMI:
         tgod: true
@@ -237,85 +126,138 @@ Player-Status:
     Ignore:
       Permissions:
         - cmi.command.gm.survival
-    Location: []
+    Location: [ ]
   Gamemode-Creative:
     Enable: true
     Default: "Survival"
     Ignore:
       Permissions:
         - cmi.command.gm.creative
-    Location: []
+    Location: [ ]
   Gamemode-Adventure:
     Enable: true
     Default: "Survival"
     Ignore:
       Permissions:
         - cmi.command.gm.adventure
-    Location: []
+    Location: [ ]
   Gamemode-Spectator:
     Enable: true
     Default: "Survival"
     Ignore:
       Permissions:
         - cmi.command.gm.spectator
-    Location: []
+    Location: [ ]
 
-User-Convertor:
+# Cleans the old player data.
+# Bypass permission: playerdataplus.bypass.clean
+# More information: https://github.com/momoservertw/PlayerdataPlus/wiki/Clean
+Clean:
   Enable: false
-  List:
-    Server:
-      Playerdata: true
-      Stats: true
-      Advancements: true
-    Economy: true
-    PlayerPoints: true
-    AuthMe: true
+  Settings:
+    Auto-Clean:
+      Enable: false
+    Log: true
+    Backup:
+      File:
+        Path: "plugins//PlayerdataPlus//Backup"
+        Zip: false
+      # Needed to setup in CorePlus's data.yml.
+      MySQL:
+        Enable: true
+    # The default setting of groups.
+    Default:
+      Expiration: 60
+      Backup: true
+  Groups:
+    Log:
+      Enable: false
+      Expiration: 90
+      Ignore-List: []
+    Region:
+      Enable: false
+      Residence-Bypass: true
+      Ignore-List: []
+      #  - "example_world"
+      #  - "world(8.8)"
+    Playerdata:
+      Enable: false
+    Advancement:
+      Enable: false
+    Statistic:
+      Enable: false
+    AuthMe:
+      Enable: false
     CMI:
-      Nick: true
+      Enable: false
+    DiscordSRV:
+      Enable: false
+    MyPet:
+      Enable: false
+    MyCommand:
+      Enable: false
+      # To remove the useless variables.
+      Playerdata:
+        List: []
+        Ignore-List: []
+    Example:
+      Enable: false
+
+
+# Command: /pdp convert <type> <feature>
+# More information: https://github.com/momoservertw/PlayerdataPlus/wiki/Data-Convertor
+Data-Convertor:
+  Enable: false
+  Offline-To-Online:
+    PlayerdataPlus: true
+    Playerdata: true
+    Advancement: true
+    Statistic: true
+    AuthMe: true
+    CMI: true
+    PlayerPoints: true
     NameTagEdit: true
     Residence: true
     LuckPerms: true
-
-MyCommand:
-  Enable: false
-  MySQL-Convertor:
-    Settings:
-      MySQL:
-        username: root
-        password: ''
-        hostname: localhost
-        port: 3306
-        database: mycommand
+  # You need to setup the MySQL settings in CorePlus/config.yml
+  Yaml-To-MySQL:
+    MyCommand: false
+  Return:
+    # Return the money and exp to player.
+    Bank: true
 
 Message:
-  prefix: '&7[&dPlayerdataPlus&7]&r '
-  noPermission: '&cYou do not have permission to use that command!'
-  configReload: '&aConfiguration(s) Reloaded!'
-  unknownCommand: '&cUnknown command, See &e/playerdataplus help &cfor a list of commands.'
-  targetNotOnline: '&cPlayer &e%targetplayer% &cdoesn''t online!'
-  PlayerdataPlus:
-    Commands:
-      title: '&8▩▩▩▩▩▩▩▩▩▩▩▩▩ &d&lPlayerdataPlus &8▩▩▩▩▩▩▩▩▩▩▩▩▩'
-      help: '&f/pp help &8- &7This help menu.'
-      reload: '&f/pp reload &8- &7Reload config file.'
-      version: '&f/pp version &8- &7Checks the plugin version and updates.'
-      clean: '&f/pp clean &8- &7Clean the expired data.'
-      nick: '&f/pp nick <nick> [color] &8- &7Change your nick name. /n &fColor: &aa&8, &bb &7(VIP)&8, &dd &7(MVP)&8, &ee &7(GOD)'
-      nickOff: '&f/pp nick off &8- &7Clear your nick name.'
-      nickOther: '&f/pp nick <nick> [color] [bypass] [player] &8- &7Change other players'' nick name. /n &fColor: &aa&8, &bb &7(VIP)&8, &dd &7(MVP)&8, &ee &7(GOD) /n &fBypass: true'
-      nickOffOther: '&f/pp nick off [player] &8- &7Clear other players'' nick name.'
-    Nick:
-      invalidLength: '&cNick is too long. Max &6%nick_length% &esymbols.'
-      targetInvalidLength: '&c%targetplayer% nick is too long. Max &6%nick_length% &csymbols.'
-      invalidNick: '&cYou can''t use this nick name.'
-      targetInvalidNick: '&c%targetplayer% can''t use this nick name.'
-      invalidColor: '&cYou don''t have permission to set this color.'
-      targetInvalidColor: '&c%targetplayer% don''t have permission to set this color.'
-      invalidColorInside: '&cYou can''t set this color inside the nick.'
-      targetInvalidColorInside: '&c%targetplayer% can''t set this color inside the nick.'
-      successOn: '&fYour new nick &8- &%nick_color%%nick%(%player%)'
-      targetSuccessOn: '&fSet %targetplayer%''s nick &8- &%nick_color%%nick%(%player%)'
-      successOff: '&fYour new nick &8- &%nick_color%%player%'
-      targetSuccessOff: '&fDisabled %targetplayer%''s nick &8- &%color%%player%'
-      successColor: '&fYour new nick color &8- &%nick_color%❤'
-      targetSuccessColor: '&fChanged %targetplayer%''s nick color &8- &%nick_color%❤'
+  prefix: "&7[&dPlayerdataPlus&7]&r "
+  Commands:
+    title: "&8▩▩▩▩▩▩▩▩▩▩▩▩▩ &d&lPlayerdataPlus &8▩▩▩▩▩▩▩▩▩▩▩▩▩"
+    help: "&f/pdp help &8- &7This help menu."
+    reload: "&f/pdp reload &8- &7Reload config file."
+    version: "&f/pdp version &8- &7Checks the plugin version and updates."
+    clean: "&f/pdp clean <type> &8- &7Clean the expired data."
+    nick: "&f/pdp nick <nick/color/off> &8- &7Change the nick name. /n &fcolor: &aa&8, &bb &7(VIP)&8, &dd &7(MVP) /n &foff: clear the nick"
+    nickOther: "&f/pdp nick <nick/color/off> [player] &8- &7Change the nick name for a player. /n &fcolor: &aa&8, &bb &7(VIP)&8, &dd &7(MVP) /n &foff: clear the nick"
+  Nick:
+    invalidLength: "&cYour nick is too long. Max &6%nick_length% &esymbols."
+    invalidLengthTarget: "&c%targetplayer%''s Nick is too long. Max &6%nick_length% &esymbols."
+    invalidNick: "&cYour nick contains illegal characters."
+    invalidNickTarget: "&c%targetplayer%''s nick contains illegal characters."
+    invalidColor: "&cYou don''t have permission to set this color."
+    invalidColorTarget: "&c%targetplayer% don''t have permission to set this color."
+    invalidColorInside: "&cYou can''t use color code inside the nick."
+    invalidColorInsideTarget: "&c%targetplayer% can''t use color code inside the nick."
+    change: "&fYour new nick &8- &%color%%nick%(%player%)"
+    changeTarget: "&f%targetplayer%''s new nick &8- &%color%%nick%(%player%)"
+    clear: "&fYour new nick &8- &%color%%player%"
+    clearTarget: "&f%targetplayer%''s new nick &8- &%color%%player%"
+    changeColor: "&fYour new nick color &8- &%color%❤"
+    changeColorTarget: "&f%targetplayer%''s new nick color &8- &%color%❤"
+  Clean:
+    succeed: "%prefix% &eRemoved a total of: &7%amount% &e(%value%&e)"
+    listed: "%prefix% &eListed a total of: &7%amount% &e(%value%&e)"
+    start: "%prefix% &6Start checking player data..."
+    end: "%prefix% &6Clean process has ended."
+      start: "%prefix% &6Start checking player data..."
+    toggleOn: "%prefix% &aEnabled the clean process."
+    toggleOff: "%prefix% &cDisabled the clean process."
+    alreadyOn: "%prefix% &fThe clean process has already enabled."
+    alreadyOff: "%prefix% &fThe clean process has already disabled."

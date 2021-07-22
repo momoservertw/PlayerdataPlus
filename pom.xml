@@ -7,25 +7,12 @@
     <groupId>momocraft.tw</groupId>
     <artifactId>PlayerdataPlus</artifactId>
     <version>1.2.0</version>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>8</source>
-                    <target>8</target>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
+    <properties>
+        <maven.compiler.source>16</maven.compiler.source>
+        <maven.compiler.target>16</maven.compiler.target>
+    </properties>
 
     <repositories>
-        <!--Maven Repo-->
-        <repository>
-            <id>sk89q-repo</id>
-            <url>https://maven.sk89q.com/repo/</url>
-        </repository>
         <!--Paper Repo-->
         <repository>
             <id>papermc</id>
@@ -52,9 +39,9 @@
         </dependency>
         <!--Paper API-->
         <dependency>
-            <groupId>com.destroystokyo.paper</groupId>
+            <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.16.5-R0.1-SNAPSHOT</version>
+            <version>1.17.1-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <!--CorePlus API-->
@@ -70,7 +57,7 @@
             <groupId>me.CMI</groupId>
             <artifactId>CMI</artifactId>
             <scope>system</scope>
-            <systemPath>${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/CMIAPI7.6.2.0.jar</systemPath>
+            <systemPath>${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/CMIAPI8.7.8.2.jar</systemPath>
             <version>LEGACY</version>
         </dependency>
         <!--MysqlPlayerDataBridge API-->
@@ -79,7 +66,7 @@
             <artifactId>MysqlPlayerDataBridge</artifactId>
             <scope>system</scope>
             <systemPath>
-                ${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/MysqlPlayerDataBridge-v3.35.0.jar
+                ${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/MysqlPlayerDataBridge-v3.36.3.jar
             </systemPath>
             <version>LEGACY</version>
         </dependency>
@@ -88,7 +75,7 @@
             <groupId>me.SkinsRestorer</groupId>
             <artifactId>SkinsRestorer</artifactId>
             <scope>system</scope>
-            <systemPath>${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/SkinsRestorer-13.7.9.jar
+            <systemPath>${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/SkinsRestorer-14.1.1.jar
             </systemPath>
             <version>LEGACY</version>
         </dependency>
@@ -111,7 +98,7 @@
             <groupId>me.MyPet</groupId>
             <artifactId>MyPet</artifactId>
             <scope>system</scope>
-            <systemPath>${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/MyPet-3.11-SNAPSHOT-B1543.jar
+            <systemPath>${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/MyPet-3.11-SNAPSHOT-B1641.jar
             </systemPath>
             <version>LATEST</version>
         </dependency>
@@ -130,6 +117,14 @@
             <artifactId>PlayerPoints</artifactId>
             <scope>system</scope>
             <systemPath>${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/PlayerPoints.jar</systemPath>
+            <version>LEGACY</version>
+        </dependency>
+        <!--Residence API-->
+        <dependency>
+            <groupId>me.Residence</groupId>
+            <artifactId>Residence</artifactId>
+            <scope>system</scope>
+            <systemPath>${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/Residence5.0.0.1.jar</systemPath>
             <version>LEGACY</version>
         </dependency>
         <!--MyCommand API-->

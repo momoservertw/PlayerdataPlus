@@ -1,6 +1,6 @@
 package tw.momocraft.playerdataplus.playerstatus;
 
-import tw.momocraft.playerdataplus.utils.locationutils.LocationMap;
+import tw.momocraft.coreplus.utils.condition.LocationMap;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +12,8 @@ public class PlayerStatusMap {
 
     private boolean flyRes;
     private boolean flyCMIT;
-    private boolean flyCMIC;;
+    private boolean flyCMIC;
+    ;
     private boolean godCMIT;
     private String gmDefault;
 

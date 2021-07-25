@@ -1,6 +1,8 @@
 package tw.momocraft.playerdataplus.utils;
 
 import org.bukkit.configuration.ConfigurationSection;
+import tw.momocraft.coreplus.api.CorePlusAPI;
+import tw.momocraft.coreplus.utils.condition.LocationMap;
 import tw.momocraft.playerdataplus.handlers.ConfigHandler;
 import tw.momocraft.playerdataplus.playerstatus.PlayerStatusMap;
 import tw.momocraft.playerdataplus.utils.clean.CleanMap;
@@ -79,18 +81,18 @@ public class ConfigPath {
     //         Nick Variables                          //
     //  ============================================== //
     private boolean nick;
+    private boolean nickAutoUpdate;
     private int nickLength;
     private boolean nickColorCode;
     private List<String> nickBlackList;
     private boolean nickCMI;
     private boolean nickCMIUpdateTabList;
-    private String nickCMISet;
-    private String nickCMIClear;
-    private boolean nickNameTagEdit;
-    private String nickNTEPrefixSet;
-    private String nickNTESuffixSet;
-    private String nickNTEPrefixClear;
-    private String nickNTESuffixClear;
+    private String nickCMINickSet;
+    private String nickCMIPlatePrefix;
+    private String nickCMIPlateSuffix;
+    private String nickCMIPlateColor;
+    private boolean nickDiscordSRV;
+    private String nickDiscordSRVSet;
     private List<String> nickCommandSet;
     private List<String> nickCommandClear;
 
@@ -180,18 +182,18 @@ public class ConfigPath {
     //  ============================================== //
     private void setNick() {
         nick = ConfigHandler.getConfig("config.yml").getBoolean("Nick.Enable");
+        nickAutoUpdate = ConfigHandler.getConfig("config.yml").getBoolean("Nick.Settings.Auto-Update");
         nickLength = ConfigHandler.getConfig("config.yml").getInt("Nick.Limits.Length");
         nickColorCode = ConfigHandler.getConfig("config.yml").getBoolean("Nick.Limits.Prevent-Color-Code");
         nickBlackList = ConfigHandler.getConfig("config.yml").getStringList("Nick.Limits.Black-List");
         nickCMI = ConfigHandler.getConfig("config.yml").getBoolean("Nick.Formats.CMI.Enable");
         nickCMIUpdateTabList = ConfigHandler.getConfig("config.yml").getBoolean("Nick.Formats.CMI.Update-Tablist");
-        nickCMISet = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.CMI.Set");
-        nickCMIClear = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.CMI.Clear");
-        nickNameTagEdit = ConfigHandler.getConfig("config.yml").getBoolean("Nick.Formats.NameTagEdit.Enable");
-        nickNTEPrefixSet = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.NameTagEdit.Set.Prefix");
-        nickNTESuffixSet = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.NameTagEdit.Set.Suffix");
-        nickNTEPrefixClear = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.NameTagEdit.Clear.Prefix");
-        nickNTESuffixClear = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.NameTagEdit.Clear.Suffix");
+        nickCMINickSet = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.CMI.Nick.Set");
+        nickCMIPlatePrefix = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.CMI.Plate.Prefix");
+        nickCMIPlateSuffix = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.CMI.Plate.Suffix");
+        nickCMIPlateColor = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.CMI.Plate.Color");
+        nickDiscordSRV = ConfigHandler.getConfig("config.yml").getBoolean("Nick.Formats.DiscordSRV.Enable");
+        nickDiscordSRVSet = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.DiscordSRV.Set");
         nickCommandSet = ConfigHandler.getConfig("config.yml").getStringList("Nick.Formats.Commands");
         nickCommandClear = ConfigHandler.getConfig("config.yml").getStringList("Nick.Formats.Commands-Clear");
         ConfigurationSection nickGroups = ConfigHandler.getConfig("config.yml").getConfigurationSection("Nick.Groups");
@@ -425,6 +427,10 @@ public class ConfigPath {
         return nick;
     }
 
+    public boolean isNickAutoUpdate() {
+        return nickAutoUpdate;
+    }
+
     public int getNickLength() {
         return nickLength;
     }
@@ -445,32 +451,28 @@ public class ConfigPath {
         return nickCMIUpdateTabList;
     }
 
-    public String getNickCMISet() {
-        return nickCMISet;
+    public String getNickCMINickSet() {
+        return nickCMINickSet;
     }
 
-    public String getNickCMIClear() {
-        return nickCMIClear;
+    public String getNickCMIPlatePrefix() {
+        return nickCMIPlatePrefix;
     }
 
-    public boolean isNickNameTagEdit() {
-        return nickNameTagEdit;
+    public String getNickCMIPlateSuffix() {
+        return nickCMIPlateSuffix;
     }
 
-    public String getNickNTEPrefixSet() {
-        return nickNTEPrefixSet;
+    public String getNickCMIPlateColor() {
+        return nickCMIPlateColor;
     }
 
-    public String getNickNTESuffixSet() {
-        return nickNTESuffixSet;
+    public boolean isNickDiscordSRV() {
+        return nickDiscordSRV;
     }
 
-    public String getNickNTEPrefixClear() {
-        return nickNTEPrefixClear;
-    }
-
-    public String getNickNTESuffixClear() {
-        return nickNTESuffixClear;
+    public String getNickDiscordSRVSet() {
+        return nickDiscordSRVSet;
     }
 
     public List<String> getNickCommandSet() {

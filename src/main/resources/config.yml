@@ -29,26 +29,29 @@ Nick:
       Enable: false
       # Updating tab list after one player changed their name.
       Update-Tablist: true
-      Set: "&%color%%nick%(%player%)"
-      Clear: "&%color%%player%"
-    NameTagEdit:
+      Nick:
+        Set: "&%color%%nick%(%player%)"
+      Plate:
+        Prefix: "&%color%%nick% "
+        Suffix: ""
+        Color: "&f"
+    # Changing the Discord member nick if the player account is linked.
+    DiscordSRV:
       Enable: false
-      Set:
-        Prefix: "&%color%%nick% &f"
-        Suffix: ""
-      Clear:
-        Prefix: "&%color%"
-        Suffix: ""
+      Set: "&%color%%nick%(%player%)"
     # Executing commands when players changed their nicks.
     Commands: []
     Commands-Clear: []
   # Defining the player"s default nick color.
   # Permission: playerdataplus.nick.group.GROUP
+  # Priority is top to bottom.
   Groups:
-    # Priority is top to bottom.
-    default: a
-    VIP: b
+    GODDESS: c
+    GOD: 6
+    KING: e
     MVP: d
+    VIP: b
+    default: a
 
 # Controls player status to improve the gaming experience or fixed.
 # More information: https://github.com/momoservertw/PlayerdataPlus/wiki/Player-Status
@@ -249,8 +252,6 @@ Message:
     changeTarget: "&f%targetplayer%''s new nick &8- &%color%%nick%(%player%)"
     clear: "&fYour new nick &8- &%color%%player%"
     clearTarget: "&f%targetplayer%''s new nick &8- &%color%%player%"
-    changeColor: "&fYour new nick color &8- &%color%❤"
-    changeColorTarget: "&f%targetplayer%''s new nick color &8- &%color%❤"
   Clean:
     succeed: "%prefix% &eRemoved a total of: &7%amount% &e(%value%&e)"
     listed: "%prefix% &eListed a total of: &7%amount% &e(%value%&e)"

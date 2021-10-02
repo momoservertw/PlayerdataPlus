@@ -1,5 +1,6 @@
 package tw.momocraft.playerdataplus.utils;
 
+import tw.momocraft.coreplus.api.CorePlusAPI;
 import tw.momocraft.playerdataplus.handlers.ConfigHandler;
 
 import java.util.*;
@@ -14,7 +15,7 @@ public class ColorCorrespond {
     }
 
     private void setUp() {
-        colorMap = ConfigHandler.getConfigPath().getNickColorsMap();
+        colorMap = CorePlusAPI.getConfig().getConfigPath().getNickColorsMap();
         colorList.addAll(colorMap.values());
         String[] colorArray = new String[]{"a", "b", "c", "d", "e", "f", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
         Collections.addAll(colorList, colorArray);

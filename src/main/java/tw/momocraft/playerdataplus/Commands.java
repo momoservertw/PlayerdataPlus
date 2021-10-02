@@ -6,6 +6,7 @@ import org.bukkit.command.CommandSender;
 import tw.momocraft.coreplus.api.CorePlusAPI;
 import tw.momocraft.playerdataplus.features.Nick;
 import tw.momocraft.playerdataplus.handlers.ConfigHandler;
+import tw.momocraft.playerdataplus.playerstatus.PlayerStatusControl;
 
 public class Commands implements CommandExecutor {
 
@@ -36,9 +37,20 @@ public class Commands implements CommandExecutor {
                     CorePlusAPI.getMsg().sendLangMsg("", ConfigHandler.getConfigPath().getMsgHelp(), sender);
                     if (CorePlusAPI.getPlayer().hasPerm(sender, "playerdataplus.command.reload"))
                         CorePlusAPI.getMsg().sendLangMsg("", ConfigHandler.getConfigPath().getMsgReload(), sender);
-
                     if (CorePlusAPI.getPlayer().hasPerm(sender, "playerdataplus.command.version"))
                         CorePlusAPI.getMsg().sendLangMsg("", ConfigHandler.getConfigPath().getMsgVersion(), sender);
+                    if (CorePlusAPI.getPlayer().hasPerm(sender, "playerdataplus.command.nick.other"))
+                        CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPrefix(),
+                                ConfigHandler.getConfigPath().getMsgCmdNickOther(), sender);
+                    else if (CorePlusAPI.getPlayer().hasPerm(sender, "playerdataplus.command.nick"))
+                        CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPrefix(),
+                                ConfigHandler.getConfigPath().getMsgCmdNick(), sender);
+                    if (CorePlusAPI.getPlayer().hasPerm(sender, "playerdataplus.command.clean"))
+                        CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPrefix(),
+                                ConfigHandler.getConfigPath().getMsgCmdClean(), sender);
+                    if (CorePlusAPI.getPlayer().hasPerm(sender, "playerdataplus.command.playerstatus"))
+                        CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPrefix(),
+                                ConfigHandler.getConfigPath().getMsgCmdPlayerstatus(), sender);
                     CorePlusAPI.getMsg().sendMsg("", sender, "");
                 } else {
                     CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPrefix(),
@@ -81,25 +93,25 @@ public class Commands implements CommandExecutor {
                 if (CorePlusAPI.getPlayer().hasPerm(sender, "playerdataplus.command.nick")) {
                     // /pdp nick <nick> <color> [player]
                     if (length == 4) {
-                        Nick.setNick(sender, args[3], args[1], args[2], true);
+                        Nick.setNick(sender, args[3], args[1], args[2], true, true);
                     } else if (length == 3) {
                         // /pdp nick <nick> <color>
                         if (CorePlusAPI.getUtils().containsColorCode(args[2])) {
-                            Nick.setNick(sender, null, args[1], args[2], true);
+                            Nick.setNick(sender, null, args[1], args[2], true, true);
                             // /pdp nick <color> [player]
                         } else if (CorePlusAPI.getUtils().containsColorCode(args[1])) {
-                            Nick.setNick(sender, args[2], null, args[1], true);
+                            Nick.setNick(sender, args[2], null, args[1], true, true);
                             // /pdp nick <off> [player]
                         } else if (args[1].equals("off")) {
-                            Nick.setNick(sender, args[2], null, null, false);
+                            Nick.setNick(sender, args[2], null, null, false, true);
                             // /pdp nick <nick> [player]
                         } else if (CorePlusAPI.getPlayer().hasPerm(sender, "playerdataplus.command.nick.other")) {
                             // /pdp nick <color> [player]
                             if (CorePlusAPI.getUtils().containsColorCode(args[2])) {
-                                Nick.setNick(sender, args[2], null, args[1], true);
+                                Nick.setNick(sender, args[2], null, args[1], true, true);
                                 // /pdp nick <color> [player]
                             } else {
-                                Nick.setNick(sender, args[2], args[1], null, true);
+                                Nick.setNick(sender, args[2], args[1], null, true, true);
                             }
                         } else {
                             CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPrefix(),
@@ -108,18 +120,20 @@ public class Commands implements CommandExecutor {
                     } else if (length == 2) {
                         // /pdp nick <color>
                         if (CorePlusAPI.getUtils().containsColorCode(args[1])) {
-                            Nick.setNick(sender, null, null, args[1], true);
+                            Nick.setNick(sender, null, null, args[1], true, true);
                             // /pdp nick <color> [player]
                         } else if (args[1].equals("off")) {
-                            Nick.setNick(sender, null, null, null, false);
+                            Nick.setNick(sender, null, null, null, false, true);
                         } else {
-                            Nick.setNick(sender, null, args[1], null, true);
+                            Nick.setNick(sender, null, args[1], null, true, true);
                         }
                     }
-                    CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPrefix(),
-                            "Message.PlayerdataPlus.Commands.nick", sender);
-                    CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPrefix(),
-                            "Message.PlayerdataPlus.Commands.nickOff", sender);
+                    if (CorePlusAPI.getPlayer().hasPerm(sender, "playerdataplus.command.nick.other"))
+                        CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPrefix(),
+                                ConfigHandler.getConfigPath().getMsgCmdNickOther(), sender);
+                    else
+                        CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPrefix(),
+                                ConfigHandler.getConfigPath().getMsgCmdNick(), sender);
                 } else {
                     CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPrefix(),
                             "Message.noPermission", sender);
@@ -127,15 +141,17 @@ public class Commands implements CommandExecutor {
                 return true;
             case "playerstatus":
                 if (CorePlusAPI.getPlayer().hasPerm(sender, "playerdataplus.command.playerstatus")) {
-                    if (length == 3) {
-                        if (args[1].equals("start")) {
-
-                        } else if (args[1].equals("stop")) {
-
-                        }
+                    // pdp playerstatus <on/off>
+                    if (length == 2) {
+                        PlayerStatusControl.startSchedule(sender, args[1]);
+                        return true;
+                    } else if (length == 1) {
+                        PlayerStatusControl.startSchedule(sender, null);
+                        return true;
                     }
                     CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPrefix(),
-                            "Message.PlayerdataPlus.Commands.nickOff", sender);
+                            ConfigHandler.getConfigPath().getMsgCmdPlayerstatus(), sender);
+                    return true;
                 } else {
                     CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPrefix(),
                             "Message.noPermission", sender);
@@ -150,8 +166,10 @@ public class Commands implements CommandExecutor {
                 }
                 return true;
         }
-        CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPrefix(),
-                "Message.unknownCommand", sender);
+        CorePlusAPI.getMsg().
+
+                sendLangMsg(ConfigHandler.getPrefix(),
+                        "Message.unknownCommand", sender);
         return true;
     }
 }

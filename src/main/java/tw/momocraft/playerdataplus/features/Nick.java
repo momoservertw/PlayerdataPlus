@@ -28,11 +28,16 @@ public class Nick implements Listener {
             return;
         if (!ConfigHandler.getConfigPath().isNickAutoUpdate())
             return;
+        if (!CorePlusAPI.getConfig().isDataMySQL())
+            return;
+        if (!CorePlusAPI.getFile().getMySQL().isConnect(ConfigHandler.getPlugin(), "coreplus"))
+            return;
         String nickname = CorePlusAPI.getFile().getMySQL().getValue(ConfigHandler.getPlugin(),
                 "coreplus", "player", "display_name");
+        setNick(null, e.getPlayer().getName(), nickname, null, true, false);
     }
 
-    public static void setNick(CommandSender sender, String target, String nickName, String nickColor, boolean status) {
+    public static void setNick(CommandSender sender, String target, String nickName, String nickColor, boolean status, boolean message) {
         Player player;
         String playerName;
         if (target == null) {
@@ -56,6 +61,8 @@ public class Nick implements Listener {
         if (!CorePlusAPI.getPlayer().hasPerm(uuid, "playerdataplus.bypass.nick.*")) {
             // Check color permission.
             if (!getColorPerm(uuid, nickColor)) {
+                if (!message)
+                    return;
                 CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPlugin(),
                         ConfigHandler.getConfigPath().getMsgNickInvalidColor(), player, placeHolders);
                 if (target != null)
@@ -68,6 +75,8 @@ public class Nick implements Listener {
             }
             // Check nick length.
             if (!getLength(uuid, nickName)) {
+                if (!message)
+                    return;
                 CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPlugin(),
                         ConfigHandler.getConfigPath().getMsgNickInvalidLength(), player, placeHolders);
                 if (target != null)
@@ -80,6 +89,8 @@ public class Nick implements Listener {
             }
             // Check contains color code
             if (!getColorCode(uuid, nickName)) {
+                if (!message)
+                    return;
                 CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPlugin(),
                         ConfigHandler.getConfigPath().getMsgNickInvalidColorInside(), player, placeHolders);
                 if (target != null)
@@ -92,6 +103,8 @@ public class Nick implements Listener {
             }
             // Check black list
             if (!getBlackList(uuid, nickName)) {
+                if (!message)
+                    return;
                 CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPlugin(),
                         ConfigHandler.getConfigPath().getMsgNickInvalidNick(), player, placeHolders);
                 if (target != null)
@@ -104,6 +117,8 @@ public class Nick implements Listener {
             }
         }
         formatting(playerName, uuid, nickName, nickColor, status);
+        if (!message)
+            return;
         placeHolders[1] = playerName;
         placeHolders[3] = nickName;
         placeHolders[4] = nickColor;
@@ -112,13 +127,14 @@ public class Nick implements Listener {
         if (target != null)
             CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPlugin(),
                     ConfigHandler.getConfigPath().getMsgNickChangeTarget(), sender, placeHolders);
-        CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Nick", playerName, "final", "return", "other",
-                new Throwable().getStackTrace()[0]);
     }
 
     private static void formatting(String playerName, UUID uuid, String nickName, String nickColor, boolean status) {
         CMIFormatting(playerName, uuid, nickName, nickColor, status);
         CMDFormatting(playerName, nickName, nickColor, status);
+        CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(),
+                "Nick", playerName, "set", "return", playerName + ": " + nickName,
+                new Throwable().getStackTrace()[0]);
     }
 
     private static void CMIFormatting(String playerName, UUID uuid, String nickName, String nickColor, boolean status) {

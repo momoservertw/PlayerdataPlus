@@ -29,143 +29,92 @@ Nick:
       Enable: false
       # Updating tab list after one player changed their name.
       Update-Tablist: true
-      Set: "&%color%%nick%(%player%)"
-      Clear: "&%color%%player%"
-    NameTagEdit:
+      Nick:
+        Set: "&%color%%nick%(%player%)"
+      Plate:
+        Prefix: "&%color%%nick% "
+        Suffix: ""
+        Color: "&f"
+    # Changing the Discord member nick if the player account is linked.
+    DiscordSRV:
       Enable: false
-      Set:
-        Prefix: "&%color%%nick% &f"
-        Suffix: ""
-      Clear:
-        Prefix: "&%color%"
-        Suffix: ""
+      Set: "&%color%%nick%(%player%)"
     # Executing commands when players changed their nicks.
     Commands: []
     Commands-Clear: []
   # Defining the player"s default nick color.
   # Permission: playerdataplus.nick.group.GROUP
+  # Priority is top to bottom.
   Groups:
-    # Priority is top to bottom.
-    default: a
-    VIP: b
+    GODDESS: c
+    GOD: 6
+    KING: e
     MVP: d
+    VIP: b
+    default: a
 
-# Controls player status to improve the gaming experience or fixed.
+# Improves server security or fixes some bugs.
+# Bypass permission: playerdataplus.bypass.status.TYPE
+# Gamemode bypass permission: playerdataplus.bypass.status.gamemode.MODE
 # More information: https://github.com/momoservertw/PlayerdataPlus/wiki/Player-Status
 Player-Status:
   Enable: false
   Settings:
-    Schedule:
-      Interval: 100
-  Fly:
-    Enable: false
-    Settings:
-      CMI:
-        tfly: true
-        cfly: true
-      Residence: true
-    Disabled:
-      Enable: true
-      Check:
-        Schedule: true
-        Login: true
-        World-Change: true
-      # Teleport players to save location when canceled the fly mode.
-      Teleport:
+    Check:
+      Schedule:
         Enable: true
-        Spawn:
-          Force: false
-          World: world
-          X: 0
-          Y: 0
-          Z: 0
-          Pitch: 0
-          Yaw: 0
-      Permissions:
-        - cmi.command.fly
-      Location:
-        - world
-        - world_nether
-        - world_the_end
-    Enabled:
+        # Unit: tick
+        Interval: 100
+      Login: true
+      World-Change: true
+    Features:
+      # cmi.command.gm.creative
+      # tgod
+      CMI: true
+      Residence: true
+  Fly:
+    Enable: true
+    # Teleport players to safe location or spawn when disabling fly mode.
+    # If there has no save location under to player, he will be teleport to spawn. (Need: CMI)
+    Teleport:
       Enable: true
-      Ignore:
-        Permissions:
-          - cmi.command.fly
-      Location:
-        - world
-        - world_nether
-        - world_the_end
-      Check:
-        Schedule: false
-        Login: true
-        World-Change: true
+      Force-Spawn: false
+    Conditions: []
+    Location:
+      - world
+      - world_nether
+      - world_the_end
+  # Only support CMI god feature.
   God:
     Enable: false
-    Ignore:
-      Permission:
-        - cmi.command.god
-      CMI:
-        tgod: true
+    Conditions: []
     Location:
       - world
       - world_nether
       - world_the_end
   Op:
     Enable: false
-    Ignore:
-      Permission:
-        - playerdataplus.bypass.status.op
+    Conditions: []
     Location:
       - world
       - world_nether
       - world_the_end
-  Gamemode-Survival:
+  Gamemode:
     Enable: false
-    Default: "Survival"
-    Ignore:
-      Permissions:
-        - cmi.command.gm.survival
-    Location: [ ]
-  Gamemode-Creative:
-    Enable: true
-    Default: "Survival"
-    Ignore:
-      Permissions:
-        - cmi.command.gm.creative
-    Location: [ ]
-  Gamemode-Adventure:
-    Enable: true
-    Default: "Survival"
-    Ignore:
-      Permissions:
-        - cmi.command.gm.adventure
-    Location: [ ]
-  Gamemode-Spectator:
-    Enable: true
-    Default: "Survival"
-    Ignore:
-      Permissions:
-        - cmi.command.gm.spectator
-    Location: [ ]
+    Default: "SURVIVAL"
+    Conditions: []
+    Location:
+      - world
+      - world_nether
+      - world_the_end
 
-# Cleans the old player data.
+# Cleans expired player data.
 # Bypass permission: playerdataplus.bypass.clean
 # More information: https://github.com/momoservertw/PlayerdataPlus/wiki/Clean
 Clean:
   Enable: false
   Settings:
-    Auto-Clean:
-      Enable: false
     Log: true
-    Backup:
-      File:
-        Path: "plugins//PlayerdataPlus//Backup"
-        Zip: false
-      # Needed to setup in CorePlus's data.yml.
-      MySQL:
-        Enable: true
-    # The default setting of groups.
     Default:
       Expiration: 60
       Backup: true
@@ -203,7 +152,6 @@ Clean:
     Example:
       Enable: false
 
-
 # Command: /pdp convert <type> <feature>
 # More information: https://github.com/momoservertw/PlayerdataPlus/wiki/Data-Convertor
 Data-Convertor:
@@ -236,6 +184,7 @@ Message:
     clean: "&f/pdp clean <type> &8- &7Clean the expired data."
     nick: "&f/pdp nick <nick/color/off> &8- &7Change the nick name. /n &fcolor: &aa&8, &bb &7(VIP)&8, &dd &7(MVP) /n &foff: clear the nick"
     nickOther: "&f/pdp nick <nick/color/off> [player] &8- &7Change the nick name for a player. /n &fcolor: &aa&8, &bb &7(VIP)&8, &dd &7(MVP) /n &foff: clear the nick"
+    playerstatus: "&f/pdp playerstatus [on/off] &8- &7Enable the player status check schedule."
   Nick:
     invalidLength: "&cYour nick is too long. Max &6%nick_length% &esymbols."
     invalidLengthTarget: "&c%targetplayer%''s Nick is too long. Max &6%nick_length% &esymbols."
@@ -245,12 +194,8 @@ Message:
     invalidColorTarget: "&c%targetplayer% don''t have permission to set this color."
     invalidColorInside: "&cYou can''t use color code inside the nick."
     invalidColorInsideTarget: "&c%targetplayer% can''t use color code inside the nick."
-    change: "&fYour new nick &8- &%color%%nick%(%player%)"
-    changeTarget: "&f%targetplayer%''s new nick &8- &%color%%nick%(%player%)"
-    clear: "&fYour new nick &8- &%color%%player%"
-    clearTarget: "&f%targetplayer%''s new nick &8- &%color%%player%"
-    changeColor: "&fYour new nick color &8- &%color%❤"
-    changeColorTarget: "&f%targetplayer%''s new nick color &8- &%color%❤"
+    change: "&fYour new nick &8- &f%player_display_name%"
+    changeTarget: "&f%targetplayer%''s new nick &8- &f%player_display_name%"
   Clean:
     succeed: "%prefix% &eRemoved a total of: &7%amount% &e(%value%&e)"
     listed: "%prefix% &eListed a total of: &7%amount% &e(%value%&e)"
@@ -261,3 +206,8 @@ Message:
     toggleOff: "%prefix% &cDisabled the clean process."
     alreadyOn: "%prefix% &fThe clean process has already enabled."
     alreadyOff: "%prefix% &fThe clean process has already disabled."
+  Player-Status:
+    scheduleStart: "%prefix% &fStart checking Player status for players..."
+    scheduleEnd: "%prefix% &fThe player status checking process has been ended."
+    scheduleAlreadyStarted: "%prefix% &fThe player status checking process is already started."
+    scheduleAlreadyEnd: "%prefix% &fThe player status checking process doesn't working now."

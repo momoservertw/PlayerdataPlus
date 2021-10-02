@@ -1,18 +1,8 @@
 package tw.momocraft.playerdataplus.features;
 
-import com.Zrips.CMI.CMI;
-import com.Zrips.CMI.Containers.CMIUser;
-import com.bekvon.bukkit.residence.Residence;
-import com.bekvon.bukkit.residence.containers.ResidencePlayer;
-import com.bekvon.bukkit.residence.economy.CMIEconomy;
-import com.bekvon.bukkit.residence.protection.ClaimedResidence;
-import org.bukkit.Bukkit;
-import tw.momocraft.coreplus.api.CorePlusAPI;
-import tw.momocraft.playerdataplus.handlers.ConfigHandler;
-
-import java.util.UUID;
-
 public class UserConvert {
+
+    /*
 
     private void convertManager(String name1, String name2, boolean replace) {
         UUID uuid1 = CorePlusAPI.getPlayer().getPlayerUUID(name1);
@@ -38,7 +28,7 @@ public class UserConvert {
         if (CorePlusAPI.getDepend().CMIEnabled()) {
             CMIEconomy economy = new CMIEconomy();
             economy.transfer(name1, name2, economy.getBalance(name1));
-        }/* else if (CorePlusAPI.getDepend().getVault().vaultEnabled() && CorePlusAPI.getDepend().getVault().getEconomy().isEnabled()) {
+        } else if (CorePlusAPI.getDepend().getVault().vaultEnabled() && CorePlusAPI.getDepend().getVault().getEconomy().isEnabled()) {
 
             Economy economy = CorePlusAPI.getDepend().getVault().getEconomy();
             if (replace) {
@@ -48,7 +38,6 @@ public class UserConvert {
                 playerPointsAPI.givePoints(uuid2, playerPointsAPI.getPoints(uuid1));
             }
         }
-             */
     }
 
 
@@ -74,10 +63,9 @@ public class UserConvert {
             } else {
                 Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "lp user " + name1 + " clone " + name2);
             }
-        } /*else if (CorePlusAPI.getDepend().getVault().vaultEnabled() && CorePlusAPI.getDepend().getVault().getPermissions().isEnabled()) {
+        } else if (CorePlusAPI.getDepend().getVault().vaultEnabled() && CorePlusAPI.getDepend().getVault().getPermissions().isEnabled()) {
             CorePlusAPI.getDepend().getVault().getPermissions().
         }
-       */
     }
 
     private void convertCMI(String name1, String name2) {
@@ -107,11 +95,10 @@ public class UserConvert {
         }
     }
 
-    /**
      * @param name1   the name of first player.
      * @param name2   the name of target player.
      * @param replace clear the target player data first.
-     */
+
     private void convertResidence(String name1, String name2, boolean replace) {
         if (CorePlusAPI.getDepend().ResidenceEnabled()) {
             ResidencePlayer resPlayer1 = Residence.getInstance().getPlayer().getResidencePlayer(name1);
@@ -130,4 +117,5 @@ public class UserConvert {
             }
         }
     }
+     */
 }

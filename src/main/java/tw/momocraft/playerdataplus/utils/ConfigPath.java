@@ -2,7 +2,6 @@ package tw.momocraft.playerdataplus.utils;
 
 import org.bukkit.configuration.ConfigurationSection;
 import tw.momocraft.coreplus.api.CorePlusAPI;
-import tw.momocraft.coreplus.utils.condition.LocationMap;
 import tw.momocraft.playerdataplus.handlers.ConfigHandler;
 import tw.momocraft.playerdataplus.playerstatus.PlayerStatusMap;
 import tw.momocraft.playerdataplus.utils.clean.CleanMap;
@@ -36,6 +35,7 @@ public class ConfigPath {
     private String msgCmdClean;
     private String msgCmdNick;
     private String msgCmdNickOther;
+    private String msgCmdPlayerstatus;
 
     private String msgNickInvalidLength;
     private String msgNickInvalidLengthTarget;
@@ -47,8 +47,6 @@ public class ConfigPath {
     private String msgNickInvalidColorInsideTarget;
     private String msgNickChange;
     private String msgNickChangeTarget;
-    private String msgNickClear;
-    private String msgNickClearTarget;
     private String msgNickChangeColor;
     private String msgNickChangeColorTarget;
 
@@ -61,6 +59,10 @@ public class ConfigPath {
     private String msgCleanToggleOff;
     private String msgCleanAlreadyOn;
     private String msgCleanAlreadyOff;
+    private String msgPSScheduleStart;
+    private String msgPSScheduleEnd;
+    private String msgPSScheduleAlreadyStart;
+    private String msgPSScheduleAlreadyEnd;
 
     //  ============================================== //
     //         Clean Variables                         //
@@ -103,6 +105,15 @@ public class ConfigPath {
     //  ============================================== //
     private boolean playerStatus;
     private Map<String, PlayerStatusMap> playerStatusProp = new HashMap<>();
+    private boolean psCheckSchedule;
+    private int psCheckScheduleInterval;
+    private boolean psCheckLogin;
+    private boolean psCheckWorldChange;
+    private boolean psCMI;
+    private boolean psRes;
+    private boolean psFlyTp;
+    private boolean psFlyTpSpawn;
+    private String psGMDefault;
 
 
     //  ============================================== //
@@ -120,6 +131,7 @@ public class ConfigPath {
         msgCmdClean = ConfigHandler.getConfig("config.yml").getString("Message.Commands.clean");
         msgCmdNick = ConfigHandler.getConfig("config.yml").getString("Message.Commands.nick");
         msgCmdNickOther = ConfigHandler.getConfig("config.yml").getString("Message.Commands.nickOther");
+        msgCmdPlayerstatus = ConfigHandler.getConfig("config.yml").getString("Message.Commands.playerstatus");
 
         msgNickInvalidLength = ConfigHandler.getConfig("config.yml").getString("Message.Commands.Nick.invalidLength");
         msgNickInvalidLengthTarget = ConfigHandler.getConfig("config.yml").getString("Message.Commands.Nick.invalidLengthTarget");
@@ -131,8 +143,6 @@ public class ConfigPath {
         msgNickInvalidColorInsideTarget = ConfigHandler.getConfig("config.yml").getString("Message.Commands.Nick.invalidColorInsideTarget");
         msgNickChange = ConfigHandler.getConfig("config.yml").getString("Message.Commands.Nick.change");
         msgNickChangeTarget = ConfigHandler.getConfig("config.yml").getString("Message.Commands.Nick.changeTarget");
-        msgNickClear = ConfigHandler.getConfig("config.yml").getString("Message.Commands.Nick.clear");
-        msgNickClearTarget = ConfigHandler.getConfig("config.yml").getString("Message.Commands.Nick.clearTarget");
         msgNickChangeColor = ConfigHandler.getConfig("config.yml").getString("Message.Commands.Nick.changeColor");
         msgNickChangeColorTarget = ConfigHandler.getConfig("config.yml").getString("Message.Commands.Nick.changeColorTarget");
 
@@ -145,6 +155,11 @@ public class ConfigPath {
         msgCleanToggleOff = ConfigHandler.getConfig("config.yml").getString("Message.Clean.toggleOff");
         msgCleanAlreadyOn = ConfigHandler.getConfig("config.yml").getString("Message.Clean.alreadyOn");
         msgCleanAlreadyOff = ConfigHandler.getConfig("config.yml").getString("Message.Clean.alreadyOff");
+
+        msgPSScheduleStart = ConfigHandler.getConfig("config.yml").getString("Message.Player-Status.scheduleStart");
+        msgPSScheduleEnd = ConfigHandler.getConfig("config.yml").getString("Message.Player-Status.scheduleEnd");
+        msgPSScheduleAlreadyStart = ConfigHandler.getConfig("config.yml").getString("Message.Player-Status.scheduleAlreadyStart");
+        msgPSScheduleAlreadyEnd = ConfigHandler.getConfig("config.yml").getString("Message.Player-Status.scheduleAlreadyStart");
     }
 
     //  ============================================== //
@@ -207,41 +222,33 @@ public class ConfigPath {
     //  ============================================== //
     private void setPlayerStatus() {
         playerStatus = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.Enable");
-        if (!playerStatus) {
-            return;
-        }
-        psLogin = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.Settings.Check.Login");
-        psWorldChange = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.Settings.Check.World-Change");
-        psSchdeule = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.Settings.Check.Schedule.Enable");
-        psSchdeuleInterval = ConfigHandler.getConfig("config.yml").getInt("Player-Status.Settings.Check.Schedule.Interval");
+        psCheckSchedule = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.Settings.Check.Schedule.Enable");
+        psCheckScheduleInterval = ConfigHandler.getConfig("config.yml").getInt("Player-Status.Settings.Check.Schedule.Interval");
+        psCheckLogin = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.Settings.Check.Login");
+        psCheckWorldChange = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.Settings.Check.World-Change");
+        psCMI = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.Settings.Features.CMI");
+        psRes = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.Settings.Features.Residence");
+        psFlyTp = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.Fly.Teleport.Enable");
+        psFlyTpSpawn = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.Fly.Teleport.Force-Spawn");
+        psGMDefault = ConfigHandler.getConfig("config.yml").getString("Player-Status.Gamemode.Default");
 
         PlayerStatusMap playerStatusMap;
         ConfigurationSection groupsConfig = ConfigHandler.getConfig("config.yml").getConfigurationSection("Player-Status");
+        List<String> valueStringList;
         if (groupsConfig != null) {
-            List<LocationMap> locMaps;
             for (String group : groupsConfig.getKeys(false)) {
-                if (ConfigHandler.getConfig("config.yml").getBoolean("Player-Status." + group + ".Enable")) {
-                    // Checking the CMI enabled.
-                    if (group.equals("God") && !CorePlusAPI.getDepend().CMIEnabled()) {
-                        continue;
-                    }
-                    playerStatusMap = new PlayerStatusMap();
-                    playerStatusMap.setIgnorePerms(ConfigHandler.getConfig("config.yml").getStringList("Player-Status." + group + ".Ignore.Permissions"));
-                    // Adding the location setting.
-                    locMaps = locationUtils.getSpeLocMaps("config.yml", "Player-Status." + group + ".Location");
-                    if (!locMaps.isEmpty()) {
-                        playerStatusMap.setLocMaps(locMaps);
-                    }
-                    // Adding the special setting for CMI.
-                    if (group.equals("Fly") && CorePlusAPI.getDepend().CMIEnabled()) {
-                        playerStatusMap.setFlyCMIT(ConfigHandler.getConfig("config.yml").getBoolean("Player-Status." + group + ".Ignore.CMI.tfly"));
-                        playerStatusMap.setFlyCMIC(ConfigHandler.getConfig("config.yml").getBoolean("Player-Status." + group + ".Ignore.CMI.cfly"));
-                        playerStatusMap.setFlyRes(ConfigHandler.getConfig("config.yml").getBoolean("Player-Status." + group + ".Ignore.Residence"));
-                    } else if (group.equals("God") && CorePlusAPI.getDepend().CMIEnabled()) {
-                        playerStatusMap.setGodCMIT(ConfigHandler.getConfig("config.yml").getBoolean("Player-Status." + group + ".Ignore.CMI.tgod"));
-                    }
-                    playerStatusProp.put(group, playerStatusMap);
-                }
+                if (!ConfigHandler.getConfig("config.yml").getBoolean("Player-Status." + group + ".Enable"))
+                    continue;
+                if (!CorePlusAPI.getDepend().CMIEnabled() && (group.equals("God")))
+                    continue;
+                playerStatusMap = new PlayerStatusMap();
+                valueStringList = ConfigHandler.getConfig("entities.yml").getStringList("Player-Status." + group + ".Conditions");
+                if (!valueStringList.isEmpty())
+                    playerStatusMap.setConditions(valueStringList);
+                valueStringList = ConfigHandler.getConfig("entities.yml").getStringList("Player-Status." + group + ".Location");
+                if (!valueStringList.isEmpty())
+                    playerStatusMap.setLocList(valueStringList);
+                playerStatusProp.put(group, playerStatusMap);
             }
         }
     }
@@ -278,6 +285,10 @@ public class ConfigPath {
 
     public String getMsgCmdNickOther() {
         return msgCmdNickOther;
+    }
+
+    public String getMsgCmdPlayerstatus() {
+        return msgCmdPlayerstatus;
     }
 
     public String getMsgNickInvalidLength() {
@@ -318,14 +329,6 @@ public class ConfigPath {
 
     public String getMsgNickChangeTarget() {
         return msgNickChangeTarget;
-    }
-
-    public String getMsgNickClear() {
-        return msgNickClear;
-    }
-
-    public String getMsgNickClearTarget() {
-        return msgNickClearTarget;
     }
 
     public String getMsgNickChangeColor() {
@@ -370,6 +373,22 @@ public class ConfigPath {
 
     public String getMsgCleanAlreadyOff() {
         return msgCleanAlreadyOff;
+    }
+
+    public String getMsgPSScheduleStart() {
+        return msgPSScheduleStart;
+    }
+
+    public String getMsgPSScheduleEnd() {
+        return msgPSScheduleEnd;
+    }
+
+    public String getMsgPSScheduleAlreadyStart() {
+        return msgPSScheduleAlreadyStart;
+    }
+
+    public String getMsgPSScheduleAlreadyEnd() {
+        return msgPSScheduleAlreadyEnd;
     }
 
     //  ============================================== //
@@ -491,6 +510,49 @@ public class ConfigPath {
     //  ============================================== //
     //         Player Status Getter                    //
     //  ============================================== //
+    public boolean isPlayerStatus() {
+        return playerStatus;
+    }
+
+    public Map<String, PlayerStatusMap> getPlayerStatusProp() {
+        return playerStatusProp;
+    }
+
+    public boolean isPsCheckSchedule() {
+        return psCheckSchedule;
+    }
+
+    public int getPsCheckScheduleInterval() {
+        return psCheckScheduleInterval;
+    }
+
+    public boolean isPsCheckLogin() {
+        return psCheckLogin;
+    }
+
+    public boolean isPsCheckWorldChange() {
+        return psCheckWorldChange;
+    }
+
+    public boolean isPsCMI() {
+        return psCMI;
+    }
+
+    public boolean isPsRes() {
+        return psRes;
+    }
+
+    public boolean isPsFlyTp() {
+        return psFlyTp;
+    }
+
+    public boolean isPsFlyTpSpawn() {
+        return psFlyTpSpawn;
+    }
+
+    public String getPsGMDefault() {
+        return psGMDefault;
+    }
 
     //  ============================================== //
     //         Data Convertor Getter                   //

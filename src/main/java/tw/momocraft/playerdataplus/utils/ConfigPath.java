@@ -3,10 +3,7 @@ package tw.momocraft.playerdataplus.utils;
 import org.bukkit.configuration.ConfigurationSection;
 import tw.momocraft.coreplus.api.CorePlusAPI;
 import tw.momocraft.playerdataplus.handlers.ConfigHandler;
-import tw.momocraft.playerdataplus.playerstatus.PlayerStatusMap;
-import tw.momocraft.playerdataplus.utils.clean.CleanMap;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,9 +17,9 @@ public class ConfigPath {
 
     private void setUp() {
         setMsg();
-        setClean();
+        //setClean();
         setNick();
-        setPlayerStatus();
+        //setPlayerStatus();
     }
 
     //  ============================================== //
@@ -47,9 +44,9 @@ public class ConfigPath {
     private String msgNickInvalidColorInsideTarget;
     private String msgNickChange;
     private String msgNickChangeTarget;
-    private String msgNickChangeColor;
-    private String msgNickChangeColorTarget;
-
+    private String msgNickClear;
+    private String msgNickClearTarget;
+/*
     private String msgCleanSucceed;
     private String msgCleanListed;
     private String msgCleanStart;
@@ -64,6 +61,9 @@ public class ConfigPath {
     private String msgPSScheduleAlreadyStart;
     private String msgPSScheduleAlreadyEnd;
 
+ */
+
+    /*
     //  ============================================== //
     //         Clean Variables                         //
     //  ============================================== //
@@ -78,6 +78,7 @@ public class ConfigPath {
     private List<String> cleanMycmdList;
     private List<String> cleanMycmdIgnoreList;
     private final Map<String, CleanMap> cleanProp = new HashMap<>();
+     */
 
     //  ============================================== //
     //         Nick Variables                          //
@@ -99,12 +100,14 @@ public class ConfigPath {
     private List<String> nickCommandClear;
 
     private final Map<String, String> nickGroupsProp = new LinkedHashMap<>();
+    ;
 
+    /*
     //  ============================================== //
     //         Player Status Variables                 //
     //  ============================================== //
     private boolean playerStatus;
-    private Map<String, PlayerStatusMap> playerStatusProp = new HashMap<>();
+    private final Map<String, PlayerStatusMap> playerStatusProp = new HashMap<>();
     private boolean psCheckSchedule;
     private int psCheckScheduleInterval;
     private boolean psCheckLogin;
@@ -115,6 +118,8 @@ public class ConfigPath {
     private boolean psFlyTpSpawn;
     private String psGMDefault;
 
+     */
+
 
     //  ============================================== //
     //         Data Convertor Variables                //
@@ -124,28 +129,28 @@ public class ConfigPath {
     //         Message Setter                          //
     //  ============================================== //
     private void setMsg() {
-        msgTitle = ConfigHandler.getConfig("config.yml").getString("Message.Commands.title");
-        msgHelp = ConfigHandler.getConfig("config.yml").getString("Message.Commands.help");
-        msgReload = ConfigHandler.getConfig("config.yml").getString("Message.Commands.reload");
-        msgVersion = ConfigHandler.getConfig("config.yml").getString("Message.Commands.version");
-        msgCmdClean = ConfigHandler.getConfig("config.yml").getString("Message.Commands.clean");
-        msgCmdNick = ConfigHandler.getConfig("config.yml").getString("Message.Commands.nick");
-        msgCmdNickOther = ConfigHandler.getConfig("config.yml").getString("Message.Commands.nickOther");
-        msgCmdPlayerstatus = ConfigHandler.getConfig("config.yml").getString("Message.Commands.playerstatus");
+        msgTitle = ConfigHandler.getConfig("message.yml").getString("Message.Commands.title");
+        msgHelp = ConfigHandler.getConfig("message.yml").getString("Message.Commands.help");
+        msgReload = ConfigHandler.getConfig("message.yml").getString("Message.Commands.reload");
+        msgVersion = ConfigHandler.getConfig("message.yml").getString("Message.Commands.version");
+        msgCmdClean = ConfigHandler.getConfig("message.yml").getString("Message.Commands.clean");
+        msgCmdNick = ConfigHandler.getConfig("message.yml").getString("Message.Commands.nick");
+        msgCmdNickOther = ConfigHandler.getConfig("message.yml").getString("Message.Commands.nickOther");
+        msgCmdPlayerstatus = ConfigHandler.getConfig("message.yml").getString("Message.Commands.playerstatus");
 
-        msgNickInvalidLength = ConfigHandler.getConfig("config.yml").getString("Message.Commands.Nick.invalidLength");
-        msgNickInvalidLengthTarget = ConfigHandler.getConfig("config.yml").getString("Message.Commands.Nick.invalidLengthTarget");
-        msgNickInvalidNick = ConfigHandler.getConfig("config.yml").getString("Message.Commands.Nick.invalidNick");
-        msgNickInvalidNickTarget = ConfigHandler.getConfig("config.yml").getString("Message.Commands.Nick.invalidNickTarget");
-        msgNickInvalidColor = ConfigHandler.getConfig("config.yml").getString("Message.Commands.Nick.invalidColor");
-        msgNickInvalidColorTarget = ConfigHandler.getConfig("config.yml").getString("Message.Commands.Nick.invalidColorTarget");
-        msgNickInvalidColorInside = ConfigHandler.getConfig("config.yml").getString("Message.Commands.Nick.invalidColorInside");
-        msgNickInvalidColorInsideTarget = ConfigHandler.getConfig("config.yml").getString("Message.Commands.Nick.invalidColorInsideTarget");
-        msgNickChange = ConfigHandler.getConfig("config.yml").getString("Message.Commands.Nick.change");
-        msgNickChangeTarget = ConfigHandler.getConfig("config.yml").getString("Message.Commands.Nick.changeTarget");
-        msgNickChangeColor = ConfigHandler.getConfig("config.yml").getString("Message.Commands.Nick.changeColor");
-        msgNickChangeColorTarget = ConfigHandler.getConfig("config.yml").getString("Message.Commands.Nick.changeColorTarget");
-
+        msgNickInvalidLength = ConfigHandler.getConfig("message.yml").getString("Message.Nick.invalidLength");
+        msgNickInvalidLengthTarget = ConfigHandler.getConfig("message.yml").getString("Message.Nick.invalidLengthTarget");
+        msgNickInvalidNick = ConfigHandler.getConfig("message.yml").getString("Message.Nick.invalidNick");
+        msgNickInvalidNickTarget = ConfigHandler.getConfig("message.yml").getString("Message.Nick.invalidNickTarget");
+        msgNickInvalidColor = ConfigHandler.getConfig("message.yml").getString("Message.Nick.invalidColor");
+        msgNickInvalidColorTarget = ConfigHandler.getConfig("message.yml").getString("Message.Nick.invalidColorTarget");
+        msgNickInvalidColorInside = ConfigHandler.getConfig("message.yml").getString("Message.Nick.invalidColorInside");
+        msgNickInvalidColorInsideTarget = ConfigHandler.getConfig("message.yml").getString("Message.Commands.Nick.invalidColorInsideTarget");
+        msgNickChange = ConfigHandler.getConfig("message.yml").getString("Message.Nick.change");
+        msgNickChangeTarget = ConfigHandler.getConfig("message.yml").getString("Message.Nick.changeTarget");
+        msgNickClear = ConfigHandler.getConfig("message.yml").getString("Message.Nick.clear");
+        msgNickClearTarget = ConfigHandler.getConfig("message.yml").getString("Message.Nick.clearTarget");
+/*
         msgCleanStart = ConfigHandler.getConfig("config.yml").getString("Message.Clean.start");
         msgCleanEnd = ConfigHandler.getConfig("config.yml").getString("Message.Clean.end");
         msgCleanSucceed = ConfigHandler.getConfig("config.yml").getString("Message.Clean.succeed");
@@ -160,11 +165,14 @@ public class ConfigPath {
         msgPSScheduleEnd = ConfigHandler.getConfig("config.yml").getString("Message.Player-Status.scheduleEnd");
         msgPSScheduleAlreadyStart = ConfigHandler.getConfig("config.yml").getString("Message.Player-Status.scheduleAlreadyStart");
         msgPSScheduleAlreadyEnd = ConfigHandler.getConfig("config.yml").getString("Message.Player-Status.scheduleAlreadyStart");
+
+ */
     }
 
     //  ============================================== //
     //         Clean Setter                            //
     //  ============================================== //
+    /*
     private void setClean() {
         clean = ConfigHandler.getConfig("config.yml").getBoolean("Clean.Enable");
         cleanAuto = ConfigHandler.getConfig("config.yml").getBoolean("Clean.Settings.Auto-Clean.Enable");
@@ -192,6 +200,8 @@ public class ConfigPath {
         }
     }
 
+     */
+
     //  ============================================== //
     //         Nick Setter                             //
     //  ============================================== //
@@ -212,14 +222,21 @@ public class ConfigPath {
         nickCommandSet = ConfigHandler.getConfig("config.yml").getStringList("Nick.Formats.Commands");
         nickCommandClear = ConfigHandler.getConfig("config.yml").getStringList("Nick.Formats.Commands-Clear");
         ConfigurationSection nickGroups = ConfigHandler.getConfig("config.yml").getConfigurationSection("Nick.Groups");
-        if (nickGroups != null)
+        if (nickGroups != null) {
+            Map<String, String> nickPriorityGroup = new LinkedHashMap<>();
             for (String group : nickGroups.getKeys(false))
-                nickGroupsProp.put(group, ConfigHandler.getConfig("config.yml").getString("Nick.Groups." + group));
+                nickPriorityGroup.put(group, ConfigHandler.getConfig("config.yml").getString("Nick.Groups." + group + ".Priority"));
+            nickPriorityGroup = CorePlusAPI.getUtils().sortByValue(nickPriorityGroup);
+            for (String group : nickPriorityGroup.keySet()) {
+                nickGroupsProp.put(group, ConfigHandler.getConfig("config.yml").getString("Nick.Groups." + group + ".Color"));
+            }
+        }
     }
 
     //  ============================================== //
     //         Player Status Setter                    //
     //  ============================================== //
+    /*
     private void setPlayerStatus() {
         playerStatus = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.Enable");
         psCheckSchedule = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.Settings.Check.Schedule.Enable");
@@ -252,6 +269,8 @@ public class ConfigPath {
             }
         }
     }
+
+     */
     //  ============================================== //
     //         Data Convertor Setter                   //
     //  ============================================== //
@@ -331,14 +350,14 @@ public class ConfigPath {
         return msgNickChangeTarget;
     }
 
-    public String getMsgNickChangeColor() {
-        return msgNickChangeColor;
+    public String getMsgNickClear() {
+        return msgNickClear;
     }
 
-    public String getMsgNickChangeColorTarget() {
-        return msgNickChangeColorTarget;
+    public String getMsgNickClearTarget() {
+        return msgNickClearTarget;
     }
-
+/*
     public String getMsgCleanSucceed() {
         return msgCleanSucceed;
     }
@@ -391,9 +410,11 @@ public class ConfigPath {
         return msgPSScheduleAlreadyEnd;
     }
 
+ */
     //  ============================================== //
     //         Clean Getter                            //
     //  ============================================== //
+    /*
     public boolean isClean() {
         return clean;
     }
@@ -437,7 +458,7 @@ public class ConfigPath {
     public Map<String, CleanMap> getCleanProp() {
         return cleanProp;
     }
-
+     */
 
     //  ============================================== //
     //         Nick Getter                             //
@@ -510,6 +531,7 @@ public class ConfigPath {
     //  ============================================== //
     //         Player Status Getter                    //
     //  ============================================== //
+    /*
     public boolean isPlayerStatus() {
         return playerStatus;
     }
@@ -553,6 +575,7 @@ public class ConfigPath {
     public String getPsGMDefault() {
         return psGMDefault;
     }
+     */
 
     //  ============================================== //
     //         Data Convertor Getter                   //

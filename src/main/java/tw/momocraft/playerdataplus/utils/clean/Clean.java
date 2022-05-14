@@ -1,31 +1,7 @@
 package tw.momocraft.playerdataplus.utils.clean;
 
-import com.Zrips.CMI.CMI;
-import com.bekvon.bukkit.residence.Residence;
-import com.bekvon.bukkit.residence.protection.ClaimedResidence;
-import com.bekvon.bukkit.residence.protection.CuboidArea;
-import com.google.common.collect.HashBasedTable;
-import com.google.common.collect.Table;
-import de.Keyle.MyPet.MyPetApi;
-import de.Keyle.MyPet.api.player.MyPetPlayer;
-import fr.xephi.authme.api.v3.AuthMeApi;
-import github.scarsz.discordsrv.DiscordSRV;
-import org.bukkit.Bukkit;
-import org.bukkit.World;
-import org.bukkit.command.CommandSender;
-import org.bukkit.scheduler.BukkitRunnable;
-import tw.momocraft.coreplus.api.CorePlusAPI;
-import tw.momocraft.coreplus.handlers.UtilsHandler;
-import tw.momocraft.coreplus.utils.file.MySQLMap;
-import tw.momocraft.playerdataplus.PlayerdataPlus;
-import tw.momocraft.playerdataplus.handlers.ConfigHandler;
-
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.concurrent.TimeUnit;
-
 public class Clean {
+    /*
     private Map<UUID, Long> playerTimeMap;
     private Map<String, UUID> playerUUIDMap;
     private Map<UUID, String> playerNameMap;
@@ -137,7 +113,7 @@ public class Clean {
         List<String> variables = new ArrayList<>();
         variables.add("username");
         variables.add("last_login");
-        Map<String, Map<String, String>> map = UtilsHandler.getMySQL().getValues(ConfigHandler.getPlugin(),
+        Map<String, Map<String, String>> map = UtilsHandler.getFile().getMySQL().getValues(ConfigHandler.getPluginName(),
                 "coreplus", "players", "uuid", variables);
         UUID uuid;
         for (String uuidString : map.keySet()) {
@@ -220,7 +196,7 @@ public class Clean {
                 addMyCommand(cleanMap);
                 break;
             default:
-                CorePlusAPI.getMsg().sendErrorMsg(ConfigHandler.getPlugin(),
+                CorePlusAPI.getMsg().sendErrorMsg(ConfigHandler.getPluginName(),
                         "Can not clean the clean group: " + groupName);
         }
     }
@@ -240,32 +216,32 @@ public class Clean {
             return;
         Map<String, CleanMap> cleanProp = ConfigHandler.getConfigPath().getCleanProp();
         String date = new SimpleDateFormat("yyyy/MM/dd HH:mm").format(new Date());
-        CorePlusAPI.getFile().getLog().add(ConfigHandler.getPlugin(),
+        CorePlusAPI.getFile().getLog().add(ConfigHandler.getPluginName(),
                 "PlayerdataPlus", "░░░░░░░░░░ Clean Logs - " + date + " ░░░░░░░░░░");
 
         CleanMap cleanMap;
         for (String dataType : expiredTable.rowKeySet()) {
             cleanMap = cleanProp.get(dataType);
 
-            CorePlusAPI.getFile().getLog().add(ConfigHandler.getPlugin(),
+            CorePlusAPI.getFile().getLog().add(ConfigHandler.getPluginName(),
                     "PlayerdataPlus", "➤ " + dataType);
-            CorePlusAPI.getFile().getLog().add(ConfigHandler.getPlugin(),
+            CorePlusAPI.getFile().getLog().add(ConfigHandler.getPluginName(),
                     "PlayerdataPlus",
                     "Expiration: " + cleanMap.getExpiration() + ", " +
                             "Backup: " + cleanMap.isBackup());
-            CorePlusAPI.getFile().getLog().add(ConfigHandler.getPlugin(),
+            CorePlusAPI.getFile().getLog().add(ConfigHandler.getPluginName(),
                     "PlayerdataPlus", "Ignore-List: " + cleanMap.getIgnoreList());
 
             if (dataType.equals("Region")) {
-                CorePlusAPI.getFile().getLog().add(ConfigHandler.getPlugin(),
+                CorePlusAPI.getFile().getLog().add(ConfigHandler.getPluginName(),
                         "PlayerdataPlus",
                         "Residence-Bypass: " + ConfigHandler.getConfigPath().isCleanResBypass());
             }
             if (dataType.equals("MyCommand")) {
-                CorePlusAPI.getFile().getLog().add(ConfigHandler.getPlugin(),
+                CorePlusAPI.getFile().getLog().add(ConfigHandler.getPluginName(),
                         "PlayerdataPlus",
                         "Playerdata-List: " + ConfigHandler.getConfigPath().getCleanMycmdList());
-                CorePlusAPI.getFile().getLog().add(ConfigHandler.getPlugin(),
+                CorePlusAPI.getFile().getLog().add(ConfigHandler.getPluginName(),
                         "PlayerdataPlus",
                         "Playerdata-Ignore-List: " + ConfigHandler.getConfigPath().getCleanMycmdIgnoreList());
             }
@@ -275,17 +251,17 @@ public class Clean {
     private void logDataEmpty() {
         if (!ConfigHandler.getConfigPath().isCleanLog())
             return;
-        CorePlusAPI.getFile().getLog().add(ConfigHandler.getPlugin(),
+        CorePlusAPI.getFile().getLog().add(ConfigHandler.getPluginName(),
                 "PlayerdataPlus", "【 No Data 】");
     }
 
     private void logData(String dataType, String group, List<String> list) {
         if (!ConfigHandler.getConfigPath().isCleanLog())
             return;
-        CorePlusAPI.getFile().getLog().add(ConfigHandler.getPlugin(),
+        CorePlusAPI.getFile().getLog().add(ConfigHandler.getPluginName(),
                 "PlayerdataPlus", "【 " + dataType + " - " + group + " 】");
         for (String value : list)
-            CorePlusAPI.getFile().getLog().add(ConfigHandler.getPlugin(),
+            CorePlusAPI.getFile().getLog().add(ConfigHandler.getPluginName(),
                     "PlayerdataPlus", " - " + value);
     }
 
@@ -332,7 +308,7 @@ public class Clean {
 
     private void purgeAuthMe(List<String> list) {
         for (String value : list)
-            CorePlusAPI.getCmd().dispatchConsoleCmd(ConfigHandler.getPlugin(),
+            CorePlusAPI.getCmd().dispatchConsoleCmd(ConfigHandler.getPluginName(),
                     "authme unregister " + value);
     }
 
@@ -351,13 +327,13 @@ public class Clean {
 
     private void purgeCMI(List<String> list) {
         for (String value : list)
-            CorePlusAPI.getCmd().dispatchConsoleCmd(ConfigHandler.getPlugin(),
+            CorePlusAPI.getCmd().dispatchConsoleCmd(ConfigHandler.getPluginName(),
                     "cmi removeuser " + value);
     }
 
     // MyPet
     private void addMyPet(CleanMap cleanMap) {
-        if (CorePlusAPI.getDepend().MyPetEnabled()) {
+        if (tw.momocraft.playerdataplus.handlers.UtilsHandler.getDepend().MyPetEnabled()) {
             List<String> list = new ArrayList<>();
             int expiredTime = cleanMap.getExpiration();
             String uuidString;
@@ -375,10 +351,11 @@ public class Clean {
         String database = mySQLMap.getDatabase();
         String playersTable = mySQLMap.getTables().get("players");
         String petsTable = mySQLMap.getTables().get("pets");
+
         for (String value : list) {
-            CorePlusAPI.getFile().getMySQL().removeValue(ConfigHandler.getPlugin(),
+            CorePlusAPI.getFile().getMySQL().removeValue(ConfigHandler.getPluginName(),
                     database, petsTable, "owner_uuid", value);
-            CorePlusAPI.getFile().getMySQL().removeValue(ConfigHandler.getPlugin(),
+            CorePlusAPI.getFile().getMySQL().removeValue(ConfigHandler.getPluginName(),
                     database, playersTable, "name", playerNameMap.get(value));
         }
     }
@@ -395,7 +372,7 @@ public class Clean {
 
     private void purgeDiscordSRV(List<String> list) {
         for (String value : list)
-            CorePlusAPI.getCmd().dispatchConsoleCmd(ConfigHandler.getPlugin(),
+            CorePlusAPI.getCmd().dispatchConsoleCmd(ConfigHandler.getPluginName(),
                     "discord unlink " + value);
     }
 
@@ -405,7 +382,7 @@ public class Clean {
         String database = mySQLMap.getDatabase();
         List<String> list = new ArrayList<>();
         int time = cleanMap.getExpiration();
-        for (String uuid : CorePlusAPI.getFile().getMySQL().getValueList(ConfigHandler.getPlugin(),
+        for (String uuid : CorePlusAPI.getFile().getMySQL().getValueList(ConfigHandler.getPluginName(),
                 database, "PLAYERDATA", "PLAYER"))
             if (isPlayerExpired("mycommand", uuid, time))
                 list.add(uuid);
@@ -414,7 +391,7 @@ public class Clean {
 
     private void purgeMyCommand(List<String> list) {
         for (String value : list)
-            CorePlusAPI.getCmd().dispatchConsoleCmd(ConfigHandler.getPlugin(),
+            CorePlusAPI.getCmd().dispatchConsoleCmd(ConfigHandler.getPluginName(),
                     " unlink " + value);
     }
 
@@ -495,7 +472,7 @@ public class Clean {
 
     private void purgeFile(String dataType, String group, List<String> list) {
         for (String value : list) {
-            CorePlusAPI.getFile().getData().delete(ConfigHandler.getPlugin(),
+            CorePlusAPI.getFile().getData().delete(ConfigHandler.getPluginName(),
                     new File(group, value));
         }
     }
@@ -542,4 +519,6 @@ public class Clean {
                 , TimeUnit.MILLISECONDS)
                 > time;
     }
+
+     */
 }

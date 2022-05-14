@@ -1,28 +1,15 @@
 package tw.momocraft.playerdataplus.playerstatus;
 
-import com.Zrips.CMI.CMI;
-import com.Zrips.CMI.Containers.CMIUser;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
-import tw.momocraft.coreplus.api.CorePlusAPI;
-import tw.momocraft.playerdataplus.PlayerdataPlus;
-import tw.momocraft.playerdataplus.handlers.ConfigHandler;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 public class PlayerStatusControl {
 
     private static boolean schedule = false;
 
     public static void startSchedule(CommandSender sender, String status) {
+        /*
         if (ConfigHandler.getConfigPath().isPsCheckSchedule()) {
-            CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPlugin(),
+            CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPluginName(),
                     "featureDisabled", sender);
             return;
         }
@@ -38,10 +25,10 @@ public class PlayerStatusControl {
         }
         if (enable == schedule) {
             if (enable)
-                CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPlugin(),
+                CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPluginName(),
                         ConfigHandler.getConfigPath().getMsgPSScheduleAlreadyStart(), sender);
             else
-                CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPlugin(),
+                CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPluginName(),
                         ConfigHandler.getConfigPath().getMsgPSScheduleAlreadyEnd(), sender);
             return;
         }
@@ -56,13 +43,13 @@ public class PlayerStatusControl {
                     cancel();
                     return;
                 }
-                CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPlugin(),
+                CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPluginName(),
                         ConfigHandler.getConfigPath().getMsgPSScheduleStart(), sender);
                 checkAll();
             }
         }.runTaskTimer(PlayerdataPlus.getInstance(),
                 0, ConfigHandler.getConfigPath().getPsCheckScheduleInterval());
-        CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPlugin(),
+        CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPluginName(),
                 ConfigHandler.getConfigPath().getMsgPSScheduleEnd(), sender);
     }
 
@@ -92,7 +79,7 @@ public class PlayerStatusControl {
         for (String groupName : playerStatusProp.keySet()) {
             playerStatusMap = playerStatusProp.get(groupName);
             if (!isMatch(player, loc, playerStatusMap)) {
-                CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(),
+                CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPluginName(),
                         "Player-Status" + groupName, "match", "continue", playerName,
                         new Throwable().getStackTrace()[0]);
                 continue;
@@ -100,19 +87,19 @@ public class PlayerStatusControl {
             switch (groupName.toLowerCase()) {
                 case "fly" -> {
                     if (!player.isFlying()) {
-                        CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(),
+                        CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPluginName(),
                                 "Player-Status" + groupName, "flying", "continue", playerName,
                                 new Throwable().getStackTrace()[0]);
                         continue back;
                     }
                     if (isAllowFly(player)) {
-                        CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(),
+                        CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPluginName(),
                                 "Player-Status" + groupName, "check", "bypass", playerName,
                                 new Throwable().getStackTrace()[0]);
                         continue back;
                     }
                     player.setFlying(false);
-                    CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(), "Player-Status." + groupName, playerName, "World-Change", "cancel", "final",
+                    CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPluginName(), "Player-Status." + groupName, playerName, "World-Change", "cancel", "final",
                             new Throwable().getStackTrace()[0]);
                 }
                 case "god" -> {
@@ -122,13 +109,13 @@ public class PlayerStatusControl {
                     if (!user.isGod())
                         continue back;
                     if (isAllowGod(player)) {
-                        CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(),
+                        CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPluginName(),
                                 "Player-Status" + groupName, "check", "bypass", playerName,
                                 new Throwable().getStackTrace()[0]);
                         continue back;
                     }
                     user.setGod(false);
-                    CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(),
+                    CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPluginName(),
                             "Player-Status." + groupName, playerName, "World-Change", "cancel", "final",
                             new Throwable().getStackTrace()[0]);
                 }
@@ -136,13 +123,13 @@ public class PlayerStatusControl {
                     if (!player.isOp())
                         continue back;
                     if (isAllowOP(player)) {
-                        CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(),
+                        CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPluginName(),
                                 "Player-Status" + groupName, "check", "bypass", playerName,
                                 new Throwable().getStackTrace()[0]);
                         continue back;
                     }
                     player.setOp(false);
-                    CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(),
+                    CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPluginName(),
                             "Player-Status." + groupName, playerName, "World-Change", "cancel", "final",
                             new Throwable().getStackTrace()[0]);
                 }
@@ -150,18 +137,18 @@ public class PlayerStatusControl {
                     if (!player.getGameMode().name().equalsIgnoreCase(ConfigHandler.getConfigPath().getPsGMDefault()))
                         continue back;
                     if (isAllowGM(player)) {
-                        CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(),
+                        CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPluginName(),
                                 "Player-Status" + groupName, "check", "bypass", playerName,
                                 new Throwable().getStackTrace()[0]);
                         continue back;
                     }
                     player.setGameMode(GameMode.valueOf(ConfigHandler.getConfigPath().getPsGMDefault().toUpperCase()));
-                    CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPlugin(),
+                    CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPluginName(),
                             "Player-Status." + groupName, playerName, "World-Change", "cancel", "final",
                             new Throwable().getStackTrace()[0]);
                 }
                 default -> {
-                    CorePlusAPI.getMsg().sendErrorMsg(ConfigHandler.getPlugin(),
+                    CorePlusAPI.getMsg().sendErrorMsg(ConfigHandler.getPluginName(),
                             "Can not find the player status type: " + groupName);
                 }
             }
@@ -178,10 +165,10 @@ public class PlayerStatusControl {
 
     private static boolean isMatch(Player player, Location loc, PlayerStatusMap playerStatusMap) {
         // Checking Location.
-        if (!CorePlusAPI.getCond().checkLocation(ConfigHandler.getPlugin(), loc, playerStatusMap.getLocList(), true))
+        if (!CorePlusAPI.getCond().checkLocation(ConfigHandler.getPluginName(), loc, playerStatusMap.getLocList(), true))
             return false;
         // Checking Conditions.
-        return CorePlusAPI.getCond().checkCondition(ConfigHandler.getPlugin(),
+        return CorePlusAPI.getCond().checkCondition(ConfigHandler.getPluginName(),
                 CorePlusAPI.getMsg().transHolder(null, player, playerStatusMap.getConditions()));
     }
 
@@ -227,5 +214,7 @@ public class PlayerStatusControl {
             return CorePlusAPI.getPlayer().hasPerm(player, "cmi.command.gm." + player.getGameMode().name().toLowerCase());
         }
         return false;
+    }
+         */
     }
 }

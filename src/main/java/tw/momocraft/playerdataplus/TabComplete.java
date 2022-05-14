@@ -5,7 +5,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.util.StringUtil;
 import tw.momocraft.coreplus.api.CorePlusAPI;
-import tw.momocraft.playerdataplus.handlers.ConfigHandler;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,29 +31,29 @@ public class TabComplete implements TabCompleter {
                 commands.add("nick");
             if (CorePlusAPI.getPlayer().hasPerm(sender, "playerdataplus.command.playerstatus"))
                 commands.add("playerstatus");
+            /*
         } else if ((args.length == 2) && (args[0].equalsIgnoreCase("clean"))) {
             if (CorePlusAPI.getPlayer().hasPerm(sender, "playerdataplus.command.clean")) {
                 commands.add("stop");
-                commands.addAll(ConfigHandler.getConfigPath().getBackupList());
+                commands.addAll(ConfigHandler.getConfigPath().);
             }
+             */
         } else if ((args.length == 2) && (args[0].equalsIgnoreCase("nick"))) {
             commands.add("off");
-            if (CorePlusAPI.getPlayer().hasPerm(sender, "playerdataplus.command.nick")) {
-                if (CorePlusAPI.getPlayer().hasPerm(sender, "playerdataplus.command.nick.color")) {
-                    commands.addAll(ConfigHandler.getColors().getColorList());
-                }
-            }
+            if (CorePlusAPI.getPlayer().hasPerm(sender, "playerdataplus.command.nick"))
+                if (CorePlusAPI.getPlayer().hasPerm(sender, "playerdataplus.command.nick.color"))
+                    commands.addAll(CorePlusAPI.getMsg().getColorMap().keySet());
         } else if ((args.length >= 3) && (args[0].equalsIgnoreCase("nick"))) {
             if (CorePlusAPI.getPlayer().hasPerm(sender, "playerdataplus.command.nick")) {
-                if (CorePlusAPI.getPlayer().hasPerm(sender, "playerdataplus.command.nick.bypass")) {
+                if (CorePlusAPI.getPlayer().hasPerm(sender, "playerdataplus.command.nick.bypass"))
                     commands.add("false");
-                }
-                if (CorePlusAPI.getPlayer().hasPerm(sender, "playerdataplus.command.nick.color")) {
-                    commands.addAll(ConfigHandler.getColors().getColorList());
-                }
-                if (CorePlusAPI.getPlayer().hasPerm(sender, "playerdataplus.command.nick.other")) {
-                }
+                if (CorePlusAPI.getPlayer().hasPerm(sender, "playerdataplus.command.nick.color"))
+                    commands.addAll(CorePlusAPI.getMsg().getColorMap().keySet());
+                if (CorePlusAPI.getPlayer().hasPerm(sender, "playerdataplus.command.nick.other"))
+                    commands.addAll(CorePlusAPI.getPlayer().getOnlinePlayerNames());
             }
+        }
+            /*
         } else if (args.length == 3 && args[0].equalsIgnoreCase("playerstatus")) {
             if (CorePlusAPI.getPlayer().hasPerm(sender, "playerdataplus.command.playerstatus")) {
                 commands.add("fly");
@@ -68,6 +67,8 @@ public class TabComplete implements TabCompleter {
                 commands.add("start");
             }
         }
+
+             */
         StringUtil.copyPartialMatches(args[(args.length - 1)], commands, completions);
         Collections.sort(completions);
         return completions;

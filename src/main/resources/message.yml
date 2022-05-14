@@ -1,0 +1,40 @@
+Config-Version: 1
+
+Message:
+  prefix: "&7[&dPlayerdataPlus&7]&r "
+  Commands:
+    title: "&8▩▩▩▩▩▩▩▩▩▩▩▩▩ &d&lPlayerdataPlus &8▩▩▩▩▩▩▩▩▩▩▩▩▩"
+    help: "&f/pdp help &8- &7This help menu."
+    reload: "&f/pdp reload &8- &7Reload config file."
+    version: "&f/pdp version &8- &7Checks the plugin version and updates."
+    clean: "&f/pdp clean <type> &8- &7Clean the expired data."
+    nick: "&f/pdp nick <nick/color/off> &8- &7Change the nick name. /n &fcolor: &aa&8, &bb &7(VIP)&8, &dd &7(MVP) /n &foff: clear the nick"
+    nickOther: "&f/pdp nick <nick/color/off> [player] &8- &7Change the nick name for a player. /n &fcolor: &aa&8, &bb &7(VIP)&8, &dd &7(MVP) /n &foff: clear the nick"
+    playerstatus: "&f/pdp playerstatus [on/off] &8- &7Enable the player status check schedule."
+  Nick:
+    invalidLength: "&cYour nick is too long. Max &6%nick_length% &esymbols."
+    invalidLengthTarget: "&c%targetplayer%''s Nick is too long. Max &6%nick_length% &esymbols."
+    invalidNick: "&cYour nick contains illegal characters."
+    invalidNickTarget: "&c%targetplayer%''s nick contains illegal characters."
+    invalidColor: "&cYou don''t have permission to set this color."
+    invalidColorTarget: "&c%targetplayer% don''t have permission to set this color."
+    invalidColorInside: "&cYou can''t use color code inside the nick."
+    invalidColorInsideTarget: "&c%targetplayer% can''t use color code inside the nick."
+    change: "&fYour new nick &8- &f%player_display_name%"
+    changeTarget: "&f%targetplayer%''s new nick &8- &f%player_display_name%"
+    clear: "&fYour nick has been cleared."
+    clearTarget: "&f%targetplayer%''s nick has been cleared."
+  Clean:
+    succeed: "%prefix% &eRemoved a total of: &7%amount% &e(%value%&e)"
+    listed: "%prefix% &eListed a total of: &7%amount% &e(%value%&e)"
+    start: "%prefix% &6Start checking player data..."
+    end: "%prefix% &6Clean process has ended."
+    toggleOn: "%prefix% &aEnabled the clean process."
+    toggleOff: "%prefix% &cDisabled the clean process."
+    alreadyOn: "%prefix% &fThe clean process has already enabled."
+    alreadyOff: "%prefix% &fThe clean process has already disabled."
+  Player-Status:
+    scheduleStart: "%prefix% &fStart checking Player status for players..."
+    scheduleEnd: "%prefix% &fThe player status checking process has been ended."
+    scheduleAlreadyStarted: "%prefix% &fThe player status checking process is already started."
+    scheduleAlreadyEnd: "%prefix% &fThe player status checking process doesn't working now."

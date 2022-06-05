@@ -19,6 +19,7 @@ public class ConfigPath {
         setMsg();
         //setClean();
         setNick();
+        setPlayerData();
         //setPlayerStatus();
     }
 
@@ -84,7 +85,6 @@ public class ConfigPath {
     //         Nick Variables                          //
     //  ============================================== //
     private boolean nick;
-    private boolean nickAutoUpdate;
     private int nickLength;
     private boolean nickColorCode;
     private List<String> nickBlackList;
@@ -100,7 +100,19 @@ public class ConfigPath {
     private List<String> nickCommandClear;
 
     private final Map<String, String> nickGroupsProp = new LinkedHashMap<>();
-    ;
+
+    //  ============================================== //
+    //         PlayerData Variables                    //
+    //  ============================================== //
+    private boolean playerData;
+    private boolean playerDataAutoSave;
+    private boolean playerDataAutoSaveMsg;
+    private int playerDataAutoSaveInterval;
+    private boolean playerDataMsgStarting;
+    private boolean playerDataMsgSucceed;
+    private boolean playerDataMsgFailed;
+    private boolean playerDataGroupNick;
+    private boolean playerDataGroupCustom;
 
     /*
     //  ============================================== //
@@ -207,7 +219,6 @@ public class ConfigPath {
     //  ============================================== //
     private void setNick() {
         nick = ConfigHandler.getConfig("config.yml").getBoolean("Nick.Enable");
-        nickAutoUpdate = ConfigHandler.getConfig("config.yml").getBoolean("Nick.Settings.Auto-Update");
         nickLength = ConfigHandler.getConfig("config.yml").getInt("Nick.Limits.Length");
         nickColorCode = ConfigHandler.getConfig("config.yml").getBoolean("Nick.Limits.Prevent-Color-Code");
         nickBlackList = ConfigHandler.getConfig("config.yml").getStringList("Nick.Limits.Black-List");
@@ -231,6 +242,59 @@ public class ConfigPath {
                 nickGroupsProp.put(group, ConfigHandler.getConfig("config.yml").getString("Nick.Groups." + group + ".Color"));
             }
         }
+    }
+
+    //  ============================================== //
+    //         PlayerData Setter                         //
+    //  ============================================== //
+    private void setPlayerData() {
+        playerDataAutoSave = ConfigHandler.getConfig("config.yml").getBoolean("PlayerData.Settings.Auto-Save.Enable");
+        playerDataAutoSaveInterval = ConfigHandler.getConfig("config.yml").getInt("PlayerData.Settings.Auto-Save.Interval");
+        playerDataAutoSaveMsg = ConfigHandler.getConfig("config.yml").getBoolean("PlayerData.Settings.Auto-Save.Message");
+        playerDataMsgStarting = ConfigHandler.getConfig("config.yml").getBoolean("PlayerData.Message.Starting");
+        playerDataMsgSucceed = ConfigHandler.getConfig("config.yml").getBoolean("PlayerData.Message.Succeed");
+        playerDataMsgFailed = ConfigHandler.getConfig("config.yml").getBoolean("PlayerData.Message.Failed");
+        playerDataGroupNick = ConfigHandler.getConfig("config.yml").getBoolean("PlayerData.Groups.Succeed");
+        playerDataGroupCustom = ConfigHandler.getConfig("config.yml").getBoolean("PlayerData.Message.Failed");
+    }
+
+    //  ============================================== //
+    //         ConfigBuilder Getter                    //
+    //  ============================================== //
+    public boolean isPlayerData() {
+        return playerData;
+    }
+
+    public boolean isPlayerDataAutoSave() {
+        return playerDataAutoSave;
+    }
+
+    public boolean isPlayerDataAutoSaveMsg() {
+        return playerDataAutoSaveMsg;
+    }
+
+    public int getPlayerDataAutoSaveInterval() {
+        return playerDataAutoSaveInterval;
+    }
+
+    public boolean isPlayerDataMsgStarting() {
+        return playerDataMsgStarting;
+    }
+
+    public boolean isPlayerDataMsgSucceed() {
+        return playerDataMsgSucceed;
+    }
+
+    public boolean isPlayerDataMsgFailed() {
+        return playerDataMsgFailed;
+    }
+
+    public boolean isPlayerDataGroupNick() {
+        return playerDataGroupNick;
+    }
+
+    public boolean isPlayerDataGroupCustom() {
+        return playerDataGroupCustom;
     }
 
     //  ============================================== //
@@ -465,10 +529,6 @@ public class ConfigPath {
     //  ============================================== //
     public boolean isNick() {
         return nick;
-    }
-
-    public boolean isNickAutoUpdate() {
-        return nickAutoUpdate;
     }
 
     public int getNickLength() {

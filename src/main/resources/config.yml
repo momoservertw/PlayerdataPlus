@@ -57,6 +57,24 @@ Nick:
       Priority: 2
       Color: d
 
+# Sync the custom player data over multiple servers.
+PlayerData:
+  Enable: false
+  Settings:
+    Auto-Save:
+      Enable: true
+      Interval: 180
+      Message: false
+    Message:
+      Starting: true
+      Succeed: true
+      Failed: true
+  Groups:
+    Nick:
+      Enable: true
+    Custom:
+      Enable: true
+
 # Improves server security or fixes some bugs.
 # Bypass permission: playerdataplus.bypass.status.TYPE
 # More information: https://github.com/momoservertw/PlayerdataPlus/wiki/Player-Status

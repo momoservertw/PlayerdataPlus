@@ -6,15 +6,20 @@ Config-Version: 4
 Debugging: false
 Check-Updates: true
 
+General:
+  MySQL:
+    Enable: false
+    Hostname: localhost
+    Port: 3306
+    Database: "playerdataplus"
+    Prefix: ""
+    Username: "root"
+    Password: ""
+
 # Format player nicks and make the chat channel more tidy.
 # More information: https://github.com/momoservertw/PlayerdataPlus/wiki/Nick
 Nick:
   Enable: false
-  Settings:
-    # Auto update the nick from database when player joined the game.
-    # Need to setup the MySQL settings in CorePlus/data.yml.
-    # Changed this option need to restart the server.
-    Auto-Update: false
   Limits:
     # Permission: playerdataplus.nick.length.NUMBER | playerdataplus.bypass.nick.length
     Length: 8
@@ -56,6 +61,24 @@ Nick:
     MVP:
       Priority: 2
       Color: d
+
+# Sync the custom player data over multiple servers.
+PlayerData:
+  Enable: false
+  Settings:
+    Auto-Save:
+      Enable: true
+      Interval: 180
+      Message: false
+    Message:
+      Starting: true
+      Succeed: true
+      Failed: true
+  Groups:
+    Nick:
+      Enable: true
+    Custom:
+      Enable: true
 
 # Improves server security or fixes some bugs.
 # Bypass permission: playerdataplus.bypass.status.TYPE

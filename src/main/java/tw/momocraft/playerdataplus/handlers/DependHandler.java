@@ -5,7 +5,10 @@ import tw.momocraft.coreplus.api.CorePlusAPI;
 import tw.momocraft.playerdataplus.Commands;
 import tw.momocraft.playerdataplus.PlayerdataPlus;
 import tw.momocraft.playerdataplus.TabComplete;
-import tw.momocraft.playerdataplus.utils.nick.Nick;
+import tw.momocraft.playerdataplus.features.nick.Nick;
+import tw.momocraft.playerdataplus.features.playerstatus.PlayerStatusControl;
+import tw.momocraft.playerdataplus.features.playerstatus.listeners.PlayerChangedWorld;
+import tw.momocraft.playerdataplus.features.playerstatus.listeners.PlayerJoin;
 
 public class DependHandler {
 
@@ -30,56 +33,61 @@ public class DependHandler {
         PlayerdataPlus.getInstance().getCommand("playerdataplus").setExecutor(new Commands());
         PlayerdataPlus.getInstance().getCommand("playerdataplus").setTabCompleter(new TabComplete());
 
-        if (ConfigHandler.getConfigPath().isNick()) {
-            if (ConfigHandler.getConfigPath().isNickAutoUpdate()) {
-                PlayerdataPlus.getInstance().getServer().getPluginManager().registerEvents(
-                        new Nick(), PlayerdataPlus.getInstance());
-                CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPluginName(),
-                        "Register-Event", "Nick", "PlayerJoinEvent", "continue",
-                        new Throwable().getStackTrace()[0]);
-            }
-        }
-        /*
-        if (ConfigHandler.getConfigPath().isPlayerStatus()) {
-            if (ConfigHandler.getConfigPath().isPsCheckLogin()) {
-                PlayerdataPlus.getInstance().getServer().getPluginManager().registerEvents(
-                        new PlayerJoin(), PlayerdataPlus.getInstance());
-                CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPluginName(),
-                        "Register-Event", "Player-Status", "FlyPlayerJoin", "continue",
-                        new Throwable().getStackTrace()[0]);
-            }
-            if (ConfigHandler.getConfigPath().isPsCheckWorldChange()) {
-                PlayerdataPlus.getInstance().getServer().getPluginManager().registerEvents(
-                        new PlayerChangedWorld(), PlayerdataPlus.getInstance());
-                CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPluginName(),
-                        "Register-Event", "Player-Status", "FlyPlayerJoin", "continue",
-                        new Throwable().getStackTrace()[0]);
-            }
-        }
-         */
+        PlayerdataPlus.getInstance().getServer().getPluginManager().registerEvents(
+                new Nick(), PlayerdataPlus.getInstance());
+        CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPluginName(),
+                "Register-Event", "Nick", "PlayerJoinEvent", "continue",
+                new Throwable().getStackTrace()[0]);
+
+        PlayerdataPlus.getInstance().getServer().getPluginManager().registerEvents(
+                new PlayerJoin(), PlayerdataPlus.getInstance());
+        CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPluginName(),
+                "Register-Event", "Player-Status", "FlyPlayerJoin", "continue",
+                new Throwable().getStackTrace()[0]);
+
+        PlayerdataPlus.getInstance().getServer().getPluginManager().registerEvents(
+                new PlayerChangedWorld(), PlayerdataPlus.getInstance());
+        CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPluginName(),
+                "Register-Event", "Player-Status", "FlyPlayerJoin", "continue",
+                new Throwable().getStackTrace()[0]);
+
+        PlayerStatusControl.startSchedule(ConfigHandler.getConfigPath().isPsCheckSchedule());
     }
 
-    private boolean SkinsRestorer = false;
+    private boolean CMI = false;
+    private boolean FeatureBoard = false;
     private boolean DiscordSRV = false;
     private boolean MyPet = false;
-    private boolean Essentials = false;
-    private boolean MyCommand = false;
+    private boolean MySQLPlayerDataBridge = false;
+    private boolean PlayerPoints = false;
+    private boolean Residence = false;
+    private boolean SkinsRestorer = false;
 
     private void setupHooks() {
-        if (ConfigHandler.getConfig("config.yml").getBoolean("General.Settings.Features.Hook.SkinsRestorer"))
-            SkinsRestorer = Bukkit.getServer().getPluginManager().getPlugin("SkinsRestorer") != null;
-        if (ConfigHandler.getConfig("config.yml").getBoolean("General.Settings.Features.Hook.DiscordSRV"))
+        if (ConfigHandler.getConfig("config.yml").getBoolean("General.Features.Hook.CMI"))
+            CMI = Bukkit.getServer().getPluginManager().getPlugin("DiscordSRV") != null;
+        if (ConfigHandler.getConfig("config.yml").getBoolean("General.Features.Hook.FeatureBoard"))
+            FeatureBoard = Bukkit.getServer().getPluginManager().getPlugin("DiscordSRV") != null;
+        if (ConfigHandler.getConfig("config.yml").getBoolean("General.Features.Hook.DiscordSRV"))
             DiscordSRV = Bukkit.getServer().getPluginManager().getPlugin("DiscordSRV") != null;
-        if (ConfigHandler.getConfig("config.yml").getBoolean("General.Settings.Features.Hook.MyPet"))
+        if (ConfigHandler.getConfig("config.yml").getBoolean("General.Features.Hook.MyPet"))
             MyPet = Bukkit.getServer().getPluginManager().getPlugin("MyPet") != null;
-        if (ConfigHandler.getConfig("config.yml").getBoolean("General.Settings.Features.Hook.Essentials"))
-            Essentials = Bukkit.getServer().getPluginManager().getPlugin("Essentials") != null;
-        if (ConfigHandler.getConfig("config.yml").getBoolean("General.Settings.Features.Hook.MyCommand"))
-            MyCommand = Bukkit.getServer().getPluginManager().getPlugin("MyCommand") != null;
+        if (ConfigHandler.getConfig("config.yml").getBoolean("General.Features.Hook.MySQLPlayerDataBridge"))
+            MySQLPlayerDataBridge = Bukkit.getServer().getPluginManager().getPlugin("DiscordSRV") != null;
+        if (ConfigHandler.getConfig("config.yml").getBoolean("General.Features.Hook.PlayerPoints"))
+            PlayerPoints = Bukkit.getServer().getPluginManager().getPlugin("DiscordSRV") != null;
+        if (ConfigHandler.getConfig("config.yml").getBoolean("General.Features.Hook.Residence"))
+            Residence = Bukkit.getServer().getPluginManager().getPlugin("Residence") != null;
+        if (ConfigHandler.getConfig("config.yml").getBoolean("General.Features.Hook.SkinsRestorer"))
+            SkinsRestorer = Bukkit.getServer().getPluginManager().getPlugin("SkinsRestorer") != null;
     }
 
-    public boolean SkinsRestorerEnabled() {
-        return this.SkinsRestorer;
+    public boolean CMIEnabled() {
+        return this.CMI;
+    }
+
+    public boolean FeatureBoardEnabled() {
+        return this.FeatureBoard;
     }
 
     public boolean DiscordSRVEnabled() {
@@ -90,11 +98,19 @@ public class DependHandler {
         return this.MyPet;
     }
 
-    public boolean EssentialsEnabled() {
-        return this.Essentials;
+    public boolean MySQLPlayerDataBridgeEnabled() {
+        return this.MySQLPlayerDataBridge;
     }
 
-    public boolean MyCommandEnabled() {
-        return this.MyCommand;
+    public boolean PlayerPointsEnabled() {
+        return this.PlayerPoints;
+    }
+
+    public boolean ResidenceEnabled() {
+        return this.Residence;
+    }
+
+    public boolean SkinsRestorerEnabled() {
+        return this.SkinsRestorer;
     }
 }

@@ -5,7 +5,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import tw.momocraft.coreplus.api.CorePlusAPI;
 import tw.momocraft.playerdataplus.handlers.ConfigHandler;
-import tw.momocraft.playerdataplus.utils.nick.Nick;
+import tw.momocraft.playerdataplus.features.nick.Nick;
 
 public class Commands implements CommandExecutor {
 
@@ -78,7 +78,6 @@ public class Commands implements CommandExecutor {
                             "Message.noPermission", sender);
                 }
                 return true;
-                /*
             case "clean":
                 if (CorePlusAPI.getPlayer().hasPerm(sender, "playerdataplus.command.clean")) {
                     if (length == 2) {
@@ -89,33 +88,31 @@ public class Commands implements CommandExecutor {
                             "Message.noPermission", sender);
                 }
                 return true;
-
-                 */
             case "nick":
                 if (CorePlusAPI.getPlayer().hasPerm(sender, "playerdataplus.command.nick")) {
                     if (length == 4) {
                         // /pdp nick <nick> <color> <player>
                         if (CorePlusAPI.getUtils().equalColorCodeWithoutSymbol(args[2])) {
-                            Nick.changeNick(sender, args[3], args[1], args[2], true);
+                            Nick.set(sender, args[3], args[1], args[2], true);
                             return true;
                         }
                     } else if (length == 3) {
                         // /pdp nick <nick> <color>
                         if (CorePlusAPI.getUtils().equalColorCodeWithoutSymbol(args[2])) {
-                            Nick.changeNick(sender, null, args[1], args[2], true);
+                            Nick.set(sender, null, args[1], args[2], true);
                             // /pdp nick <color> <player>
                         } else if (CorePlusAPI.getUtils().equalColorCodeWithoutSymbol(args[1])) {
-                            Nick.changeNick(sender, args[2], null, args[1], true);
+                            Nick.set(sender, args[2], null, args[1], true);
                             // /pdp nick <off> <player>
                         } else if (args[1].equals("off")) {
-                            Nick.clearNick(sender, args[2], true);
+                            Nick.clear(sender, args[2], true);
                         } else if (CorePlusAPI.getPlayer().hasPerm(sender, "playerdataplus.command.nick.other")) {
                             // /pdp nick <color> <player>
                             if (CorePlusAPI.getUtils().equalColorCodeWithoutSymbol(args[2])) {
-                                Nick.changeNick(sender, args[2], null, args[1], true);
+                                Nick.set(sender, args[2], null, args[1], true);
                             } else {
                                 // /pdp nick <nick> <player>
-                                Nick.changeNick(sender, args[2], args[1], null, true);
+                                Nick.set(sender, args[2], args[1], null, true);
                             }
                         } else {
                             CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPrefix(),
@@ -125,13 +122,13 @@ public class Commands implements CommandExecutor {
                     } else if (length == 2) {
                         // /pdp nick <color>
                         if (CorePlusAPI.getUtils().equalColorCodeWithoutSymbol(args[1])) {
-                            Nick.changeNick(sender, null, null, args[1], true);
+                            Nick.set(sender, null, null, args[1], true);
                             // /pdp nick off
                         } else if (args[1].equals("off")) {
-                            Nick.clearNick(sender, null, true);
+                            Nick.clear(sender, null, true);
                         } else {
                             // /pdp nick <nick>
-                            Nick.changeNick(sender, null, args[1], null, true);
+                            Nick.set(sender, null, args[1], null, true);
                         }
                         return true;
                     }
@@ -149,25 +146,6 @@ public class Commands implements CommandExecutor {
                             "Message.noPermission", sender);
                     return true;
                 }
-                /*
-            case "playerstatus":
-                if (CorePlusAPI.getPlayer().hasPerm(sender, "playerdataplus.command.playerstatus")) {
-                    // pdp playerstatus <on/off>
-                    if (length == 2) {
-                        PlayerStatusControl.startSchedule(sender, args[1]);
-                        return true;
-                    } else if (length == 1) {
-                        PlayerStatusControl.startSchedule(sender, null);
-                        return true;
-                    }
-                    CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPrefix(),
-                            ConfigHandler.getConfigPath().getMsgCmdPlayerstatus(), sender);
-                    return true;
-                } else {
-                    CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPrefix(),
-                            "Message.noPermission", sender);
-                }
-                return true;
             case "dataconvert":
                 if (CorePlusAPI.getPlayer().hasPerm(sender, "playerdataplus.command.dataconvert")) {
 
@@ -176,8 +154,6 @@ public class Commands implements CommandExecutor {
                             "Message.noPermission", sender);
                 }
                 return true;
-
-                 */
         }
         CorePlusAPI.getMsg().
 

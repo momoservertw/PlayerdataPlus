@@ -130,14 +130,6 @@
             <systemPath>${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/Residence5.0.1.3.jar</systemPath>
             <version>LEGACY</version>
         </dependency>
-        <!--MyCommand API-->
-        <dependency>
-            <groupId>me.MyCommand</groupId>
-            <artifactId>MyCommand</artifactId>
-            <scope>system</scope>
-            <systemPath>${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/MyCommand-5.2.7.jar</systemPath>
-            <version>LEGACY</version>
-        </dependency>
     </dependencies>
 
 </project>

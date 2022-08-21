@@ -3,7 +3,10 @@ package tw.momocraft.playerdataplus.utils;
 import org.bukkit.configuration.ConfigurationSection;
 import tw.momocraft.coreplus.api.CorePlusAPI;
 import tw.momocraft.playerdataplus.handlers.ConfigHandler;
+import tw.momocraft.playerdataplus.features.playerstatus.PlayerStatusMap;
+import tw.momocraft.playerdataplus.clean.CleanMap;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +20,7 @@ public class ConfigPath {
 
     private void setUp() {
         setMsg();
+        setGeneral();
         //setClean();
         setNick();
         setPlayerData();
@@ -47,7 +51,7 @@ public class ConfigPath {
     private String msgNickChangeTarget;
     private String msgNickClear;
     private String msgNickClearTarget;
-/*
+
     private String msgCleanSucceed;
     private String msgCleanListed;
     private String msgCleanStart;
@@ -62,9 +66,16 @@ public class ConfigPath {
     private String msgPSScheduleAlreadyStart;
     private String msgPSScheduleAlreadyEnd;
 
- */
+    //  ============================================== //
+    //         MySQL Variables                         //
+    //  ============================================== //
+    private boolean mysql;
+    private String mysqlPort;
+    private String mysqlDatabase;
+    private String mysqlPrefix;
+    private String mysqlUsername;
+    private String mysqlPassword;
 
-    /*
     //  ============================================== //
     //         Clean Variables                         //
     //  ============================================== //
@@ -79,7 +90,6 @@ public class ConfigPath {
     private List<String> cleanMycmdList;
     private List<String> cleanMycmdIgnoreList;
     private final Map<String, CleanMap> cleanProp = new HashMap<>();
-     */
 
     //  ============================================== //
     //         Nick Variables                          //
@@ -114,7 +124,6 @@ public class ConfigPath {
     private boolean playerDataGroupNick;
     private boolean playerDataGroupCustom;
 
-    /*
     //  ============================================== //
     //         Player Status Variables                 //
     //  ============================================== //
@@ -130,12 +139,17 @@ public class ConfigPath {
     private boolean psFlyTpSpawn;
     private String psGMDefault;
 
-     */
-
 
     //  ============================================== //
     //         Data Convertor Variables                //
     //  ============================================== //
+    private boolean userConvertor;
+    private boolean userConvertorCMI;
+    private boolean userConvertorPlayerPoints;
+    private boolean userConvertorMyPet;
+    private boolean userConvertorLuckPerms;
+    private boolean userConvertorResidence;
+    private boolean userConvertorMySuite;
 
     //  ============================================== //
     //         Message Setter                          //
@@ -162,7 +176,7 @@ public class ConfigPath {
         msgNickChangeTarget = ConfigHandler.getConfig("message.yml").getString("Message.Nick.changeTarget");
         msgNickClear = ConfigHandler.getConfig("message.yml").getString("Message.Nick.clear");
         msgNickClearTarget = ConfigHandler.getConfig("message.yml").getString("Message.Nick.clearTarget");
-/*
+
         msgCleanStart = ConfigHandler.getConfig("config.yml").getString("Message.Clean.start");
         msgCleanEnd = ConfigHandler.getConfig("config.yml").getString("Message.Clean.end");
         msgCleanSucceed = ConfigHandler.getConfig("config.yml").getString("Message.Clean.succeed");
@@ -177,14 +191,25 @@ public class ConfigPath {
         msgPSScheduleEnd = ConfigHandler.getConfig("config.yml").getString("Message.Player-Status.scheduleEnd");
         msgPSScheduleAlreadyStart = ConfigHandler.getConfig("config.yml").getString("Message.Player-Status.scheduleAlreadyStart");
         msgPSScheduleAlreadyEnd = ConfigHandler.getConfig("config.yml").getString("Message.Player-Status.scheduleAlreadyStart");
-
- */
     }
+
+    //  ============================================== //
+    //         General Setter                          //
+    //  ============================================== //
+    private void setGeneral() {
+        mysql = ConfigHandler.getConfig("config.yml").getBoolean("General.MySQL.Enable");
+        mysqlDatabase = ConfigHandler.getConfig("config.yml").getString("General.MySQL.Database");
+        mysqlPrefix = ConfigHandler.getConfig("config.yml").getString("General.MySQL.Prefix");
+        mysqlPort = ConfigHandler.getConfig("config.yml").getString("General.MySQL.Port");
+        mysqlUsername = ConfigHandler.getConfig("config.yml").getString("General.MySQL.Username");
+        mysqlPassword = ConfigHandler.getConfig("config.yml").getString("General.MySQL.Password");
+        mysqlPort = ConfigHandler.getConfig("config.yml").getString("General.MySQL.Port");
+    }
+
 
     //  ============================================== //
     //         Clean Setter                            //
     //  ============================================== //
-    /*
     private void setClean() {
         clean = ConfigHandler.getConfig("config.yml").getBoolean("Clean.Enable");
         cleanAuto = ConfigHandler.getConfig("config.yml").getBoolean("Clean.Settings.Auto-Clean.Enable");
@@ -212,8 +237,6 @@ public class ConfigPath {
         }
     }
 
-     */
-
     //  ============================================== //
     //         Nick Setter                             //
     //  ============================================== //
@@ -225,9 +248,9 @@ public class ConfigPath {
         nickCMI = ConfigHandler.getConfig("config.yml").getBoolean("Nick.Formats.CMI.Enable");
         nickCMIUpdateTabList = ConfigHandler.getConfig("config.yml").getBoolean("Nick.Formats.CMI.Update-Tablist");
         nickCMINickSet = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.CMI.Nick.Set");
-        nickCMIPlatePrefix = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.CMI.Plate.Prefix");
-        nickCMIPlateSuffix = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.CMI.Plate.Suffix");
-        nickCMIPlateColor = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.CMI.Plate.Color");
+        nickCMIPlatePrefix = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.CMI.Name-Plate.Prefix");
+        nickCMIPlateSuffix = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.CMI.Name-Plate.Suffix");
+        nickCMIPlateColor = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.CMI.Name-Plate.Color");
         nickDiscordSRV = ConfigHandler.getConfig("config.yml").getBoolean("Nick.Formats.DiscordSRV.Enable");
         nickDiscordSRVSet = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.DiscordSRV.Set");
         nickCommandSet = ConfigHandler.getConfig("config.yml").getStringList("Nick.Formats.Commands");
@@ -259,7 +282,7 @@ public class ConfigPath {
     }
 
     //  ============================================== //
-    //         ConfigBuilder Getter                    //
+    //         Playerdata Getter                       //
     //  ============================================== //
     public boolean isPlayerData() {
         return playerData;
@@ -300,7 +323,6 @@ public class ConfigPath {
     //  ============================================== //
     //         Player Status Setter                    //
     //  ============================================== //
-    /*
     private void setPlayerStatus() {
         playerStatus = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.Enable");
         psCheckSchedule = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.Settings.Check.Schedule.Enable");
@@ -311,7 +333,7 @@ public class ConfigPath {
         psRes = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.Settings.Features.Residence");
         psFlyTp = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.Fly.Teleport.Enable");
         psFlyTpSpawn = ConfigHandler.getConfig("config.yml").getBoolean("Player-Status.Fly.Teleport.Force-Spawn");
-        psGMDefault = ConfigHandler.getConfig("config.yml").getString("Player-Status.Gamemode.Default");
+        psGMDefault = ConfigHandler.getConfig("config.yml").getString("Player-Status.Gamemode.Default").toUpperCase();
 
         PlayerStatusMap playerStatusMap;
         ConfigurationSection groupsConfig = ConfigHandler.getConfig("config.yml").getConfigurationSection("Player-Status");
@@ -329,15 +351,22 @@ public class ConfigPath {
                 valueStringList = ConfigHandler.getConfig("entities.yml").getStringList("Player-Status." + group + ".Location");
                 if (!valueStringList.isEmpty())
                     playerStatusMap.setLocList(valueStringList);
-                playerStatusProp.put(group, playerStatusMap);
+                playerStatusProp.put(group.toLowerCase(), playerStatusMap);
             }
         }
     }
 
-     */
     //  ============================================== //
-    //         Data Convertor Setter                   //
+    //         User Convertor Setter                   //
     //  ============================================== //
+    private void setUserConvertor() {
+        userConvertor = ConfigHandler.getConfig("config.yml").getBoolean("User-Convertor.Enable");
+        userConvertorCMI = ConfigHandler.getConfig("config.yml").getBoolean("User-Convertor.Groups.CMI");
+        userConvertorPlayerPoints = ConfigHandler.getConfig("config.yml").getBoolean("User-Convertor.Groups.PlayerPoints");
+        userConvertorLuckPerms = ConfigHandler.getConfig("config.yml").getBoolean("User-Convertor.Groups.LuckPerms");
+        userConvertorResidence = ConfigHandler.getConfig("config.yml").getBoolean("User-Convertor.Groups.Residence");
+        userConvertorMySuite = ConfigHandler.getConfig("config.yml").getBoolean("User-Convertor.Groups.MySuite");
+    }
 
     //  ============================================== //
     //         Message Getter                          //
@@ -421,7 +450,34 @@ public class ConfigPath {
     public String getMsgNickClearTarget() {
         return msgNickClearTarget;
     }
-/*
+
+    //  ============================================== //
+    //         General Getter                          //
+    //  ============================================== //
+    public boolean isMysql() {
+        return mysql;
+    }
+
+    public String getMysqlPort() {
+        return mysqlPort;
+    }
+
+    public String getMysqlDatabase() {
+        return mysqlDatabase;
+    }
+
+    public String getMysqlPrefix() {
+        return mysqlPrefix;
+    }
+
+    public String getMysqlUsername() {
+        return mysqlUsername;
+    }
+
+    public String getMysqlPassword() {
+        return mysqlPassword;
+    }
+
     public String getMsgCleanSucceed() {
         return msgCleanSucceed;
     }
@@ -474,11 +530,14 @@ public class ConfigPath {
         return msgPSScheduleAlreadyEnd;
     }
 
- */
+    //  ============================================== //
+    //         General Getter                          //
+    //  ============================================== //
+
+
     //  ============================================== //
     //         Clean Getter                            //
     //  ============================================== //
-    /*
     public boolean isClean() {
         return clean;
     }
@@ -522,7 +581,6 @@ public class ConfigPath {
     public Map<String, CleanMap> getCleanProp() {
         return cleanProp;
     }
-     */
 
     //  ============================================== //
     //         Nick Getter                             //
@@ -591,7 +649,7 @@ public class ConfigPath {
     //  ============================================== //
     //         Player Status Getter                    //
     //  ============================================== //
-    /*
+
     public boolean isPlayerStatus() {
         return playerStatus;
     }
@@ -635,11 +693,37 @@ public class ConfigPath {
     public String getPsGMDefault() {
         return psGMDefault;
     }
-     */
 
     //  ============================================== //
-    //         Data Convertor Getter                   //
+    //         User Convertor Getter                   //
     //  ============================================== //
+    public boolean isUserConvertor() {
+        return userConvertor;
+    }
+
+    public boolean isUserConvertorCMI() {
+        return userConvertorCMI;
+    }
+
+    public boolean isUserConvertorPlayerPoints() {
+        return userConvertorPlayerPoints;
+    }
+
+    public boolean isUserConvertorMyPet() {
+        return userConvertorMyPet;
+    }
+
+    public boolean isUserConvertorLuckPerms() {
+        return userConvertorLuckPerms;
+    }
+
+    public boolean isUserConvertorResidence() {
+        return userConvertorResidence;
+    }
+
+    public boolean isUserConvertorMySuite() {
+        return userConvertorMySuite;
+    }
 }
 
 

@@ -2,8 +2,9 @@ package tw.momocraft.playerdataplus;
 
 import org.bukkit.plugin.java.JavaPlugin;
 import tw.momocraft.coreplus.api.CorePlusAPI;
+import tw.momocraft.playerdataplus.api.PlayerDataInterface;
 import tw.momocraft.playerdataplus.handlers.ConfigHandler;
-import tw.momocraft.playerdataplus.handlers.DependHandler;
+import tw.momocraft.playerdataplus.features.playerdata.PlayerData;
 
 public class PlayerdataPlus extends JavaPlugin {
 
@@ -25,5 +26,13 @@ public class PlayerdataPlus extends JavaPlugin {
         return instance;
     }
 
-
+    //  ============================================== //
+    //         API                                     //
+    //  ============================================== //
+    private PlayerDataInterface placeDataAPI = null;
+    public PlayerDataInterface getPlaceData() {
+        if (placeDataAPI == null)
+            placeDataAPI = new PlayerData();
+        return placeDataAPI;
+    }
 }

@@ -12,55 +12,59 @@ General:
     Hook:
       AuthMe: true
       CMI: true
-      FeatureBoard: true
       DiscordSRV: true
+      FeatureBoard: true
       MyPet: true
       MysqlPlayerDataBridge: true
       PlayerPoints: true
       Residence: true
       SkinsRestorer: true
+  # MySQL database is necessary.
   MySQL:
-    Enable: false
-    Hostname: localhost
+    Hostname: "localhost"
     Port: 3306
     Database: "playerdataplus"
     Prefix: ""
     Username: "root"
     Password: ""
 
-# Format player nicks and make the chat channel more tidy.
+#  Format players' nicks and nametag.
 # More information: https://github.com/momoservertw/PlayerdataPlus/wiki/Nick
 Nick:
   Enable: false
+  Settings:
+    Command-Alias: true
+  # By default, players cannot color their names or add color codes to their nicknames.
+  # Bypass permission: playerdataplus.bypass.nick.colorcode
   Limits:
     # Bypass permission: playerdataplus.bypass.nick.length
     Length: 8
-    # Prevent players input any color code in their nicks.
-    # Bypass permission: playerdataplus.bypass.nick.colorcode
-    Prevent-Color-Code: true
     # Prevent players input some bad words in their nicks. Support regular expression.
     # Bypass permission: playerdataplus.bypass.nick.blacklist
     Black-List:
       - fuck
       - bitch
   Formats:
+    Message: "&%color%%nick%(%player%)"
     CMI:
       Enable: false
-      # Update tab list after one player changed their name.
       Update-Tablist: true
       Nick:
         Set: "&%color%%nick%(%player%)"
       Name-Plate:
         Prefix: "&%color%%nick% "
         Suffix: ""
+        # The default color of the player id.
+        # Valid: AQUA, BLACK, BLUE, DARK_AQUA, DARK_BLUE, DARK_GRAY, DARK_GREEN, DARK_PURPLE, DARK_RED
+        #       GOLD, GRAY, GREEN, LIGHT_PURPLE, RED, WHITE, YELLOW
         Color: "WHITE"
     # Changing the Discord member nick if the player account is linked.
     DiscordSRV:
       Enable: false
       Set: "%nick%(%player%)"
     # Executing commands when players changed their nicks.
-    Commands: [ ]
-    Commands-Clear: [ ]
+    Commands: []
+    Commands-Clear: []
   # Defining the player"s default nick color.
   # Permission: playerdataplus.nick.group.GROUP
   Groups:

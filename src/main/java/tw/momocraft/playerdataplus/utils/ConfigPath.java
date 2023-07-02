@@ -3,10 +3,7 @@ package tw.momocraft.playerdataplus.utils;
 import org.bukkit.configuration.ConfigurationSection;
 import tw.momocraft.coreplus.api.CorePlusAPI;
 import tw.momocraft.playerdataplus.handlers.ConfigHandler;
-import tw.momocraft.playerdataplus.features.playerstatus.PlayerStatusMap;
-import tw.momocraft.playerdataplus.clean.CleanMap;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +20,7 @@ public class ConfigPath {
         setGeneral();
         //setClean();
         setNick();
-        setPlayerData();
+        //setPlayerData();
         //setPlayerStatus();
     }
 
@@ -69,13 +66,14 @@ public class ConfigPath {
     //  ============================================== //
     //         MySQL Variables                         //
     //  ============================================== //
-    private boolean mysql;
+    private String mysqlHost;
     private String mysqlPort;
     private String mysqlDatabase;
     private String mysqlPrefix;
     private String mysqlUsername;
     private String mysqlPassword;
 
+    /*
     //  ============================================== //
     //         Clean Variables                         //
     //  ============================================== //
@@ -91,13 +89,16 @@ public class ConfigPath {
     private List<String> cleanMycmdIgnoreList;
     private final Map<String, CleanMap> cleanProp = new HashMap<>();
 
+    */
+
     //  ============================================== //
     //         Nick Variables                          //
     //  ============================================== //
     private boolean nick;
+    private boolean nickAlias;
     private int nickLength;
-    private boolean nickColorCode;
     private List<String> nickBlackList;
+    private String nickMsg;
     private boolean nickCMI;
     private boolean nickCMIUpdateTabList;
     private String nickCMINickSet;
@@ -111,6 +112,7 @@ public class ConfigPath {
 
     private final Map<String, String> nickGroupsProp = new LinkedHashMap<>();
 
+    /*
     //  ============================================== //
     //         PlayerData Variables                    //
     //  ============================================== //
@@ -140,6 +142,7 @@ public class ConfigPath {
     private String psGMDefault;
 
 
+
     //  ============================================== //
     //         Data Convertor Variables                //
     //  ============================================== //
@@ -150,6 +153,8 @@ public class ConfigPath {
     private boolean userConvertorLuckPerms;
     private boolean userConvertorResidence;
     private boolean userConvertorMySuite;
+
+     */
 
     //  ============================================== //
     //         Message Setter                          //
@@ -197,16 +202,16 @@ public class ConfigPath {
     //         General Setter                          //
     //  ============================================== //
     private void setGeneral() {
-        mysql = ConfigHandler.getConfig("config.yml").getBoolean("General.MySQL.Enable");
+        mysqlHost = ConfigHandler.getConfig("config.yml").getString("General.MySQL.Hostname");
+        mysqlPort = ConfigHandler.getConfig("config.yml").getString("General.MySQL.Port");
         mysqlDatabase = ConfigHandler.getConfig("config.yml").getString("General.MySQL.Database");
         mysqlPrefix = ConfigHandler.getConfig("config.yml").getString("General.MySQL.Prefix");
-        mysqlPort = ConfigHandler.getConfig("config.yml").getString("General.MySQL.Port");
         mysqlUsername = ConfigHandler.getConfig("config.yml").getString("General.MySQL.Username");
         mysqlPassword = ConfigHandler.getConfig("config.yml").getString("General.MySQL.Password");
-        mysqlPort = ConfigHandler.getConfig("config.yml").getString("General.MySQL.Port");
     }
 
 
+    /*
     //  ============================================== //
     //         Clean Setter                            //
     //  ============================================== //
@@ -237,14 +242,17 @@ public class ConfigPath {
         }
     }
 
+     */
+
     //  ============================================== //
     //         Nick Setter                             //
     //  ============================================== //
     private void setNick() {
         nick = ConfigHandler.getConfig("config.yml").getBoolean("Nick.Enable");
+        nickAlias = ConfigHandler.getConfig("config.yml").getBoolean("Nick.Settings.Command-Alias");
         nickLength = ConfigHandler.getConfig("config.yml").getInt("Nick.Limits.Length");
-        nickColorCode = ConfigHandler.getConfig("config.yml").getBoolean("Nick.Limits.Prevent-Color-Code");
         nickBlackList = ConfigHandler.getConfig("config.yml").getStringList("Nick.Limits.Black-List");
+        nickMsg = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.Message");
         nickCMI = ConfigHandler.getConfig("config.yml").getBoolean("Nick.Formats.CMI.Enable");
         nickCMIUpdateTabList = ConfigHandler.getConfig("config.yml").getBoolean("Nick.Formats.CMI.Update-Tablist");
         nickCMINickSet = ConfigHandler.getConfig("config.yml").getString("Nick.Formats.CMI.Nick.Set");
@@ -267,6 +275,7 @@ public class ConfigPath {
         }
     }
 
+    /*
     //  ============================================== //
     //         PlayerData Setter                         //
     //  ============================================== //
@@ -281,6 +290,9 @@ public class ConfigPath {
         playerDataGroupCustom = ConfigHandler.getConfig("config.yml").getBoolean("PlayerData.Message.Failed");
     }
 
+     */
+
+    /*
     //  ============================================== //
     //         Playerdata Getter                       //
     //  ============================================== //
@@ -320,6 +332,9 @@ public class ConfigPath {
         return playerDataGroupCustom;
     }
 
+     */
+
+    /*
     //  ============================================== //
     //         Player Status Setter                    //
     //  ============================================== //
@@ -356,6 +371,9 @@ public class ConfigPath {
         }
     }
 
+     */
+    /*
+
     //  ============================================== //
     //         User Convertor Setter                   //
     //  ============================================== //
@@ -367,6 +385,8 @@ public class ConfigPath {
         userConvertorResidence = ConfigHandler.getConfig("config.yml").getBoolean("User-Convertor.Groups.Residence");
         userConvertorMySuite = ConfigHandler.getConfig("config.yml").getBoolean("User-Convertor.Groups.MySuite");
     }
+
+     */
 
     //  ============================================== //
     //         Message Getter                          //
@@ -454,8 +474,8 @@ public class ConfigPath {
     //  ============================================== //
     //         General Getter                          //
     //  ============================================== //
-    public boolean isMysql() {
-        return mysql;
+    public String getMysqlHost() {
+        return mysqlHost;
     }
 
     public String getMysqlPort() {
@@ -477,6 +497,7 @@ public class ConfigPath {
     public String getMysqlPassword() {
         return mysqlPassword;
     }
+
 
     public String getMsgCleanSucceed() {
         return msgCleanSucceed;
@@ -538,6 +559,8 @@ public class ConfigPath {
     //  ============================================== //
     //         Clean Getter                            //
     //  ============================================== //
+
+    /*
     public boolean isClean() {
         return clean;
     }
@@ -582,6 +605,8 @@ public class ConfigPath {
         return cleanProp;
     }
 
+    */
+
     //  ============================================== //
     //         Nick Getter                             //
     //  ============================================== //
@@ -593,12 +618,16 @@ public class ConfigPath {
         return nickLength;
     }
 
-    public boolean isNickColorCode() {
-        return nickColorCode;
+    public boolean isNickAlias() {
+        return nickAlias;
     }
 
     public List<String> getNickBlackList() {
         return nickBlackList;
+    }
+
+    public String getNickMsg() {
+        return nickMsg;
     }
 
     public boolean isNickCMI() {
@@ -645,6 +674,7 @@ public class ConfigPath {
         return nickGroupsProp;
     }
 
+    /*
 
     //  ============================================== //
     //         Player Status Getter                    //
@@ -724,6 +754,8 @@ public class ConfigPath {
     public boolean isUserConvertorMySuite() {
         return userConvertorMySuite;
     }
+
+     */
 }
 
 

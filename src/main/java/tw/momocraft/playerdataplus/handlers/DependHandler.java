@@ -33,30 +33,30 @@ public class DependHandler {
         PlayerdataPlus.getInstance().getCommand("playerdataplus").setExecutor(new Commands());
         PlayerdataPlus.getInstance().getCommand("playerdataplus").setTabCompleter(new TabComplete());
 
+        // Nick
         PlayerdataPlus.getInstance().getServer().getPluginManager().registerEvents(
                 new Nick(), PlayerdataPlus.getInstance());
         CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPluginName(),
                 "Register-Event", "Nick", "PlayerJoinEvent", "continue",
                 new Throwable().getStackTrace()[0]);
 
+        // Fly
         PlayerdataPlus.getInstance().getServer().getPluginManager().registerEvents(
                 new PlayerJoin(), PlayerdataPlus.getInstance());
         CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPluginName(),
                 "Register-Event", "Player-Status", "FlyPlayerJoin", "continue",
                 new Throwable().getStackTrace()[0]);
-
         PlayerdataPlus.getInstance().getServer().getPluginManager().registerEvents(
                 new PlayerChangedWorld(), PlayerdataPlus.getInstance());
         CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPluginName(),
                 "Register-Event", "Player-Status", "FlyPlayerJoin", "continue",
                 new Throwable().getStackTrace()[0]);
-
-        PlayerStatusControl.startSchedule(ConfigHandler.getConfigPath().isPsCheckSchedule());
     }
 
+    private boolean AuthMe = false;
     private boolean CMI = false;
-    private boolean FeatureBoard = false;
     private boolean DiscordSRV = false;
+    private boolean FeatureBoard = false;
     private boolean MyPet = false;
     private boolean MySQLPlayerDataBridge = false;
     private boolean PlayerPoints = false;
@@ -64,22 +64,28 @@ public class DependHandler {
     private boolean SkinsRestorer = false;
 
     private void setupHooks() {
+        if (ConfigHandler.getConfig("config.yml").getBoolean("General.Features.Hook.AuthMe"))
+            AuthMe = Bukkit.getServer().getPluginManager().getPlugin("AuthMe") != null;
         if (ConfigHandler.getConfig("config.yml").getBoolean("General.Features.Hook.CMI"))
-            CMI = Bukkit.getServer().getPluginManager().getPlugin("DiscordSRV") != null;
+            CMI = Bukkit.getServer().getPluginManager().getPlugin("CMI") != null;
         if (ConfigHandler.getConfig("config.yml").getBoolean("General.Features.Hook.FeatureBoard"))
-            FeatureBoard = Bukkit.getServer().getPluginManager().getPlugin("DiscordSRV") != null;
+            FeatureBoard = Bukkit.getServer().getPluginManager().getPlugin("FeatureBoard") != null;
         if (ConfigHandler.getConfig("config.yml").getBoolean("General.Features.Hook.DiscordSRV"))
             DiscordSRV = Bukkit.getServer().getPluginManager().getPlugin("DiscordSRV") != null;
         if (ConfigHandler.getConfig("config.yml").getBoolean("General.Features.Hook.MyPet"))
             MyPet = Bukkit.getServer().getPluginManager().getPlugin("MyPet") != null;
         if (ConfigHandler.getConfig("config.yml").getBoolean("General.Features.Hook.MySQLPlayerDataBridge"))
-            MySQLPlayerDataBridge = Bukkit.getServer().getPluginManager().getPlugin("DiscordSRV") != null;
+            MySQLPlayerDataBridge = Bukkit.getServer().getPluginManager().getPlugin("MySQLPlayerDataBridge") != null;
         if (ConfigHandler.getConfig("config.yml").getBoolean("General.Features.Hook.PlayerPoints"))
-            PlayerPoints = Bukkit.getServer().getPluginManager().getPlugin("DiscordSRV") != null;
+            PlayerPoints = Bukkit.getServer().getPluginManager().getPlugin("PlayerPoints") != null;
         if (ConfigHandler.getConfig("config.yml").getBoolean("General.Features.Hook.Residence"))
             Residence = Bukkit.getServer().getPluginManager().getPlugin("Residence") != null;
         if (ConfigHandler.getConfig("config.yml").getBoolean("General.Features.Hook.SkinsRestorer"))
             SkinsRestorer = Bukkit.getServer().getPluginManager().getPlugin("SkinsRestorer") != null;
+    }
+
+    public boolean AuthMeEnabled() {
+        return this.AuthMe;
     }
 
     public boolean CMIEnabled() {

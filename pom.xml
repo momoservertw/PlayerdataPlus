@@ -61,7 +61,8 @@
             <groupId>tw.momocraft</groupId>
             <artifactId>CorePlus</artifactId>
             <scope>system</scope>
-            <systemPath>${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/CorePlus-1.0.0.jar</systemPath>
+            <systemPath>${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/CorePlus-1.0.0.jar
+            </systemPath>
             <version>LEGACY</version>
         </dependency>
         <!--CMI API-->
@@ -69,7 +70,8 @@
             <groupId>me.CMI</groupId>
             <artifactId>CMI</artifactId>
             <scope>system</scope>
-            <systemPath>${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/CMI9.0.0.0API.jar</systemPath>
+            <systemPath>${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/CMIAPI.jar
+            </systemPath>
             <version>LEGACY</version>
         </dependency>
         <!--MysqlPlayerDataBridge API-->
@@ -78,7 +80,7 @@
             <artifactId>MysqlPlayerDataBridge</artifactId>
             <scope>system</scope>
             <systemPath>
-                ${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/MysqlPlayerDataBridge-v4.2.0.jar
+                ${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/MysqlPlayerDataBridge.jar
             </systemPath>
             <version>LEGACY</version>
         </dependency>
@@ -87,7 +89,7 @@
             <groupId>me.SkinsRestorer</groupId>
             <artifactId>SkinsRestorer</artifactId>
             <scope>system</scope>
-            <systemPath>${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/SkinsRestorer-14.1.13.jar
+            <systemPath>${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/SkinsRestorer.jar
             </systemPath>
             <version>LEGACY</version>
         </dependency>
@@ -110,7 +112,7 @@
             <groupId>me.MyPet</groupId>
             <artifactId>MyPet</artifactId>
             <scope>system</scope>
-            <systemPath>${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/MyPet-3.12-SNAPSHOT-B1686.jar
+            <systemPath>${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/MyPet.jar
             </systemPath>
             <version>LATEST</version>
         </dependency>
@@ -119,7 +121,8 @@
             <groupId>org.black_ixx</groupId>
             <artifactId>PlayerPoints</artifactId>
             <scope>system</scope>
-            <systemPath>${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/PlayerPoints.jar</systemPath>
+            <systemPath>${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/PlayerPoints.jar
+            </systemPath>
             <version>LEGACY</version>
         </dependency>
         <!--Residence API-->
@@ -127,7 +130,8 @@
             <groupId>me.Residence</groupId>
             <artifactId>Residence</artifactId>
             <scope>system</scope>
-            <systemPath>${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/Residence5.0.1.3.jar</systemPath>
+            <systemPath>${pom.basedir}/src/main/java/tw/momocraft/playerdataplus/extra/Residence.jar
+            </systemPath>
             <version>LEGACY</version>
         </dependency>
     </dependencies>

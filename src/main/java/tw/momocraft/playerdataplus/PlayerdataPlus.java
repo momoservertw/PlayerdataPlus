@@ -1,10 +1,9 @@
 package tw.momocraft.playerdataplus;
 
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import tw.momocraft.coreplus.api.CorePlusAPI;
-import tw.momocraft.playerdataplus.api.PlayerDataInterface;
 import tw.momocraft.playerdataplus.handlers.ConfigHandler;
-import tw.momocraft.playerdataplus.features.playerdata.PlayerData;
 
 public class PlayerdataPlus extends JavaPlugin {
 
@@ -14,25 +13,21 @@ public class PlayerdataPlus extends JavaPlugin {
     public void onEnable() {
         instance = this;
         ConfigHandler.generateData(false);
-        CorePlusAPI.getMsg().sendConsoleMsg(ConfigHandler.getPluginName(), "&fhas been Enabled.");
+        CorePlusAPI.getMsg().sendConsoleMsg(ConfigHandler.getPluginPrefix(), "&fhas been Enabled.");
     }
 
     @Override
     public void onDisable() {
-        CorePlusAPI.getMsg().sendConsoleMsg(ConfigHandler.getPluginName(), "&fhas been Enabled.");
+        CorePlusAPI.getMsg().sendConsoleMsg(ConfigHandler.getPluginPrefix(), "&fhas been Enabled.");
     }
 
     public static PlayerdataPlus getInstance() {
         return instance;
     }
 
-    //  ============================================== //
-    //         API                                     //
-    //  ============================================== //
-    private PlayerDataInterface placeDataAPI = null;
-    public PlayerDataInterface getPlaceData() {
-        if (placeDataAPI == null)
-            placeDataAPI = new PlayerData();
-        return placeDataAPI;
+    public static void disablePlugin() {
+        CorePlusAPI.getMsg().sendConsoleMsg(ConfigHandler.getPluginPrefix(),
+                "&fStarting to disable the plugin...");
+        Bukkit.getServer().getPluginManager().disablePlugin(instance);
     }
 }

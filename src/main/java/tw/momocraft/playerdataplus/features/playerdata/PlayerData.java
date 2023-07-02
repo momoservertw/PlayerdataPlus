@@ -1,67 +1,13 @@
 package tw.momocraft.playerdataplus.features.playerdata;
 
-import fr.xephi.authme.api.v3.AuthMeApi;
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.player.PlayerLoginEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.scheduler.BukkitRunnable;
-import tw.momocraft.coreplus.api.CorePlusAPI;
-import tw.momocraft.coreplus.handlers.UtilsHandler;
-import tw.momocraft.coreplus.utils.file.maps.MySQLMap;
-import tw.momocraft.playerdataplus.PlayerdataPlus;
-import tw.momocraft.playerdataplus.api.PlayerDataInterface;
-import tw.momocraft.playerdataplus.handlers.ConfigHandler;
+public class PlayerData {
+//public class PlayerData implements PlayerDataInterface {
 
-import java.sql.ResultSet;
-import java.util.*;
 
-public class PlayerData implements PlayerDataInterface {
-
+    /*
     private final Map<String, PlayerDataMap> playerMap = new HashMap<>();
 
-    public void setupMySQL() {
-        // Load MySQL settings.
-        MySQLMap mySQLMap = new MySQLMap();
-        Map<String, String> tableMap = new HashMap<>();
-        mySQLMap.setGroupName("playerdataplus");
-        mySQLMap.setDatabase(ConfigHandler.getConfigPath().getMysqlDatabase());
-        mySQLMap.setHostName(ConfigHandler.getConfigPath().getMysqlPort());
-        mySQLMap.setPort(ConfigHandler.getConfigPath().getMysqlPort());
-        mySQLMap.setUsername(ConfigHandler.getConfigPath().getMysqlUsername());
-        mySQLMap.setPassword(ConfigHandler.getConfigPath().getMysqlPassword());
-        tableMap.put("players", ConfigHandler.getConfigPath().getMysqlPrefix() + "players");
-        tableMap.put("playerdata", ConfigHandler.getConfigPath().getMysqlPrefix() + "playerdata");
-        mySQLMap.setTables(tableMap);
-        // Connect the MySQL.
-        CorePlusAPI.getFile().getMySQL().connect(ConfigHandler.getPluginName(), mySQLMap);
-        // Table: players
-        List<String> columnsList = new ArrayList<>();
-        columnsList.add("uuid");
-        columnsList.add("name");
-        columnsList.add("display_name");
-        columnsList.add("nick");
-        columnsList.add("last_login");
-        // Create the table if not exist.
-        CorePlusAPI.getFile().getMySQL().createTables(ConfigHandler.getPluginName(),
-                mySQLMap.getDatabase(),
-                tableMap.get("players"),
-                columnsList);
-        // Table: playerdata
-        columnsList = new ArrayList<>();
-        columnsList.add("uuid");
-        columnsList.add("variable");
-        columnsList.add("value");
-        // Create the table if not exist.
-        CorePlusAPI.getFile().getMySQL().createTables(ConfigHandler.getPluginName(),
-                mySQLMap.getDatabase(),
-                tableMap.get("playerdata"),
-                columnsList);
-    }
+
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerLoginEvent(PlayerLoginEvent e) {
@@ -148,21 +94,20 @@ public class PlayerData implements PlayerDataInterface {
         playerMap.remove(playerName);
     }
 
-    /*
-     * 1. 當玩家加入伺服器
-     * if (Synced=true)
-     * 載入MySQL的資料到快取中，設置Synced=true
-     * else
-     *   if (player.isOnlineInBungee)
-     *   Waiting
-     *   else
-     *   # 異常狀況，當作玩家在線時伺服器崩潰。
-     *
-     * 2. 當玩家登出後，儲存該玩家的資料、設置Synced=true，之後從快取中移除該玩家。
-     *
-     * 3. 每隔3分鐘自動存檔玩家資料
-     */
+//     * 1. 當玩家加入伺服器
+//     * if (Synced=true)
+//     * 載入MySQL的資料到快取中，設置Synced=true
+//     * else
+//     *   if (player.isOnlineInBungee)
+//     *   Waiting
+//     *   else
+//     *   # 異常狀況，當作玩家在線時伺服器崩潰。
+//     *
+//     * 2. 當玩家登出後，儲存該玩家的資料、設置Synced=true，之後從快取中移除該玩家。
+//     *
+//     * 3. 每隔3分鐘自動存檔玩家資料
 
+    /*
     @Override
     public String getPlayerData(String playerName, String variable) {
         try {
@@ -208,6 +153,7 @@ public class PlayerData implements PlayerDataInterface {
         }
     }
 
+    */
     /*
     public void syncData() {
         if (!CorePlusAPI.getFile().getMySQL().)
@@ -215,7 +161,6 @@ public class PlayerData implements PlayerDataInterface {
         importPlayerList();
         importPlayerLastLogin();
     }
-     */
 
     private void importPlayerLastLogin() {
         List<String> uuidList = UtilsHandler.getFile().getMySQL().getValueList(tw.momocraft.coreplus.handlers.ConfigHandler.getPluginName(),
@@ -277,4 +222,5 @@ public class PlayerData implements PlayerDataInterface {
                     "username", offlinePlayer.getName());
         }
     }
+    */
 }

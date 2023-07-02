@@ -6,22 +6,19 @@ import java.util.UUID;
 public class PlayerDataMap {
 
     private UUID uuid;
-    private String playerName;
-    private String displayName;
-    private String nickName;
-    private long lastLogin;
-    private double money;
-    private Map<String, String> homes;
-    private
 
-    Groups:
-            # CMI features: Money, Nick, Home, Inventory, EnderChest.
-            CMI: true
-    PlayerPoints: true
-    MyPet: true
-    MySuite: true
-    Residence: true
-    LuckPerms: true
+    private String playerName;
+
+    private String displayName;
+
+    private String nickName;
+
+    private long lastLogin;
+
+    private double money;
+
+    private Map<String, String> homes;
+
     private Map<String, String> playerData;
 
     public UUID getUuid() {

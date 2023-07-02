@@ -4,8 +4,8 @@ author: Momocraft
 api-version: 1.13
 version: 1.2.0
 description: Clean the old player data and formatting nicknames.
-depend: [CorePlus]
-softdepend: [SkinsRestorer, MyPet]
+depend: [ CorePlus ]
+softdepend: [ AuthMe, CMI, DiscordSRV, FeatureBoard, MyPet, MySQLPlayerDataBridge, PlayerPoints, Residence, SkinsRestorer ]
 
 commands:
   playerdataplus:
@@ -96,13 +96,17 @@ permissions:
     default: op
     children:
       playerdataplus.bypass.nick.length: true
-      playerdataplus.bypass.nick.purecolor: true
+      playerdataplus.bypass.nick.colorcode: true
+      playerdataplus.bypass.nick.placeholder: true
       playerdataplus.bypass.nick.blacklist: true
   playerdataplus.bypass.nick.length:
     description: Allows player to bypass the length limit of nick.
     default: op
-  playerdataplus.bypass.nick.purecolor:
-    description: Allows player to bypass the pure-color limit of nick.
+  playerdataplus.bypass.nick.colorcode:
+    description: Allows player to bypass the colorcode limit of nick.
+    default: op
+  playerdataplus.bypass.nick.placeholder:
+    description: Allows player to bypass the placeholder limit of nick.
     default: op
   playerdataplus.bypass.nick.blacklist:
     description: Allows player to bypass the blacklist limit of nick.
@@ -185,19 +189,15 @@ permissions:
     description: Defines the player"s default nick color to the highest number of group.
     default: op
     children:
-      playerdataplus.nick.group.0: true
-      playerdataplus.nick.group.1: true
-      playerdataplus.nick.group.2: true
-      playerdataplus.nick.group.3: true
-  playerdataplus.nick.group.0:
+      playerdataplus.nick.group.default: true
+      playerdataplus.nick.group.vip: true
+      playerdataplus.nick.group.mvp: true
+  playerdataplus.nick.group.default:
+    description: Defines player"s default nick color.
+    default: true
+  playerdataplus.nick.group.vip:
     description: Defines player"s default nick color.
     default: op
-  playerdataplus.nick.group.1:
-    description: Defines player"s default nick color.
-    default: op
-  playerdataplus.nick.group.2:
-    description: Defines player"s default nick color.
-    default: op
-  playerdataplus.nick.group.3:
+  playerdataplus.nick.group.mvp:
     description: Defines player"s default nick color.
     default: op

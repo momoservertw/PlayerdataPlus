@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 public class PlayerStatusControl {
+    /*
 
     private static boolean schedule = false;
 
@@ -188,4 +189,6 @@ public class PlayerStatusControl {
         }
         return false;
     }
+
+     */
 }

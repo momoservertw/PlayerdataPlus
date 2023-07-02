@@ -7,40 +7,55 @@ Debugging: false
 Check-Updates: true
 
 General:
+  Features:
+    # Changed these options need to restart the server.
+    Hook:
+      AuthMe: true
+      CMI: true
+      DiscordSRV: true
+      FeatureBoard: true
+      MyPet: true
+      MysqlPlayerDataBridge: true
+      PlayerPoints: true
+      Residence: true
+      SkinsRestorer: true
   MySQL:
-    Enable: false
-    Hostname: localhost
+    Hostname: "localhost"
     Port: 3306
     Database: "playerdataplus"
     Prefix: ""
     Username: "root"
     Password: ""
 
-# Format player nicks and make the chat channel more tidy.
+#  Format players' nicks and nametag.
 # More information: https://github.com/momoservertw/PlayerdataPlus/wiki/Nick
 Nick:
   Enable: false
+  Settings:
+    Command-Alias: true
+  # By default, players cannot color their names or add color codes to their nicknames.
+  # Bypass permission: playerdataplus.bypass.nick.colorcode
   Limits:
-    # Permission: playerdataplus.nick.length.NUMBER | playerdataplus.bypass.nick.length
+    # Bypass permission: playerdataplus.bypass.nick.length
     Length: 8
-    # Prevent players input any color code in their nicks.
-    # Bypass permission: playerdataplus.bypass.nick.colorcode
-    Prevent-Color-Code: true
     # Prevent players input some bad words in their nicks. Support regular expression.
     # Bypass permission: playerdataplus.bypass.nick.blacklist
     Black-List:
       - fuck
       - bitch
   Formats:
+    Message: "&%color%%nick%(%player%)"
     CMI:
       Enable: false
-      # Updating tab list after one player changed their name.
       Update-Tablist: true
       Nick:
         Set: "&%color%%nick%(%player%)"
-      Plate:
+      Name-Plate:
         Prefix: "&%color%%nick% "
         Suffix: ""
+        # The default color of the player id.
+        # Valid: AQUA, BLACK, BLUE, DARK_AQUA, DARK_BLUE, DARK_GRAY, DARK_GREEN, DARK_PURPLE, DARK_RED
+        #       GOLD, GRAY, GREEN, LIGHT_PURPLE, RED, WHITE, YELLOW
         Color: "WHITE"
     # Changing the Discord member nick if the player account is linked.
     DiscordSRV:
@@ -80,8 +95,7 @@ PlayerData:
     Custom:
       Enable: true
 
-# Improves server security or fixes some bugs.
-# Bypass permission: playerdataplus.bypass.status.TYPE
+# Auto change player status like "disable fly status".
 # More information: https://github.com/momoservertw/PlayerdataPlus/wiki/Player-Status
 Player-Status:
   Enable: false
@@ -93,19 +107,19 @@ Player-Status:
         Interval: 100
       Login: true
       World-Change: true
-    Features:
-      # cmi.command.gm.creative
-      # tgod
-      CMI: true
-      Residence: true
+  Op:
+    Enable: false
+    Location:
+      - world
+      - world_nether
+      - world_the_end
   Fly:
-    Enable: true
+    Enable: false
     # Teleport players to safe location or spawn when disabling fly mode.
-    # If there has no save location under to player, he will be teleport to spawn. (Need: CMI)
     Safe-Location:
       Teleport: true
-      Commands: []
-    Conditions: []
+      Commands:
+        - "console: cmi spawn %player%"
     Location:
       - world
       - world_nether
@@ -113,14 +127,6 @@ Player-Status:
   # Only support CMI.
   God:
     Enable: false
-    Conditions: []
-    Location:
-      - world
-      - world_nether
-      - world_the_end
-  Op:
-    Enable: false
-    Conditions: []
     Location:
       - world
       - world_nether
@@ -129,7 +135,6 @@ Player-Status:
   Gamemode:
     Enable: false
     Default: "SURVIVAL"
-    Conditions: []
     Location:
       - world
       - world_nether
@@ -149,11 +154,11 @@ Clean:
     Log:
       Enable: false
       Expiration: 90
-      Ignore-List: []
+      Ignore-List: [ ]
     Region:
       Enable: false
       Residence-Bypass: true
-      Ignore-List: []
+      Ignore-List: [ ]
       #  - "example_world"
       #  - "world(8.8)"
     Playerdata:
@@ -174,29 +179,20 @@ Clean:
       Enable: false
       # To remove the useless variables.
       Playerdata:
-        List: []
-        Ignore-List: []
+        List: [ ]
+        Ignore-List: [ ]
     Example:
       Enable: false
 
-# Command: /pdp convert <type> <feature>
+# Command: /pdp convert <type> <uuid1> <uuid2>
 # More information: https://github.com/momoservertw/PlayerdataPlus/wiki/Data-Convertor
-Data-Convertor:
+User-Convertor:
   Enable: false
-  Offline-To-Online:
-    PlayerdataPlus: true
-    Playerdata: true
-    Advancement: true
-    Statistic: true
-    AuthMe: true
+  Groups:
+    # CMI features: Money, Nick, Home, Inventory, EnderChest.
     CMI: true
     PlayerPoints: true
-    NameTagEdit: true
+    MyPet: true
+    MySuite: true
     Residence: true
     LuckPerms: true
-  # You need to setup the MySQL settings in CorePlus/config.yml
-  Yaml-To-MySQL:
-    MyCommand: false
-  Return:
-    # Return the money and exp to player.
-    Bank: true

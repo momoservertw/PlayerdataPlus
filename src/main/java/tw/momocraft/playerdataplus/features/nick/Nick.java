@@ -7,10 +7,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
 import tw.momocraft.coreplus.api.CorePlusAPI;
 import tw.momocraft.playerdataplus.handlers.ConfigHandler;
 import tw.momocraft.playerdataplus.handlers.UtilsHandler;
@@ -21,12 +18,14 @@ import java.util.UUID;
 
 public class Nick implements Listener {
 
+    /*
     @EventHandler(priority = EventPriority.HIGH)
     private void onPlayerJoinEvent(PlayerJoinEvent e) {
         if (!ConfigHandler.getConfigPath().isNick())
             return;
         updateNickName(e.getPlayer());
     }
+     */
 
     public static void clear(CommandSender sender, String targetName, boolean sendMessage) {
         NickMap nickMap = new NickMap();
@@ -104,83 +103,55 @@ public class Nick implements Listener {
     }
 
     public static void set(CommandSender sender, String targetName, String nickName, String nickColor, boolean sendMessage) {
-        NickMap nickMap = new NickMap();
-        nickMap.setNickName(nickName);
+        CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPluginName(),
+                "Nick", "targetName: " + targetName + ", nickName: " + nickName + ", nickColor: " + nickColor,
+                "set", "start",
+                new Throwable().getStackTrace()[0]);
 
         Player player;
+        OfflinePlayer offlinePlayer;
         String playerName;
+        String displayName;
         UUID uuid;
-        if (targetName == null) {
-            if (sender instanceof ConsoleCommandSender) {
-                CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPrefix(),
-                        "Message.onlyPlayer", sender);
-                return;
-            }
-            nickMap.setSentBySelf(true);
-            player = (Player) sender;
+
+        NickMap nickMap = new NickMap();
+        nickMap.setSentBySelf(sender.getName().equals(targetName));
+        player = CorePlusAPI.getPlayer().getPlayer(targetName);
+        offlinePlayer = CorePlusAPI.getPlayer().getOfflinePlayer(targetName);
+        if (player != null) {
             playerName = player.getName();
             uuid = player.getUniqueId();
-            // Setup the attributes.
-            nickMap.setSentBySelf(true);
+            displayName = CorePlusAPI.getPlayer().getPlayerDisplayName(uuid);
+
             nickMap.setPlayer(player);
-            nickMap.setPlayerName(playerName);
             nickMap.setPlayerUUID(uuid);
+            nickMap.setPlayerName(playerName);
+            nickMap.setDisplayName(displayName);
+        } else if (offlinePlayer != null) {
+            playerName = offlinePlayer.getName();
+            uuid = offlinePlayer.getUniqueId();
+            displayName = CorePlusAPI.getPlayer().getPlayerDisplayName(uuid);
+
+            nickMap.setOfflinePlayer(offlinePlayer);
+            nickMap.setPlayerUUID(uuid);
+            nickMap.setPlayerName(playerName);
+            nickMap.setDisplayName(displayName);
         } else {
-            // Setup the attributes.
-            nickMap.setSentBySelf(false);
-            nickMap.setPlayerName(targetName);
-            player = CorePlusAPI.getPlayer().getPlayer(targetName);
-            if (player != null) {
-                playerName = player.getName();
-                uuid = player.getUniqueId();
-                nickMap.setPlayer(player);
-                nickMap.setPlayerName(playerName);
-                nickMap.setPlayerUUID(uuid);
-            } else {
-                OfflinePlayer offlinePlayer = CorePlusAPI.getPlayer().getOfflinePlayer(targetName);
-                if (offlinePlayer != null) {
-                    playerName = offlinePlayer.getName();
-                    uuid = offlinePlayer.getUniqueId();
-                    nickMap.setOfflinePlayer(offlinePlayer);
-                    nickMap.setPlayerName(playerName);
-                    nickMap.setPlayerUUID(uuid);
-                } else {
-                    CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPluginName(),
-                            "Message.targetNotFound", sender);
-                    return;
-                }
-            }
+            CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPluginName(),
+                    "Message.targetNotFound", sender);
+            return;
         }
         if (nickColor == null)
             nickColor = getDefaultColor(uuid);
         nickMap.setNickColor(nickColor);
-        // Setup the placeholders.
+
         String[] placeHolders = CorePlusAPI.getMsg().newString();
         placeHolders[0] = playerName; // %player%
         placeHolders[1] = playerName; // %targetplayer%
-        placeHolders[21] = nickName != null ? nickName : ""; // %nick%
         placeHolders[16] = nickColor; // %color%
-        // Check bypass permission.
-        if (CorePlusAPI.getPlayer().hasPerm(uuid, "playerdataplus.bypass.nick.*")) {
-            // Change nick.
-            setCMI(nickMap);
-            setDiscord(nickMap);
-            setCmd(nickMap, true);
-            saveNick(uuid, nickName);
-            // Send messages.
-            if (!sendMessage)
-                return;
-            if (nickMap.isSentBySelf()) {
-                CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPrefix(),
-                        ConfigHandler.getConfigPath().getMsgNickChange(), player, placeHolders);
-            } else {
-                CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPrefix(),
-                        ConfigHandler.getConfigPath().getMsgNickChange(), player, placeHolders);
-                CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPrefix(),
-                        ConfigHandler.getConfigPath().getMsgNickChangeTarget(), sender, placeHolders);
-            }
-            return;
-        }
+        placeHolders[21] = displayName; // %nick%
+        placeHolders[23] = String.valueOf(ConfigHandler.getConfigPath().getNickLength()); // %limit%
+
         // Check color permission.
         if (!checkColorPerm(uuid, nickColor)) {
             if (!sendMessage)
@@ -197,75 +168,56 @@ public class Nick implements Listener {
             return;
         }
         // Check nick length.
-        if (nickName != null) {
-            if (!checkLength(uuid, nickName)) {
-                if (sendMessage) {
-                    if (nickMap.isSentBySelf())
-                        CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPrefix(),
-                                ConfigHandler.getConfigPath().getMsgNickInvalidLength(), player, placeHolders);
-                    else
-                        CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPrefix(),
-                                ConfigHandler.getConfigPath().getMsgNickInvalidLengthTarget(), sender, placeHolders);
-                }
-                CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPluginName(),
-                        "Nick", playerName, "length", "cancel",
-                        new Throwable().getStackTrace()[0]);
-                return;
+        if (!checkLength(uuid, nickName)) {
+            if (sendMessage) {
+                if (nickMap.isSentBySelf())
+                    CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPrefix(),
+                            ConfigHandler.getConfigPath().getMsgNickInvalidLength(), player, placeHolders);
+                else
+                    CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPrefix(),
+                            ConfigHandler.getConfigPath().getMsgNickInvalidLengthTarget(), sender, placeHolders);
             }
-            // Check contains color code.
-            if (!checkColorCode(uuid, nickName)) {
-                if (sendMessage) {
-                    if (nickMap.isSentBySelf())
-                        CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPrefix(),
-                                ConfigHandler.getConfigPath().getMsgNickInvalidColorInside(), player, placeHolders);
-                    else
-                        CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPrefix(),
-                                ConfigHandler.getConfigPath().getMsgNickInvalidColorInsideTarget(), sender, placeHolders);
-                }
-                CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPluginName(),
-                        "Nick", playerName, "color code", "cancel",
-                        new Throwable().getStackTrace()[0]);
-                return;
+            CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPluginName(),
+                    "Nick", playerName, "length", "cancel",
+                    new Throwable().getStackTrace()[0]);
+            return;
+        }
+
+        // Check contains color code.
+        nickName = checkColorCode(uuid, nickName);
+
+        // Check contains placeholder.
+        nickName = checkPlaceholder(sender, nickName);
+
+        nickMap.setNickName(nickName);
+
+        // Check black list.
+        if (!checkBlackList(uuid, nickName)) {
+            if (sendMessage) {
+                if (nickMap.isSentBySelf())
+                    CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPrefix(),
+                            ConfigHandler.getConfigPath().getMsgNickInvalidNick(), player, placeHolders);
+                else
+                    CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPrefix(),
+                            ConfigHandler.getConfigPath().getMsgNickInvalidNickTarget(), sender, placeHolders);
             }
-            // Check contains placeholder.
-            if (!checkPlaceholder(uuid, nickName)) {
-                if (sendMessage) {
-                    if (nickMap.isSentBySelf())
-                        CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPrefix(),
-                                ConfigHandler.getConfigPath().getMsgNickInvalidColorInside(), player, placeHolders);
-                    else
-                        CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPrefix(),
-                                ConfigHandler.getConfigPath().getMsgNickInvalidColorInsideTarget(), sender, placeHolders);
-                }
-                CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPluginName(),
-                        "Nick", playerName, "color code", "cancel",
-                        new Throwable().getStackTrace()[0]);
-                return;
-            }
-            // Check black list.
-            if (!checkBlackList(uuid, nickName)) {
-                if (sendMessage) {
-                    if (nickMap.isSentBySelf())
-                        CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPrefix(),
-                                ConfigHandler.getConfigPath().getMsgNickInvalidNick(), player, placeHolders);
-                    else
-                        CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPrefix(),
-                                ConfigHandler.getConfigPath().getMsgNickInvalidNickTarget(), sender, placeHolders);
-                }
-                CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPluginName(),
-                        "Nick", playerName, "block list", "cancel",
-                        new Throwable().getStackTrace()[0]);
-                return;
-            }
+            CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPluginName(),
+                    "Nick", playerName, "block list", "cancel",
+                    new Throwable().getStackTrace()[0]);
+            return;
         }
         // Change nick name.
         setCMI(nickMap);
         setDiscord(nickMap);
         setCmd(nickMap, true);
-        saveNick(uuid, nickName);
+
+        saveNick(uuid, nickMap);
 
         // Send messages.
         if (sendMessage) {
+            displayName = ConfigHandler.getConfigPath().getNickMsg();
+            displayName = translate(nickMap, displayName);
+            placeHolders[21] = displayName; // %nick%
             if (nickMap.isSentBySelf()) {
                 CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPrefix(),
                         ConfigHandler.getConfigPath().getMsgNickChange(), player, placeHolders);
@@ -277,20 +229,33 @@ public class Nick implements Listener {
             }
         }
         CorePlusAPI.getMsg().sendDetailMsg(ConfigHandler.isDebug(), ConfigHandler.getPluginName(),
-                "Nick", playerName, "change", "return",
+                "Nick", playerName + ": " + displayName, "change", "return",
                 new Throwable().getStackTrace()[0]);
     }
 
     private static void setCMI(NickMap nickMap) {
-        if (!CorePlusAPI.getDepend().CMIEnabled())
-            return;
         if (!ConfigHandler.getConfigPath().isNickCMI())
             return;
+        if (!CorePlusAPI.getDepend().CMIEnabled())
+            return;
+        if (!UtilsHandler.getDepend().CMIEnabled())
+            return;
+        String nickName = nickMap.getNickName();
+        String nickColor = nickMap.getNickColor();
+
+        CMIUser cmiUser = CMI.getInstance().getPlayerManager().getUser(nickMap.getPlayerName());
+        if (nickName == null && nickColor != null) {
+            cmiUser.setNickName(CorePlusAPI.getUtils().removeColorCode(cmiUser.getDisplayName()), true);
+            cmiUser.setNamePlatePrefix(CorePlusAPI.getUtils().removeColorCode(cmiUser.getNamePlatePrefix()));
+            cmiUser.setNamePlateSuffix(CorePlusAPI.getUtils().removeColorCode(cmiUser.getNamePlateSuffix()));
+            cmiUser.setNamePlateNameColor(CorePlusAPI.getUtils().getChatColor(nickMap.getNickColor()));
+            return;
+        }
+
         String nickFormat = ConfigHandler.getConfigPath().getNickCMINickSet();
         String platePrefix = ConfigHandler.getConfigPath().getNickCMIPlatePrefix();
         String plateSuffix = ConfigHandler.getConfigPath().getNickCMIPlateSuffix();
         String plateColor = ConfigHandler.getConfigPath().getNickCMIPlateColor();
-
         // Translate placeholder of format.
         Player player = nickMap.getPlayer();
         String playerName;
@@ -319,7 +284,6 @@ public class Nick implements Listener {
 
         // Change CMI nick.
         try {
-            CMIUser cmiUser = CMI.getInstance().getPlayerManager().getUser(nickMap.getPlayerName());
             cmiUser.setNickName(nickFormat, true);
             cmiUser.setNamePlatePrefix(platePrefix);
             cmiUser.setNamePlateSuffix(plateSuffix);
@@ -336,10 +300,16 @@ public class Nick implements Listener {
     }
 
     private static void setDiscord(NickMap nickMap) {
-        if (!CorePlusAPI.getDepend().DiscordSRVEnabled())
-            return;
         if (!ConfigHandler.getConfigPath().isNickDiscordSRV())
             return;
+        if (!CorePlusAPI.getDepend().DiscordSRVEnabled())
+            return;
+        if (!UtilsHandler.getDepend().CMIEnabled())
+            return;
+        String nickName = nickMap.getNickName();
+        if (nickName == null)
+            return;
+
         String format = ConfigHandler.getConfigPath().getNickDiscordSRVSet();
         Player player = nickMap.getPlayer();
         if (player != null) {
@@ -358,7 +328,7 @@ public class Nick implements Listener {
             cmdList = ConfigHandler.getConfigPath().getNickCommandSet();
         else
             cmdList = ConfigHandler.getConfigPath().getNickCommandClear();
-        if (cmdList == null)
+        if (cmdList == null || cmdList.isEmpty())
             return;
         Player player = nickMap.getPlayer();
         OfflinePlayer offlinePlayer = nickMap.getOfflinePlayer();
@@ -413,24 +383,27 @@ public class Nick implements Listener {
         return true;
     }
 
-    private static boolean checkColorCode(UUID uuid, String nickName) {
-        if (CorePlusAPI.getPlayer().hasPerm(uuid, "playerdataplus.bypass.nick.colorcode"))
-            return true;
-        if (ConfigHandler.getConfigPath().isNickColorCode())
-            return !CorePlusAPI.getUtils().containsColorCode(nickName);
-        String[] split = nickName.split("[&§]");
+    private static String checkPlaceholder(CommandSender sender, String nickName) {
+        if (CorePlusAPI.getPlayer().hasPerm(sender, "playerdataplus.bypass.nick.placeholder"))
+            return nickName;
+        String[] split = nickName.split("%");
+        if (split.length == 1)
+            return nickName;
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i <= split.length; i++) {
-            if (i == 0)
-                continue;
-            if (!checkColorPerm(uuid, String.valueOf(split[i].charAt(0))))
-                return false;
+            if (i % 2 == 0)
+                sb.append(split[i]);
         }
-        return true;
+        return sb.toString();
+    }
+
+    private static String checkColorCode(UUID uuid, String nickName) {
+        if (CorePlusAPI.getPlayer().hasPerm(uuid, "playerdataplus.bypass.nick.colorcode"))
+            return nickName;
+        return CorePlusAPI.getUtils().removeColorCode(nickName);
     }
 
     private static boolean checkColorPerm(UUID uuid, String nickColor) {
-        if (nickColor == null)
-            return true;
         return CorePlusAPI.getPlayer().hasPerm(uuid, "playerdataplus.nick.color." + nickColor)
                 || getDefaultColor(uuid).equals(nickColor);
     }
@@ -444,19 +417,18 @@ public class Nick implements Listener {
     }
 
     private static String translate(NickMap nickMap, String input) {
+        if (input == null)
+            return null;
         String nickName = nickMap.getNickName();
         String nickColor = nickMap.getNickColor();
-        String displayName = nickMap.getDisplayName();
-        input = input.replace("%player%", nickMap.getNickName());
+        String playerName = nickMap.getPlayerName();
+        input = input.replace("%player%", playerName != null ? playerName : "");
         input = input.replace("%nick%", nickName != null ? nickName : "");
-        input = input.replace("%display_name%", displayName != null ? displayName : "");
         input = input.replace("%color%", nickColor != null ? nickColor : "");
         return input;
     }
 
-    private static void saveNick(UUID uuid, String nickName) {
-        if (!ConfigHandler.getConfigPath().isPlayerDataGroupNick())
-            return;
+    private static void saveNick(UUID uuid, NickMap nickMap) {
         if (!CorePlusAPI.getConfig().isDataMySQL()) {
             CorePlusAPI.getMsg().sendErrorMsg(ConfigHandler.getPluginName(),
                     "Can not connect to MySQL.");
@@ -468,17 +440,29 @@ public class Nick implements Listener {
                     "Can not connect to MySQL.");
             return;
         }
+
+        String displayName = nickMap.getDisplayName();
+        String nickName = nickMap.getNickName();
+        String nickColor = nickMap.getNickColor();
+
         CorePlusAPI.getFile().getMySQL().setValueWhere(ConfigHandler.getPluginName(),
                 "playerdataplus", "player",
-                "uuid", uuid.toString(), "display_name", nickName);
+                "uuid", uuid.toString(), "display_name", displayName);
         CorePlusAPI.getFile().getMySQL().setValueWhere(ConfigHandler.getPluginName(),
                 "playerdataplus", "player",
-                "uuid", uuid.toString(), "nick", nickName);
+                "uuid", uuid.toString(), "nick_name", nickName);
+        CorePlusAPI.getFile().getMySQL().setValueWhere(ConfigHandler.getPluginName(),
+                "playerdataplus", "player",
+                "uuid", uuid.toString(), "nick_color", nickColor);
     }
 
+
     private void updateNickName(Player player) {
+       /*
         if (!ConfigHandler.getConfigPath().isPlayerDataGroupNick())
             return;
+
+        */
         if (!CorePlusAPI.getConfig().isDataMySQL()) {
             CorePlusAPI.getMsg().sendErrorMsg(ConfigHandler.getPluginName(),
                     "Can not update the nick name from MySQL: CorePlus");

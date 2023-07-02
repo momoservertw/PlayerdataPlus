@@ -3,9 +3,10 @@ package tw.momocraft.playerdataplus;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import tw.momocraft.coreplus.api.CorePlusAPI;
-import tw.momocraft.playerdataplus.handlers.ConfigHandler;
 import tw.momocraft.playerdataplus.features.nick.Nick;
+import tw.momocraft.playerdataplus.handlers.ConfigHandler;
 
 public class Commands implements CommandExecutor {
 
@@ -90,56 +91,49 @@ public class Commands implements CommandExecutor {
                 return true;
             case "nick":
                 if (CorePlusAPI.getPlayer().hasPerm(sender, "playerdataplus.command.nick")) {
-                    if (length == 4) {
-                        // /pdp nick <nick> <color> <player>
-                        if (CorePlusAPI.getUtils().equalColorCodeWithoutSymbol(args[2])) {
-                            Nick.set(sender, args[3], args[1], args[2], true);
-                            return true;
-                        }
-                    } else if (length == 3) {
-                        // /pdp nick <nick> <color>
-                        if (CorePlusAPI.getUtils().equalColorCodeWithoutSymbol(args[2])) {
-                            Nick.set(sender, null, args[1], args[2], true);
-                            // /pdp nick <color> <player>
-                        } else if (CorePlusAPI.getUtils().equalColorCodeWithoutSymbol(args[1])) {
-                            Nick.set(sender, args[2], null, args[1], true);
-                            // /pdp nick <off> <player>
-                        } else if (args[1].equals("off")) {
-                            Nick.clear(sender, args[2], true);
-                        } else if (CorePlusAPI.getPlayer().hasPerm(sender, "playerdataplus.command.nick.other")) {
-                            // /pdp nick <color> <player>
-                            if (CorePlusAPI.getUtils().equalColorCodeWithoutSymbol(args[2])) {
-                                Nick.set(sender, args[2], null, args[1], true);
-                            } else {
-                                // /pdp nick <nick> <player>
-                                Nick.set(sender, args[2], args[1], null, true);
-                            }
+                    if (length == 1) {
+                        if (CorePlusAPI.getPlayer().hasPerm(sender, "playerdataplus.command.nick.other")) {
+                            CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPrefix(),
+                                    ConfigHandler.getConfigPath().getMsgCmdNickOther(), sender);
                         } else {
                             CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPrefix(),
-                                    "Message.noPermission", sender);
-                        }
-                        return true;
-                    } else if (length == 2) {
-                        // /pdp nick <color>
-                        if (CorePlusAPI.getUtils().equalColorCodeWithoutSymbol(args[1])) {
-                            Nick.set(sender, null, null, args[1], true);
-                            // /pdp nick off
-                        } else if (args[1].equals("off")) {
-                            Nick.clear(sender, null, true);
-                        } else {
-                            // /pdp nick <nick>
-                            Nick.set(sender, null, args[1], null, true);
+                                    ConfigHandler.getConfigPath().getMsgCmdNick(), sender);
                         }
                         return true;
                     }
-                    // Send command prompt
-                    if (CorePlusAPI.getPlayer().hasPerm(sender, "playerdataplus.command.nick.other")) {
-                        CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPrefix(),
-                                ConfigHandler.getConfigPath().getMsgCmdNickOther(), sender);
-                    } else {
-                        CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPrefix(),
-                                ConfigHandler.getConfigPath().getMsgCmdNick(), sender);
+                    String targetName = null;
+                    String nickName = null;
+                    String nickColor = null;
+                    for (int i = 1; i < length; i++) {
+                        if (nickColor == null) {
+                            if (CorePlusAPI.getUtils().equalColorWithoutSymbol(args[i])) {
+                                nickColor = args[i];
+                                System.out.println("color: "+ nickColor);
+                                continue;
+                            }
+                        }
+                        if (targetName == null) {
+                            if (CorePlusAPI.getPlayer().isPlayerPlayerBefore(args[i])) {
+                                if (CorePlusAPI.getPlayer().isPlayerOnline(args[i])) {
+                                    targetName = args[i];
+                                    continue;
+                                }
+                            }
+                        }
+                        if (nickName == null)
+                            nickName = args[i];
                     }
+                    if (targetName == null) {
+                        if (sender instanceof ConsoleCommandSender) {
+                            CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPrefix(),
+                                    "Message.onlyPlayer", sender);
+                            return true;
+                        }
+                        targetName = sender.getName();
+                    }
+                    nickColor = CorePlusAPI.getUtils().getColorCode(nickColor);
+
+                    Nick.set(sender, targetName, nickName, nickColor, true);
                     return true;
                 } else {
                     CorePlusAPI.getMsg().sendLangMsg(ConfigHandler.getPrefix(),

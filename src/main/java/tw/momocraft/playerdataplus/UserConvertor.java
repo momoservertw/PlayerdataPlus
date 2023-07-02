@@ -21,6 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class UserConvertor {
+    /*
 
     private Table<String, String, String> oldUserTable;
     private Table<String, String, String> newUserTable;
@@ -57,6 +58,7 @@ public class UserConvertor {
                 "UserConvertor", "Action: Check");
         CorePlusAPI.getFile().getLog().add(ConfigHandler.getPluginName(),
                 "UserConvertor", "--- Data ---");
+
         CorePlusAPI.getFile().getLog().add(ConfigHandler.getPluginName(),
                 "UserConvertor", "CMI: " + ConfigHandler.getConfigPath().isUserConvertorCMI());
         CorePlusAPI.getFile().getLog().add(ConfigHandler.getPluginName(),
@@ -68,13 +70,16 @@ public class UserConvertor {
         CorePlusAPI.getFile().getLog().add(ConfigHandler.getPluginName(),
                 "UserConvertor", "LuckPerms: " + ConfigHandler.getConfigPath().isUserConvertorLuckPerms());
 
+
         checkCMI(oldUUID, newUUID);
         checkPoints(oldUUID, newUUID);
         //checkMyPet(oldUUID, newUUID);
         //checkMySuite(oldUUID, newUUID);
         checkResidence(oldUUID, newUUID);
         checkLuckPerms(oldUUID, newUUID);
+
     }
+
 
     private void checkCMI(UUID oldUUID, UUID newUUID) {
         if (!UtilsHandler.getDepend().CMIEnabled())
@@ -160,7 +165,7 @@ public class UserConvertor {
         newUserTable.put("PlayerPoints", "points", String.valueOf(newPoints));
     }
 
-        /*
+
     private void checkMyPet(UUID oldUUID, UUID newUUID) {
         if (!CorePlusAPI.getDepend().MyPetEnabled())
             return;
@@ -170,7 +175,7 @@ public class UserConvertor {
         oldUserTable.put("PlayerPoints","points", String.valueOf(oldPoints));
         newUserTable.put("PlayerPoints","points", String.valueOf(newPoints));
     }
-         */
+
 
     private void checkResidence(UUID oldUUID, UUID newUUID) {
         if (!UtilsHandler.getDepend().ResidenceEnabled())
@@ -197,10 +202,8 @@ public class UserConvertor {
         for (String permission : CorePlusAPI.getPlayer().getLuckPermsAllPerms(newUUID))
             newUserTable.put("LuckPerms", "permissions", permission);
     }
-}
 
 
-    /*
     private void copyCMI(Player sender, UUID oldUUID, UUID newUUID) {
         if (!UtilsHandler.getDepend().CMIEnabled())
             return;
@@ -294,3 +297,4 @@ public class UserConvertor {
         }
     }
     */
+}

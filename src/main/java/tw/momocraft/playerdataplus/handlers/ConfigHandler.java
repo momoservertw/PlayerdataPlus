@@ -4,13 +4,16 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import tw.momocraft.coreplus.api.CorePlusAPI;
 import tw.momocraft.coreplus.utils.file.maps.FileMap;
+import tw.momocraft.coreplus.utils.file.maps.MySQLMap;
 import tw.momocraft.playerdataplus.PlayerdataPlus;
 import tw.momocraft.playerdataplus.utils.ConfigPath;
 
 import java.io.File;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ConfigHandler {
@@ -44,6 +47,7 @@ public class ConfigHandler {
         FileMap fileMap;
         String filePath;
         String fileName;
+
         // config.yml
         fileMap = new FileMap();
         filePath = PlayerdataPlus.getInstance().getDataFolder().getPath();
@@ -53,6 +57,7 @@ public class ConfigHandler {
         fileMap.setFileType("yaml");
         fileMap.setVersion(4);
         configInfoMap.put(fileName, fileMap);
+
         // message.yml
         fileMap = new FileMap();
         filePath = PlayerdataPlus.getInstance().getDataFolder().getPath();
@@ -114,6 +119,7 @@ public class ConfigHandler {
         }
         getConfig(fileName).options().copyDefaults(false);
     }
+
 
     private static void setConfigPath(ConfigPath configPaths) {
         configPath = configPaths;

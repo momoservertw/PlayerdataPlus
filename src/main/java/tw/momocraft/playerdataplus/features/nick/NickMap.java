@@ -1,7 +1,6 @@
 package tw.momocraft.playerdataplus.features.nick;
 
 import org.bukkit.OfflinePlayer;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
@@ -9,14 +8,19 @@ import java.util.UUID;
 public class NickMap {
 
     private String playerName;
-    private UUID playerUUID;
+
     private String displayName;
+
+    private UUID playerUUID;
+
     private String nickName;
+
     private String nickColor;
 
-    private CommandSender sender;
     private Player player;
+
     private OfflinePlayer offlinePlayer;
+
     private boolean sentBySelf;
 
     public String getPlayerName() {
@@ -27,20 +31,20 @@ public class NickMap {
         this.playerName = playerName;
     }
 
-    public UUID getPlayerUUID() {
-        return playerUUID;
-    }
-
-    public void setPlayerUUID(UUID playerUUID) {
-        this.playerUUID = playerUUID;
-    }
-
     public String getDisplayName() {
         return displayName;
     }
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
+    }
+
+    public UUID getPlayerUUID() {
+        return playerUUID;
+    }
+
+    public void setPlayerUUID(UUID playerUUID) {
+        this.playerUUID = playerUUID;
     }
 
     public String getNickName() {
@@ -57,14 +61,6 @@ public class NickMap {
 
     public void setNickColor(String nickColor) {
         this.nickColor = nickColor;
-    }
-
-    public CommandSender getSender() {
-        return sender;
-    }
-
-    public void setSender(CommandSender sender) {
-        this.sender = sender;
     }
 
     public Player getPlayer() {

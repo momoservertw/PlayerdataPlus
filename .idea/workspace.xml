@@ -5,70 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="55df3580-7d8b-4dd9-afca-eac36992f8e3" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/Commands.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/Commands.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/PlayerdataPlus.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/PlayerdataPlus.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/UserConvertor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/UserConvertor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/api/PlayerDataInterface.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/api/PlayerdataPlusAPI.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/clean/Clean.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/features/clean/Clean.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/clean/CleanMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/features/clean/CleanMap.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/extra/CMI9.0.0.0API.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/TabComplete.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/TabComplete.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/extra/CorePlus-1.0.0.jar" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/extra/CorePlus-1.0.0.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/extra/FeatherBoard.jar" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/extra/FeatherBoard.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/extra/MaSuiteCore.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/extra/MyPet-3.12-SNAPSHOT-B1686.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/extra/MysqlPlayerDataBridge-v4.2.0.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/extra/PlayerPoints.jar" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/extra/PlayerPoints.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/extra/Residence5.0.1.3.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/extra/SkinsRestorer-14.1.13.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/features/nick/Nick.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/features/nick/Nick.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/features/nick/NickMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/features/nick/NickMap.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/features/playerdata/PlayerData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/features/playerdata/PlayerData.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/features/playerdata/PlayerDataMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/features/playerdata/PlayerDataMap.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/features/playerstatus/PlayerStatusControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/features/playerstatus/PlayerStatusControl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/handlers/ConfigHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/handlers/ConfigHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/handlers/DependHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/handlers/DependHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/handlers/UtilsHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/handlers/UtilsHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/utils/ConfigPath.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tw/momocraft/playerdataplus/utils/ConfigPath.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/config.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/message.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/message.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/plugin.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/PlayerdataPlus-1.1.3.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/PlayerdataPlus-1.2.0.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/PlayerdataPlus-1.2.0.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/config.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/config2.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/message.tml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/message.yml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/message.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/plugin.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/Commands.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/Commands.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/PlayerStatus/PlayerStatusControl.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/PlayerStatus/PlayerStatusMap.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/PlayerStatus/listeners/PlayerChangedWorld.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/PlayerStatus/listeners/PlayerJoin.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/PlayerdataPlus.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/PlayerdataPlus.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/api/PlayerDataInterface.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/api/PlayerdataPlusAPI.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/handlers/ConfigHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/handlers/ConfigHandler.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/handlers/DependHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/handlers/DependHandler.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/handlers/UtilsHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/handlers/UtilsHandler.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/playerdata/PlayerData$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/playerdata/PlayerData.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/playerdata/PlayerDataMap.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/utils/ConfigPath.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/utils/ConfigPath.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/utils/UserConvert.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/utils/api.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/utils/clean/Clean.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/utils/clean/CleanMap.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/utils/nick/Nick.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tw/momocraft/playerdataplus/utils/nick/NickMap.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-archiver/pom.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -96,6 +35,9 @@
       <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
     </file-type-list>
   </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
   <component name="ProjectId" id="1YfEXPpnvXuYUu7PavtAcp0cMOr" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -104,11 +46,11 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "last_opened_file_path": "C:/Users/yami/IdeaProjects/CorePlus"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/yami/IdeaProjects/CorePlus&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="tw.momocraft.playerdataplus.PlayerStatus" />

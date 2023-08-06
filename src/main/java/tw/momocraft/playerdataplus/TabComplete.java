@@ -67,7 +67,6 @@ public class TabComplete implements TabCompleter {
                 commands.add("start");
             }
         }
-
              */
         StringUtil.copyPartialMatches(args[(args.length - 1)], commands, completions);
         Collections.sort(completions);

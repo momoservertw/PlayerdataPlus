@@ -19,6 +19,7 @@ General:
       PlayerPoints: true
       Residence: true
       SkinsRestorer: true
+  # MySQL database is necessary.
   MySQL:
     Hostname: "localhost"
     Port: 3306
